@@ -20,9 +20,13 @@ const routes = [
         component: () => import("@/views/login.vue")
     },
     {
+        "path": '/404',
+        component: () => import("@/views/404.vue")
+    },
+    {
         redirect: '/404',
         path: '/:pathMatch(.*)/',
-        children:[],
+        children: [],
         component: () => import("@/views/404.vue")
     }
 ]
