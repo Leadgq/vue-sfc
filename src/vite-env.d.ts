@@ -7,4 +7,4 @@ declare module '*.vue' {
 }
 
 
-declare let   AMap: any;
+declare const  AMap: any;
