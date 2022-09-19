@@ -1,5 +1,5 @@
 let map: any;
-let cityMarkers: Array<any> = [];
+let cityMarkers:any[] = [];
 // 当前城市code
 let currentCityCode: string | number | undefined = undefined;
 // 聚合点位得实例对象
@@ -81,7 +81,7 @@ export const clearAMap = () => {
     }
 };
 // 调整视角
-const changeMapView = (viewType: string, viewCityCode: string) => {
+export const changeMapView = (viewType: string, viewCityCode: string) => {
     clearAMap();
     let defaultCenter: any[] | undefined = undefined;
     const specialCityIndex = specialCityInfo.findIndex(item => item.cityCode === viewCityCode);

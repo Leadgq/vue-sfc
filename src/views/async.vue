@@ -18,7 +18,7 @@ const getUserInfo = () => {
 </script>
 <script lang="ts">
 export default {
-  name: "async"
+  name: "async",
 };
 </script>
 <style lang="scss" scoped></style>
