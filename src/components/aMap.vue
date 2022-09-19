@@ -9,8 +9,13 @@
 <script setup lang="ts">
 import {loadMap} from "@/tools/amap";
 
+const toViewType = () => {
+}
+// province  210000
+// city  210200
+// district 210298
 onMounted(async () => {
-  await loadMap({contraction: 'map', viewType: 'province', viewCityCode: '210000'});
+  await loadMap({contraction: 'map', viewType: 'district', viewCityCode: '210298', toViewType});
 });
 </script>
 <style lang="scss" scoped>
