@@ -12,5 +12,5 @@ export type userRequestType = {
 // 请求注册参数
 export type registerUserType = {
     name: string,
-    id: number | number
+    id: number | string
 }

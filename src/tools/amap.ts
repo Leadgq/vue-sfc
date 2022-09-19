@@ -1,86 +1,147 @@
 let map: any;
+let cityMarkers: Array<any> = [];
+// 当前城市code
+let currentCityCode: string | number | undefined = undefined;
+// 聚合点位得实例对象
+let clusterMarker: any = undefined;
+//  3D
+let object3DLayer: any;
+//  信息提示框
+let  cityInfoWindow:any;
+type aMapInstance = {
+    contraction: string,
+    viewType: string,
+    viewCityCode: string,
+    toViewType: () => void
+}
+// 无法匹配的辖区数据
+const specialCityInfo = [
+    {belongToProvince: '大连', cityCode: '210298', city: '开发区', level: 'district', center: [121.901641, 39.063867]},
+    {belongToProvince: '大连', cityCode: '210282', city: '普兰店市', level: 'district', center: [121.938299, 39.391565]},
+    {belongToProvince: '大连', cityCode: '210299', city: '高新园区', level: 'district', center: [121.528854, 38.858948]},
+    {belongToProvince: '大连', cityCode: '210295', city: '长兴岛', level: 'district', center: [121.428787, 39.571643]},
+    {belongToProvince: '大连', cityCode: '210294', city: '花园口', level: 'district', center: [122.640624, 39.556593]},
+    {belongToProvince: '大连', cityCode: '210297', city: '保税区', level: 'district', center: [121.802372, 39.060374]},
+    {belongToProvince: '大连', cityCode: '210296', city: '金石滩', level: 'district', center: [122.0156, 39.079789]},
+    {belongToProvince: '盘锦', cityCode: '211121', city: '大洼县', level: 'district', center: [122.082227, 41.002679]},
+    {belongToProvince: '盘锦', cityCode: '211190', city: '辽滨经济区', level: 'district', center: [122.239737, 40.695747]},
+    {belongToProvince: '锦州', cityCode: '210791', city: '锦州港', level: 'district', center: [121.048169, 40.807108]},
+    {belongToProvince: '锦州', cityCode: '210790', city: '滨海新区', level: 'district', center: [121.073175, 40.829298]},
+    {belongToProvince: '沈阳', cityCode: '210190', city: '经济技术开发区', level: 'district', center: [123.296272, 41.767981]},
+    {belongToProvince: '沈阳', cityCode: '210191', city: '金融商贸开发区', level: 'district', center: [123.430395, 41.813583]},
+    {belongToProvince: '抚顺', cityCode: '210424', city: '开发区', level: 'district', center: [123.720572, 41.822035]},
+    {belongToProvince: '铁岭', cityCode: '211283', city: '凡河新区', level: 'district', center: [123.733652, 42.222791]}
+];
 // 加载地图
-export const loadMap = async (contraction: string, cityName = '辽宁', level = 'province'): Promise<void> => {
+export const loadMap = async ({contraction, viewType = 'province', viewCityCode = '210000',toViewType}: aMapInstance): Promise<void> => {
     return new Promise((resolve) => {
         map = new AMap.Map(contraction, {
             resizeEnable: true,
-            center: [121.614786, 38.913962],//中心点坐标
+            center: [122.254265, 40.361304],//中心点坐标
             viewMode: '3D',//使用3D视图
-            zoom: 7,
+            zoom: 7.62,
+            zooms: [3, 18],
             mapStyle: "amap://styles/dark",
             showLabel: false
         });
+        initInfoWindow(toViewType)
+        // 添加3D图层
+        object3DLayer = new AMap.Object3DLayer({zIndex: -1});
+        map.add(object3DLayer);
         resolve();
-        //掩模
-        boundariesArea(cityName, level);
+        // 调整视角
+        changeMapView(viewType, viewCityCode);
     })
 }
-
+/**
+ * 初始化建筑的infoWindow
+ */
+const initInfoWindow = (toViewType: () => void) => {
+    // 建筑物弹窗
+    cityInfoWindow = new AMap.InfoWindow({
+        isCustom: true,
+        closeWhenClickMap: true,
+        autoMove: true,
+        offset: new AMap.Pixel(0, -25),
+        anchor: 'bottom-right'
+    });
+    window.ritenToViewType = toViewType;
+    cityInfoWindow.on('open', () => {});
+    cityInfoWindow.on('close', () => {});
+};
+export const clearAMap = () => {
+    if (cityMarkers.length > 0) {
+        map && map.remove(cityMarkers);
+        cityMarkers = [];
+    }
+    map && map.clearInfoWindow();
+    currentCityCode = undefined;
+    if (clusterMarker) {
+        clusterMarker.clearMarkers();
+    }
+};
 // 调整视角
-const changeView = (cityName: string, level: string) => {
-    boundariesArea(cityName, level);
-}
-
-const boundariesArea = (cityName: string, level: string) => {
-    const districtSearch = new AMap.DistrictSearch({
+const changeMapView = (viewType: string, viewCityCode: string) => {
+    clearAMap();
+    let defaultCenter: any[] | undefined = undefined;
+    const specialCityIndex = specialCityInfo.findIndex(item => item.cityCode === viewCityCode);
+    if (specialCityIndex !== -1) {
+        // 无法匹配的行政区，掩模做上级城市掩模
+        viewCityCode = viewCityCode.substring(0, 4) + '00';
+        defaultCenter = specialCityInfo[specialCityIndex].center;
+    }
+    let district = new AMap.DistrictSearch({
         subdistrict: 0,
         extensions: 'all',
-        level: `${level}`
+        level: defaultCenter ? 'city' : viewType
     });
-    districtSearch.search(cityName, (status: String, result: any) => {
-        if (status === 'complete') {
-            const bounds = result.districtList[0].boundaries;
-            const mask = []
-            for (let i = 0; i < bounds.length; i += 1) {
-                mask.push([bounds[i]])
-            }
-            map.setMask(mask);
-            //添加高度
-            addLayer(bounds);
-            //添加描边
-            addPolyline(bounds);
-            //设置地图样式
-            setMapStyle(level);
+    // 异步设置中心点 & 掩模 & 描边
+    district.search(viewCityCode, (status: string, result: any) => {
+        if (status !== 'complete') return;
+        const center = defaultCenter || (viewType === 'province' ? [122.254265, 40.361304] : result.districtList[0].center);
+        const zoom = viewType === 'province' ? 7.62 : (viewType === 'city' && !defaultCenter) ? 9.75 : 12;
+        map.setZoomAndCenter(zoom, center);
+        const bounds = result.districtList[0].boundaries;
+        drawMask(viewType, bounds);
+    });
+}
+/**
+ * 区域掩模 + 描边
+ * @param viewType
+ * @param bounds
+ */
+const drawMask = (viewType: string, bounds: Array<any>) => {
+    // 清理bounds数据，第一个map将坐标对象转为数组；第二个map进行数据缩略
+    let maskMap = bounds.map(cake => cake.map((item: any) => [item.getLng(), item.getLat()])).map(cake => {
+        let shrink = 1;
+        // 大型陆块描边量减半
+        if (cake.length > 10000) {
+            shrink = 2;
         }
+        let filteredCake = cake.filter((item: any, index: number) => index % shrink === 0);
+        // 如果不能整除保留最后一个点位，形成闭环
+        if ((cake.length - 1) % shrink !== 0) {
+            filteredCake.push(cake[cake.length - 1]);
+        }
+        return filteredCake;
     });
-}
-// 调整大小，设置中心点
-const setMapStyle = (level: string) => {
-    let zoom;
-    switch (level) {
-        case 'province':
-            zoom = 7;
-            map.setCenter([122.222222, 40.913962]);
-            break;
-        case 'city':
-            zoom = 9;
-            break;
-        case 'district':
-            zoom = 13;
-            break;
-    }
-    map.setZoom(zoom);
-}
-//添加高度面
-const addLayer = (bounds: any) => {
-    const layer = new AMap.Object3DLayer({ zIndex: 1 });
-    map.add(layer)
-    const wall = new AMap.Object3D.Wall({
-        path: bounds,
-        height: 0,
-        color: '#0088ffcc'
+    // 组装数据进行掩模
+    map.setMask(maskMap.map(item => [item]));
+    // 添加描边，提高加载速度，只描大型岛屿
+    maskMap.filter(item => item.length > 50).forEach(mask => new AMap.Polyline({
+        path: mask,
+        strokeColor: '#298BAB',
+        strokeWeight: 4,
+        map: map
+    }));
+    // 添加高度面
+    if (!object3DLayer) return;
+    object3DLayer.clear();
+    let wall = new AMap.Object3D.Wall({
+        path: maskMap.filter(item => item.length > 200),
+        height: viewType === 'province' ? -100000 : viewType === 'city' ? -50000 : -10000,
+        color: '#101010',
+        transparent: true
     });
-    wall.transparent = true
-    layer.add(wall)
-}
-// 添加描边
-const addPolyline = (bounds: any) => {
-    for (let i = 0; i < bounds.length; i += 1) {
-        new AMap.Polyline({
-            path: bounds[i],
-            strokeColor: '#99ffff',
-            strokeWeight: 4,
-            map: map
-        })
-    }
-}
+    object3DLayer.add(wall);
+};
