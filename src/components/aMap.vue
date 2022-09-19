@@ -7,21 +7,23 @@
 </template>
 
 <script setup lang="ts">
-import { loadMap } from "@/tools/amap";
+import {loadMap} from "@/tools/amap";
 
 onMounted(async () => {
-  await loadMap("map", "辽宁", "province");
+  await loadMap({contraction: 'map', viewType: 'province', viewCityCode: '210000'});
 });
 </script>
 <style lang="scss" scoped>
 .content {
   @apply w-full h-full  relative;
   #map {
-    @apply w-full h-full relative;
+    @apply w-full h-full absolute;
   }
+
   .common {
-    @apply absolute w-[25%] h-full  z-10 top-0;
+    @apply absolute w-[20%] h-full  z-10 top-0;
   }
+
   .chart-left {
     @extend .common;
     @apply left-0 ;
