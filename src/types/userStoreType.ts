@@ -9,5 +9,5 @@ export type userRequestType = {
 }
 export type registerUserType = {
     name: string,
-    id: number | number
+    id: number | string
 }
