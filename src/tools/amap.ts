@@ -1,19 +1,23 @@
 let map: any;
-let cityMarkers:any[] = [];
+// marker集合
+let cityMarkers: any[] = [];
 // 当前城市code
 let currentCityCode: string | number | undefined = undefined;
+// 当前视角
+let currentViewType: string
 // 聚合点位得实例对象
 let clusterMarker: any = undefined;
 //  3D
 let object3DLayer: any;
 //  信息提示框
-let  cityInfoWindow:any;
+let cityInfoWindow: any;
 type aMapInstance = {
     contraction: string,
     viewType: string,
     viewCityCode: string,
     toViewType: () => void
 }
+let  cityList:any = []
 // 无法匹配的辖区数据
 const specialCityInfo = [
     {belongToProvince: '大连', cityCode: '210298', city: '开发区', level: 'district', center: [121.901641, 39.063867]},
@@ -33,7 +37,7 @@ const specialCityInfo = [
     {belongToProvince: '铁岭', cityCode: '211283', city: '凡河新区', level: 'district', center: [123.733652, 42.222791]}
 ];
 // 加载地图
-export const loadMap = async ({contraction, viewType = 'province', viewCityCode = '210000',toViewType}: aMapInstance): Promise<void> => {
+export const loadMap = async ({contraction, viewType = 'province', viewCityCode = '210000', toViewType }: aMapInstance): Promise<void> => {
     return new Promise((resolve) => {
         map = new AMap.Map(contraction, {
             resizeEnable: true,
@@ -53,6 +57,104 @@ export const loadMap = async ({contraction, viewType = 'province', viewCityCode 
         changeMapView(viewType, viewCityCode);
     })
 }
+export const drawCityMakers = (list: any[], viewType: string, viewCityCode: string) => {
+    // 保存视角
+    saveView(viewType, viewCityCode);
+    clearAMap();
+     cityList = [...list];
+    // 预先计算code对应经纬度
+    let district = new AMap.DistrictSearch({
+        subdistrict: 0,
+        level: viewType === 'province' ? 'city' : 'district',
+        showbiz: false,
+        extensions: 'base'
+    });
+    cityList.forEach((city:Record<string,any>, index:number) => {
+        const specialCity = specialCityInfo.find(item => item.cityCode === city.cityCode);
+        if (specialCity) {
+            cityList[index].center = specialCity.center;
+            cityList[index].level = specialCity.level;
+            drawCityMarker({
+                ...city,
+                center: specialCity.center
+            });
+            return;
+        }
+        // 异步设置中心点 & 掩模 & 描边
+        district.search(city.cityCode, (status: string, result: Record<string, any>) => {
+            if (status !== 'complete') {
+                return;
+            }
+            cityList[index].center = result.districtList[0].center;
+            cityList[index].level = result.districtList[0].level;
+            drawCityMarker({
+                ...city,
+                center: result.districtList[0].center
+            });
+        });
+    })
+}
+const drawCityMarker = (city: Record<string, any>) => {
+    const marker = new AMap.Marker({
+        position: city.center,
+        offset: new AMap.Pixel(0, -25),
+        content: `<div class="city-marker">
+                <div class="city-marker-img"></div>
+               <div class="city-name">${city.cityName}</div>
+      </div>`,
+        anchor: 'top-center'
+    });
+    marker.on('click',()=>{
+        setTimeout(()=>{
+             currentCityCode = city.cityCode;
+             window.ToViewType(city.level,city.cityCode,city.cityName);
+        },10)
+    })
+    cityMarkers.push(marker);
+    map.add(marker);
+}
+const saveView = (viewType: string, viewCityCode: string) => {
+    currentCityCode = viewCityCode;
+    currentViewType = viewType;
+}
+
+// 画区级数据
+export const drawDistrictMaker = (DistrictList:any[] = [],viewType:string, viewCityCode:string ) => {
+    clearAMap();
+    saveView(viewType, viewCityCode);
+    cityList = DistrictList;
+    cityList.forEach((item:Record<string, any>) => drawCityMarker(item));
+    map.setFitView(cityMarkers, true, [150, 60, 100, 60]);
+    if (cityList.length > 30) {
+        // 聚合开始
+        renderClusterMarker();
+    }
+};
+const handlerClusterMarker = (context: any) => {
+    const count = cityMarkers.length;
+    let div = document.createElement('div');
+    let fontColor = '#fff';
+    let size = Math.round(30 + Math.pow(context.count / count, 1 / 5) * 20);
+    div.style.width = 29 + 'px';
+    div.style.height = 35 + 'px';
+    div.innerHTML = context.count;
+    div.style.lineHeight = 33 + 'px';
+    div.style.color = fontColor;
+    div.style.fontSize = '11px';
+    div.style.textAlign = 'center';
+    div.className = 'point';
+    context.marker.setOffset(new AMap.Pixel(-size / 2, -size / 2));
+    context.marker.setContent(div);
+};
+
+// 点位聚合
+const renderClusterMarker = () => {
+    clusterMarker = new AMap.MarkerClusterer(map, cityMarkers, {
+        gridSize: 80,
+        renderClusterMarker: handlerClusterMarker,
+        minClusterSize: 10
+    });
+};
 /**
  * 初始化建筑的infoWindow
  */
@@ -65,7 +167,7 @@ const initInfoWindow = (toViewType: () => void) => {
         offset: new AMap.Pixel(0, -25),
         anchor: 'bottom-right'
     });
-    window.ritenToViewType = toViewType;
+    window.ToViewType = toViewType;
     cityInfoWindow.on('open', () => {});
     cityInfoWindow.on('close', () => {});
 };

@@ -1,3 +1,3 @@
 declare interface Window {
-      ritenToViewType: () => void
+    ToViewType: (viewType: string, viewCityCode: string, cityName: string) => void
 }

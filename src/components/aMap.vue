@@ -7,8 +7,8 @@
 </template>
 
 <script setup lang="ts">
-import {changeMapView, loadMap} from "@/tools/amap";
-import {loadFile} from "@/tools/lib"
+import {changeMapView, drawCityMakers, drawDistrictMaker, loadMap} from "@/tools/amap";
+import {loadFile} from "@/tools/lib";
 // 地图类型
 type viewTypes = {
   viewType: string;
@@ -30,11 +30,12 @@ const toViewType = (viewType?: string, viewCityCode?: string, cityName?: string)
   }
 };
 //公共行为
-const handlerViewType = (viewType: string, viewCityCode: string, cityName: string) => {
+const handlerViewType = async (viewType: string, viewCityCode: string, cityName: string) => {
   currentViewType.viewType = viewType;
   currentViewType.viewCityCode = viewCityCode;
   currentViewType.name = cityName;
   changeMapView(viewType, viewCityCode);
+  await loadData();
 };
 // 返回视角
 const backViewType = (index: number) => {
@@ -49,13 +50,31 @@ const backViewType = (index: number) => {
 };
 // 加载数据
 const loadData = async () => {
-  const result = await loadFile() as Record<string, any>;
+  const result = await loadFile() as Record<string, {
+    cityList: any[],
+    projectList: any[],
+  }>;
   const {viewCityCode} = currentViewType;
   let data = result[viewCityCode];
-  // todo
   if (data) {
-
+    if (currentViewType.viewType === 'district') {
+      let districtData = handlerDistrictData(data.projectList);
+      drawDistrictMaker(districtData, currentViewType.viewType, currentViewType.viewCityCode);
+    } else {
+      drawCityMakers(data.cityList, currentViewType.viewType, currentViewType.viewCityCode)
+    }
   }
+}
+
+const handlerDistrictData = (list: any[]) => {
+  return (list || []).map((item: any) => {
+    return {
+      ...item,
+      center: [item.longitude, item.latitude],
+      cityName: item?.name,
+      level: 'district'
+    };
+  }).filter((item: any) => item.longitude && item.latitude && item.longitude !== '0' && item.latitude !== '0')
 }
 // province  210000
 // city  210200
@@ -76,6 +95,22 @@ onMounted(async () => {
   @apply w-full h-full  relative;
   #map {
     @apply w-full h-full absolute;
+    &:deep(.city-marker) {
+      @apply w-[64px] flex flex-col justify-center  items-center;
+      .city-name {
+        @apply text-white text-[16px]  whitespace-nowrap;
+      }
+
+      .city-marker-img {
+        background-image: url("../assets/maker/icon_city_marker.png");
+        @apply w-[20px] h-[25px] object-cover bg-center bg-top bg-cover;
+      }
+    }
+
+    &:deep( .point) {
+      background-image: url("../assets/maker/ponit.png");
+      background-size: 100% auto;
+    }
   }
 
   .common {
