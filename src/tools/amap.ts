@@ -225,7 +225,7 @@ export const changeMapView = (viewType: string, viewCityCode: string) => {
         level: defaultCenter ? 'city' : viewType
     });
     // 异步设置中心点 & 掩模 & 描边
-    district.search(viewCityCode, (status: string, result: any) => {
+    district.search(viewCityCode, (status: string, result: Record<string, any>) => {
         if (status !== 'complete') return;
         const center = defaultCenter || (viewType === 'province' ? [122.254265, 40.361304] : result.districtList[0].center);
         const zoom = viewType === 'province' ? 7.62 : (viewType === 'city' && !defaultCenter) ? 9.75 : 12;

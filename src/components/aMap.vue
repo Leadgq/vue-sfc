@@ -1,10 +1,10 @@
 <template>
   <div class="content">
     <div class="nav">
-       <div v-for="(item,index) in stackItem " :key="index" class="nav-item" @click="backViewType(index)">
-         <span>{{item.name}}</span>
-         <span class="row"> > </span>
-       </div>
+      <div v-for="(item,index) in stackItem " :key="index" class="nav-item" @click="backViewType(index)">
+        <span>{{ item.name }}</span>
+        <span class="row"> > </span>
+      </div>
     </div>
     <div id="map"></div>
   </div>
@@ -69,7 +69,7 @@ const loadData = async () => {
     }
   }
 }
-
+// 处理区级数据
 const handlerDistrictData = (list: any[]) => {
   return (list || []).map((item: any) => {
     return {
@@ -78,7 +78,10 @@ const handlerDistrictData = (list: any[]) => {
       cityName: item?.name,
       level: 'district'
     };
-  }).filter((item: any) => item.longitude && item.latitude && item.longitude !== '0' && item.latitude !== '0')
+  }).filter((item: { longitude: string, latitude: string }) => filterData(item.longitude, item.latitude))
+}
+const filterData = (longitude: string, latitude: string) => {
+  return longitude && latitude && latitude !== '0' && longitude !== '0'
 }
 // province  210000
 // city  210200
@@ -97,17 +100,18 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .content {
   @apply w-full h-full  relative;
-  .nav{
-     @apply absolute left-10 top-10 z-10 text-white flex;
-    .nav-item{
+  .nav {
+    @apply absolute left-10 top-10 z-10 text-white flex;
+    .nav-item {
       @apply cursor-pointer;
-      &:last-of-type{
-        .row{
-        @apply  hidden ;
+      &:last-of-type {
+        .row {
+          @apply hidden ;
         }
       }
     }
   }
+
   #map {
     @apply w-full h-full absolute;
     &:deep(.city-marker) {
