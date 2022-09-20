@@ -1,3 +1,4 @@
+import fileSaver from 'file-saver'
 // 千分符
 export const toLocalString = (num: number | string) => {
     if (!num) throw new Error('请传入字符串或者数字');
@@ -25,4 +26,9 @@ export const loadFile = async () => {
         moduleData = data.default;
     }
     return moduleData;
+}
+
+// 下载文件
+export const downloadFile = (url: string | Blob, name: string) => {
+    fileSaver.saveAs(url, name);
 }
