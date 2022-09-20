@@ -55,12 +55,14 @@ const backViewType = (index: number) => {
 };
 // 加载数据
 const loadData = async () => {
+  // 匹配数据
   const result = await loadFile() as Record<string, {
     cityList: any[],
     projectList: any[],
   }>;
   const {viewCityCode} = currentViewType;
   let data = result[viewCityCode];
+  // 如果匹配到
   if (data) {
     if (currentViewType.viewType === 'district') {
       let districtData = handlerDistrictData(data.projectList);
@@ -127,7 +129,7 @@ onMounted(async () => {
       }
 
       .city-marker-img {
-        background-image: url("../assets/maker/icon_city_marker.png");
+        background: url("@/assets/maker/icon_city_marker.png");
         @apply w-[20px] h-[25px] object-cover bg-center bg-top bg-cover;
       }
     }
@@ -135,17 +137,15 @@ onMounted(async () => {
     &:deep(.city-info-window) {
       background: rgba(3, 2, 19, 0.8500);
       box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.1000);
-      border-radius: 6px;
-      @apply flex flex-col  p-[16px];
+      @apply flex flex-col  p-[16px]  rounded-[6px];
       .info-window-name {
         @apply text-[18px] text-white;
       }
-
     }
 
     &:deep( .point) {
-      background-image: url("../assets/maker/ponit.png");
-      background-size: 100% auto;
+      background-image: url("@/assets/maker/ponit.png");
+      @apply bg-cover;
     }
   }
 
