@@ -16,7 +16,7 @@ const getCurrentTime = (): string => {
     const seconds = date.getSeconds().toString().padStart(2, '0');
     return `${year}-${month}-${day} ${hours}:${mini}:${seconds}`;
 }
-
+// 加载文件夹中的数据
 export const loadFile = async () => {
     const module = import.meta.glob("../mock/AQYD.ts");
     let moduleData = {};

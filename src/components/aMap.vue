@@ -52,6 +52,7 @@ const loadData = async () => {
   const result = await loadFile() as Record<string, any>;
   const {viewCityCode} = currentViewType;
   let data = result[viewCityCode];
+  // todo
   if (data) {
 
   }
