@@ -20,11 +20,12 @@ let currentViewType = reactive<viewTypes>({
   name: "辽宁省",
 });
 // 视角站
-let stackItem: viewTypes[] = [];
+let stackItem: viewTypes[] = $ref([]);
 // 调整向下视角
 const toViewType = (viewType?: string, viewCityCode?: string, cityName?: string) => {
   if (viewType && viewCityCode && cityName) {
     handlerViewType(viewType, viewCityCode, cityName);
+    stackItem.push({...currentViewType});
   }
 };
 //公共行为
@@ -55,7 +56,7 @@ onMounted(async () => {
     viewCityCode: currentViewType.viewCityCode,
     toViewType,
   });
-  stackItem.push(currentViewType);
+  stackItem.push({...currentViewType});
 });
 </script>
 <style lang="scss" scoped>
