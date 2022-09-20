@@ -83,17 +83,17 @@ const handlerDistrictData = (list: any[]) => {
 const filterData = (longitude: string, latitude: string) => {
   return longitude && latitude && latitude !== '0' && longitude !== '0'
 }
-// province  210000
-// city  210200
-// district 210298
 onMounted(async () => {
+  // 加载地图
   await loadMap({
     contraction: "map",
     viewType: currentViewType.viewType,
     viewCityCode: currentViewType.viewCityCode,
     toViewType,
   });
+  // 默认放入
   stackItem.push({...currentViewType});
+  // 加载数据
   await loadData();
 });
 </script>
