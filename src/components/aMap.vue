@@ -13,6 +13,7 @@
 <script setup lang="ts">
 import {changeMapView, drawCityMakers, drawDistrictMaker, loadMap} from "@/tools/amap";
 import {loadFile} from "@/tools/lib";
+import {ElMessage} from 'element-plus'
 // 地图类型
 type viewTypes = {
   viewType: string;
@@ -67,6 +68,11 @@ const loadData = async () => {
     } else {
       drawCityMakers(data.cityList, currentViewType.viewType, currentViewType.viewCityCode)
     }
+  } else {
+    ElMessage.error({
+      message: '当前区域暂无数据',
+      type: 'error',
+    })
   }
 }
 // 处理区级数据
@@ -130,10 +136,7 @@ onMounted(async () => {
       background: rgba(3, 2, 19, 0.8500);
       box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.1000);
       border-radius: 6px;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-
+      @apply flex flex-col  p-[16px];
       .info-window-name {
         @apply text-[18px] text-white;
       }
