@@ -8,6 +8,7 @@
 
 <script setup lang="ts">
 import {changeMapView, loadMap} from "@/tools/amap";
+import {loadFile} from "@/tools/lib"
 // 地图类型
 type viewTypes = {
   viewType: string;
@@ -46,6 +47,15 @@ const backViewType = (index: number) => {
     stackItem.splice(index + 1, stackItem.length - 1);
   }
 };
+// 加载数据
+const loadData = async () => {
+  const result = await loadFile() as Record<string, any>;
+  const {viewCityCode} = currentViewType;
+  let data = result[viewCityCode];
+  if (data) {
+
+  }
+}
 // province  210000
 // city  210200
 // district 210298
@@ -57,6 +67,7 @@ onMounted(async () => {
     toViewType,
   });
   stackItem.push({...currentViewType});
+  await loadData();
 });
 </script>
 <style lang="scss" scoped>

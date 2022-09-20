@@ -17,4 +17,12 @@ const getCurrentTime = (): string => {
     return `${year}-${month}-${day} ${hours}:${mini}:${seconds}`;
 }
 
-
+export const loadFile = async () => {
+    const module = import.meta.glob("../mock/AQYD.ts");
+    let moduleData = {};
+    let data = await Object.values(module)[0]() as Record<string, any>;
+    if (data) {
+        moduleData = data.default;
+    }
+    return moduleData;
+}
