@@ -10,7 +10,7 @@ const storeInstance = userStore();
 const router = useRouter();
 const login = async () => {
   await storeInstance.getUseInfoAction(1);
-  router.push({
+  await router.push({
     path: "/async",
   });
 };

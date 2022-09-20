@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { loadMap, changeMapView } from "@/tools/amap";
+import {changeMapView, loadMap} from "@/tools/amap";
 // 地图类型
 type viewTypes = {
   viewType: string;
@@ -36,11 +36,13 @@ const handlerViewType = (viewType: string, viewCityCode: string, cityName: strin
 };
 // 返回视角
 const backViewType = (index: number) => {
+  // 如果点击的是最后一个
+  if (index === stackItem.length - 1) return;
   let stackItemObject = stackItem[index];
   if (stackItemObject) {
-    const { viewCityCode, viewType, name } = stackItemObject;
+    const {viewCityCode, viewType, name} = stackItemObject;
     handlerViewType(viewType, viewCityCode, name);
-    stackItem.slice(index + 1, stackItem.length - 1);
+    stackItem.splice(index + 1, stackItem.length - 1);
   }
 };
 // province  210000
