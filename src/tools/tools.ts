@@ -1,13 +1,18 @@
 // @ts-ignore
 import {jsonp} from 'vue-jsonp';
 
+type  distanceType = {
+    lon: string,
+    lat: string
+}
+
 // 判断当前是否是一个可用数组
 const isAvailableArray = (arr: any[]) => {
     return arr && Array.isArray(arr) && arr.length > 0;
 };
 
 // 拼接字符串
-const handlerData = (data: any[]) => {
+const handlerData = (data: distanceType[]) => {
     let str: string = '';
     if (data.length === 1) {
         str = data.reduce((str, cur) => {
@@ -26,7 +31,7 @@ const handlerData = (data: any[]) => {
 };
 
 // 处理参数
-const parmaHandler = (from: any[], to: any[]) => {
+const parmaHandler = (from: distanceType[], to: distanceType[]) => {
     let distanceFrom = handlerData(from);
     let distanceTo = handlerData(to);
     return {
@@ -35,7 +40,7 @@ const parmaHandler = (from: any[], to: any[]) => {
     };
 };
 
-export const computeDistance = (from: any[], to: any[]) => {
+export const computeDistance = (from: distanceType[], to: distanceType[]) => {
     return new Promise((resolve) => {
         (function () {
             // 距离集合
