@@ -106,9 +106,18 @@ const drawCityMarker = (city: Record<string, any>) => {
     });
     marker.on('click',()=>{
         setTimeout(()=>{
-             currentCityCode = city.cityCode;
-             window.ToViewType(city.level,city.cityCode,city.cityName);
+            if(currentViewType !=='district'){
+                currentCityCode = city.cityCode;
+                window.ToViewType(city.level,city.cityCode,city.cityName);
+            }
         },10)
+    })
+
+    marker.on('mouseover',()=>{
+         setTimeout(()=>{
+             currentCityCode = city.cityCode || city.id;
+             drawInfoWindow()
+         },0)
     })
     cityMarkers.push(marker);
     map.add(marker);
@@ -117,7 +126,25 @@ const saveView = (viewType: string, viewCityCode: string) => {
     currentCityCode = viewCityCode;
     currentViewType = viewType;
 }
-
+// 画窗体
+const drawInfoWindow = () => {
+    let city: Record<string, any>;
+    if (currentViewType !== 'district') {
+        city = cityList.find((item: Record<string, any>) => item.cityCode === currentCityCode);
+    } else {
+        city = cityList.find((item: Record<string, any>) => item.id === currentCityCode);
+    }
+    if (!city) return;
+    const content = `<div class="city-info-window">
+      <div class="info-window-name"><span>${city.cityName}</span></div>
+    </div>`;
+    cityInfoWindow.setContent(content);
+    if (cityInfoWindow.getIsOpen()) {
+        cityInfoWindow.setPosition(city.center);
+    } else {
+        cityInfoWindow.open(map, city.center);
+    }
+}
 // 画区级数据
 export const drawDistrictMaker = (DistrictList:any[] = [],viewType:string, viewCityCode:string ) => {
     clearAMap();

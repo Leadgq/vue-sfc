@@ -1,7 +1,11 @@
 <template>
   <div class="content">
-    <div class="chart-left"></div>
-    <div class="chart-right"></div>
+    <div class="nav">
+       <div v-for="(item,index) in stackItem " :key="index" class="nav-item" @click="backViewType(index)">
+         <span>{{item.name}}</span>
+         <span class="row"> > </span>
+       </div>
+    </div>
     <div id="map"></div>
   </div>
 </template>
@@ -93,6 +97,17 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .content {
   @apply w-full h-full  relative;
+  .nav{
+     @apply absolute left-10 top-10 z-10 text-white flex;
+    .nav-item{
+      @apply cursor-pointer;
+      &:last-of-type{
+        .row{
+        @apply  hidden ;
+        }
+      }
+    }
+  }
   #map {
     @apply w-full h-full absolute;
     &:deep(.city-marker) {
@@ -107,24 +122,25 @@ onMounted(async () => {
       }
     }
 
+    &:deep(.city-info-window) {
+      background: rgba(3, 2, 19, 0.8500);
+      box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.1000);
+      border-radius: 6px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+
+      .info-window-name {
+        @apply text-[18px] text-white;
+      }
+
+    }
+
     &:deep( .point) {
       background-image: url("../assets/maker/ponit.png");
       background-size: 100% auto;
     }
   }
 
-  .common {
-    @apply absolute w-[20%] h-full  z-10 top-0;
-  }
-
-  .chart-left {
-    @extend .common;
-    @apply left-0;
-  }
-
-  .chart-right {
-    @extend .common;
-    @apply right-0;
-  }
 }
 </style>
