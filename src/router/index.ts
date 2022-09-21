@@ -1,38 +1,25 @@
-import {createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 import Guard from "@/router/Guard"
 import BaseRouters from "@/router/baseRouters";
-import {handlerRouter} from "@/router/options";
+import {App} from "vue";
+import {workRoutes} from "@/router/wokerRoutes"
+
 // 额外声明路由元信息
 declare module "vue-router" {
     interface RouteMeta {
         title?: string
         // 权限
-        permissions?: string[],
+        permissions?: string,
     }
 }
-const routes = [
-    {
-        path: '/async',
-        name: 'async',
-        component: () => import("@/views/async.vue"),
-        children: [
-            {
-                path: 'async_children',
-                name: 'async_children',
-                meta: {permissions: ' '},
-                component: () => import("@/components/asyncChildren.vue"),
-            }
-        ]
-    },
-    {
-        path: '/map',
-        name: 'map',
-        component: () => import("@/views/map.vue")
-    },
-] as RouteRecordRaw[]
+
 const router = createRouter({
     history: createWebHistory(),
-    routes: [...BaseRouters, ...handlerRouter(routes)],
+    routes: [...BaseRouters, ...workRoutes],
 })
-new Guard(router);
+// 引入路由入口
+export const setRouter = async (app: App) => {
+    new Guard(router);
+    app.use(router);
+}
 export default router;

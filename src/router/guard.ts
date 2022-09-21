@@ -11,7 +11,7 @@ class Guard {
 
     protected run() {
         this.router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-            if (!to.fullPath.includes('login') && !this.getUserToken()) {
+            if (!to.fullPath.includes('login') && !this.isLogin()) {
                 next({name: 'login'});
             } else {
                 next();
@@ -19,7 +19,7 @@ class Guard {
         })
     }
 
-    protected getUserToken() {
+    protected isLogin() {
         const store = UserStore();
         return store.userInfoValue.token;
     }

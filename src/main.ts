@@ -1,18 +1,22 @@
 import {createApp} from 'vue';
 import App from './App.vue';
+import {setStore} from "@/store";
+import router, {setRouter} from "@/router/index";
 import {loadTailWind} from "@/plugin/tailwind";
 import {loadElementStyle} from "@/plugin/loadElement";
-import store from "@/store/index"
-import router from "@/router/index";
 
-const appInstance = createApp(App);
-appInstance.use(store).use(router);
-// 当路由准备
-router.isReady().then(() => {
-    // 加载tailwind
+async function bootstrap() {
+    const app = createApp(App);
+    // 引入TailWind
     loadTailWind();
+    // 引入非组件api的样式
     loadElementStyle();
-    appInstance.mount('#app');
-})
+    // 引入pinia
+    setStore(app);
+    // 引入router
+    setRouter(app);
+    await router.isReady();
+    app.mount('#app')
+}
 
-
+await bootstrap();

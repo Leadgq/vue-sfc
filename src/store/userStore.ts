@@ -2,7 +2,6 @@ import {getUseInfo, getUserInfoPromises} from '@/api/user';
 import {defineStore} from "pinia"
 import {userInfoResponseType} from "@/types/userStoreType"
 
-
 const userStore = defineStore('userStore', {
     state: () => {
         return {
@@ -13,11 +12,14 @@ const userStore = defineStore('userStore', {
     getters: {
         userInfoValue(): userInfoResponseType {
             return this.userInfo;
+        },
+        userPromisesInfo(): string[] {
+            return this.userPromises;
         }
     },
     actions: {
-        async getUseInfoAction(id: string | number) {
-            let res = await getUseInfo({id});
+        async getUseInfoAction() {
+            let res = await getUseInfo();
             this.userInfo = res.result;
         },
         async getUserInfoPromise() {

@@ -37,9 +37,7 @@ export default [
         response: {
             code: 200,
             message: '成功',
-            result: {
-                permissions: ['async_look', 'async_edit']
-            }
+            result: ['async_look', 'async_edit']
         }
     }
 ] as MockMethod[]
