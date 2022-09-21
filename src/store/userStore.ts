@@ -1,16 +1,11 @@
-import { getUseInfo } from '@/api/user';
-import { defineStore } from "pinia"
-import { userInfoResponseType } from "@/types/userStoreType"
+import {getUseInfo} from '@/api/user';
+import {defineStore} from "pinia"
+import {userInfoResponseType} from "@/types/userStoreType"
 
 const userStore = defineStore('userStore', {
     state: () => {
         return {
-            userInfo: <userInfoResponseType>{
-                name: undefined,
-                age: undefined,
-                token: '',
-                id: undefined
-            }
+            userInfo: <userInfoResponseType>{}
         }
     },
     getters: {
@@ -20,7 +15,7 @@ const userStore = defineStore('userStore', {
     },
     actions: {
         async getUseInfoAction(id: string | number) {
-            let res = await getUseInfo({ id });
+            let res = await getUseInfo({id});
             this.userInfo = res.result;
         }
     },
