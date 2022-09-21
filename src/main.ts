@@ -4,8 +4,9 @@ import {loadTailWind} from "@/plugin/tailwind";
 import {loadElementStyle} from "@/plugin/loadElement";
 import store from "@/store/index"
 import router from "@/router/index";
+
 const appInstance = createApp(App);
-appInstance.use(router).use(store);
+appInstance.use(store).use(router);
 // 当路由准备
 router.isReady().then(() => {
     // 加载tailwind

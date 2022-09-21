@@ -6,13 +6,13 @@
 
 <script lang="ts" setup>
 import userStore from "@/store/userStore";
+
 const storeInstance = userStore();
 const router = useRouter();
 const login = async () => {
   await storeInstance.getUseInfoAction(1);
-  await router.push({
-    path: "/async",
-  });
+  await storeInstance.getUserInfoPromise();
+  await router.push({path: "/async/async_children"});
 };
 </script>
 

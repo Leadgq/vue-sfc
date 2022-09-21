@@ -1,7 +1,7 @@
-import { http } from "@/plugin/http/axios"
-import { userInfoResponseType, userRequestType, registerUserType } from "@/types/userStoreType"
+import {http} from "@/plugin/http/axios"
+import {registerUserType, userInfoResponseType} from "@/types/userStoreType"
 //获取用户信息
-export const getUseInfo = (params: userRequestType) => {
+export const getUseInfo = () => {
     const url = `/getUserInfo`
     return http.request<userInfoResponseType>({
         method: 'get',
@@ -14,5 +14,12 @@ export const registerUser = (data: registerUserType) => {
         method: 'post',
         url: '/registerUser',
         data
+    })
+}
+// 获取用户权限
+export const getUserInfoPromises = () => {
+    return http.request<string[]>({
+        method: 'get',
+        url: '/getUserInfoPromises',
     })
 }

@@ -1,6 +1,7 @@
 // test.ts
-import { Random } from 'mockjs'
-import { MockMethod } from 'vite-plugin-mock'
+import {Random} from 'mockjs'
+import {MockMethod} from 'vite-plugin-mock'
+
 export default [
     {
         url: '/api/getUserInfo',
@@ -13,7 +14,7 @@ export default [
                 name: '测试者',
                 token: Random.string(),
                 id: 1,
-                age:12
+                age: 12
             },
         },
     },
@@ -28,5 +29,17 @@ export default [
                 name: '哈哈哈',
             },
         },
+    },
+    {
+        url: '/api/getUserInfoPromises',
+        method: 'get',
+        timeout: 100,
+        response: {
+            code: 200,
+            message: '成功',
+            result: {
+                permissions: ['async_look', 'async_edit']
+            }
+        }
     }
 ] as MockMethod[]
