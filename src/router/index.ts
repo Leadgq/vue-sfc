@@ -1,4 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
+import Guard from "@/router/Guard"
+
 const routes = [
     {
         path: '/async',
@@ -34,4 +36,5 @@ const router = createRouter({
     history: createWebHistory(),
     routes,
 })
+new Guard(router);
 export default router;
