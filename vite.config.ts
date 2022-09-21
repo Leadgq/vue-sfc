@@ -37,6 +37,8 @@ export default ({command, mode}: viteConfig) => {
             alias: {'@': path.resolve(__dirname, 'src')}
         },
         server: {
+            port: 5173,
+            open: true,
             proxy: {
                 '/api': {
                     target: env.VITE_HOST,
