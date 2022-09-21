@@ -1,7 +1,7 @@
 // 用户响应
 export type userInfoResponseType = {
     name: number | string | undefined;
-    age: number | string | undefined;
+    age: number  | undefined;
     token: string;
     id: number | string | undefined;
 }

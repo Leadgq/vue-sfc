@@ -47,11 +47,9 @@ const backViewType = (index: number) => {
   // 如果点击的是最后一个
   if (index === stackItem.length - 1) return;
   let stackItemObject = stackItem[index];
-  if (stackItemObject) {
-    const {viewCityCode, viewType, name} = stackItemObject;
-    handlerViewType(viewType, viewCityCode, name);
-    stackItem.splice(index + 1, stackItem.length - 1);
-  }
+  const {viewCityCode, viewType, name} = stackItemObject;
+  handlerViewType(viewType, viewCityCode, name);
+  stackItem.splice(index + 1, stackItem.length - 1);
 };
 // 加载数据
 const loadData = async () => {
@@ -71,10 +69,7 @@ const loadData = async () => {
       drawCityMakers(data.cityList, currentViewType.viewType, currentViewType.viewCityCode)
     }
   } else {
-    ElMessage.error({
-      message: '当前区域暂无数据',
-      type: 'error',
-    })
+    ElMessage.error('当前区域暂无数据')
   }
 }
 // 处理区级数据
