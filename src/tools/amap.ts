@@ -17,7 +17,8 @@ type aMapInstance = {
     viewCityCode: string,
     toViewType: () => void
 }
-let  cityList:any = []
+let cityList: any = []
+let cacheMap = new Map();
 // 无法匹配的辖区数据
 const specialCityInfo = [
     {belongToProvince: '大连', cityCode: '210298', city: '开发区', level: 'district', center: [121.901641, 39.063867]},
@@ -37,7 +38,12 @@ const specialCityInfo = [
     {belongToProvince: '铁岭', cityCode: '211283', city: '凡河新区', level: 'district', center: [123.733652, 42.222791]}
 ];
 // 加载地图
-export const loadMap = async ({contraction, viewType = 'province', viewCityCode = '210000', toViewType }: aMapInstance): Promise<void> => {
+export const loadMap = async ({
+                                  contraction,
+                                  viewType = 'province',
+                                  viewCityCode = '210000',
+                                  toViewType
+                              }: aMapInstance): Promise<void> => {
     return new Promise((resolve) => {
         map = new AMap.Map(contraction, {
             resizeEnable: true,
@@ -61,7 +67,7 @@ export const drawCityMakers = (list: any[], viewType: string, viewCityCode: stri
     // 保存视角
     saveView(viewType, viewCityCode);
     clearAMap();
-     cityList = [...list];
+    cityList = [...list];
     // 预先计算code对应经纬度
     let district = new AMap.DistrictSearch({
         subdistrict: 0,
@@ -69,7 +75,7 @@ export const drawCityMakers = (list: any[], viewType: string, viewCityCode: stri
         showbiz: false,
         extensions: 'base'
     });
-    cityList.forEach((city:Record<string,any>, index:number) => {
+    cityList.forEach((city: Record<string, any>, index: number) => {
         const specialCity = specialCityInfo.find(item => item.cityCode === city.cityCode);
         if (specialCity) {
             cityList[index].center = specialCity.center;
@@ -104,20 +110,20 @@ const drawCityMarker = (city: Record<string, any>) => {
       </div>`,
         anchor: 'top-center'
     });
-    marker.on('click',()=>{
-        setTimeout(()=>{
-            if(currentViewType !=='district'){
+    marker.on('click', () => {
+        setTimeout(() => {
+            if (currentViewType !== 'district') {
                 currentCityCode = city.cityCode;
-                window.ToViewType(city.level,city.cityCode,city.cityName);
+                window.ToViewType(city.level, city.cityCode, city.cityName);
             }
-        },10)
+        }, 10)
     })
 
-    marker.on('mouseover',()=>{
-         setTimeout(()=>{
-             currentCityCode = city.cityCode || city.id;
-             drawInfoWindow()
-         },0)
+    marker.on('mouseover', () => {
+        setTimeout(() => {
+            currentCityCode = city.cityCode || city.id;
+            drawInfoWindow()
+        }, 0)
     })
     cityMarkers.push(marker);
     map.add(marker);
@@ -146,11 +152,11 @@ const drawInfoWindow = () => {
     }
 }
 // 画区级数据
-export const drawDistrictMaker = (DistrictList:any[] = [],viewType:string, viewCityCode:string ) => {
+export const drawDistrictMaker = (DistrictList: any[] = [], viewType: string, viewCityCode: string) => {
     clearAMap();
     saveView(viewType, viewCityCode);
     cityList = DistrictList;
-    cityList.forEach((item:Record<string, any>) => drawCityMarker(item));
+    cityList.forEach((item: Record<string, any>) => drawCityMarker(item));
     map.setFitView(cityMarkers, true, [150, 60, 100, 60]);
     if (cityList.length > 30) {
         // 聚合开始
@@ -195,8 +201,10 @@ const initInfoWindow = (toViewType: () => void) => {
         anchor: 'bottom-right'
     });
     window.ToViewType = toViewType;
-    cityInfoWindow.on('open', () => {});
-    cityInfoWindow.on('close', () => {});
+    cityInfoWindow.on('open', () => {
+    });
+    cityInfoWindow.on('close', () => {
+    });
 };
 export const clearAMap = () => {
     if (cityMarkers.length > 0) {
@@ -231,17 +239,24 @@ export const changeMapView = (viewType: string, viewCityCode: string) => {
         const zoom = viewType === 'province' ? 7.62 : (viewType === 'city' && !defaultCenter) ? 9.75 : 12;
         map.setZoomAndCenter(zoom, center);
         const bounds = result.districtList[0].boundaries;
-        drawMask(viewType, bounds);
+        drawMask(viewCityCode, viewType, bounds);
     });
 }
-/**
- * 区域掩模 + 描边
- * @param viewType
- * @param bounds
- */
-const drawMask = (viewType: string, bounds: Array<any>) => {
-    // 清理bounds数据，第一个map将坐标对象转为数组；第二个map进行数据缩略
-    let maskMap = bounds.map(cake => cake.map((item: any) => [item.getLng(), item.getLat()])).map(cake => {
+// 缓存岛屿描边信息
+const cacheMaskMap = (viewCityCode: string, data: Array<any>) => {
+    if (!cacheMap.has(viewCityCode)) {
+        cacheMap.set(viewCityCode, data)
+    }
+}
+// 获取岛屿描边信息
+const getCacheMapData = (viewCityCode: string): any[] | undefined => {
+    if (cacheMap.has(viewCityCode)) {
+        return cacheMap.get(viewCityCode);
+    }
+}
+// 处理岛屿描边信息
+const handlerMaskMapData = (bounds: any[]): any[] => {
+    return bounds.map(cake => cake.map((item: any) => [item.getLng(), item.getLat()])).map(cake => {
         let shrink = 1;
         // 大型陆块描边量减半
         if (cake.length > 10000) {
@@ -254,8 +269,12 @@ const drawMask = (viewType: string, bounds: Array<any>) => {
         }
         return filteredCake;
     });
+}
+const handlerAMapAction = (maskMap: any[], viewType: string) => {
+    console.time();
     // 组装数据进行掩模
     map.setMask(maskMap.map(item => [item]));
+
     // 添加描边，提高加载速度，只描大型岛屿
     maskMap.filter(item => item.length > 50).forEach(mask => new AMap.Polyline({
         path: mask,
@@ -273,4 +292,21 @@ const drawMask = (viewType: string, bounds: Array<any>) => {
         transparent: true
     });
     object3DLayer.add(wall);
+    console.timeEnd();
+}
+/**
+ * 区域掩模 + 描边
+ * @param viewCityCode
+ * @param viewType
+ * @param bounds
+ */
+const drawMask = (viewCityCode: string, viewType: string, bounds: Array<any>) => {
+    let maskData = getCacheMapData(viewCityCode);
+    if (maskData) {
+        handlerAMapAction(maskData, viewType);
+    } else {
+        let maskMap = handlerMaskMapData(bounds);
+        cacheMaskMap(viewCityCode, maskMap);
+        handlerAMapAction(maskMap, viewType);
+    }
 };
