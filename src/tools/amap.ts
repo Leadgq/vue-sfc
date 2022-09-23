@@ -271,7 +271,6 @@ const handlerMaskMapData = (bounds: any[]): any[] => {
     });
 }
 const handlerAMapAction = (maskMap: any[], viewType: string) => {
-    console.time();
     // 组装数据进行掩模
     map.setMask(maskMap.map(item => [item]));
 
@@ -292,7 +291,6 @@ const handlerAMapAction = (maskMap: any[], viewType: string) => {
         transparent: true
     });
     object3DLayer.add(wall);
-    console.timeEnd();
 }
 /**
  * 区域掩模 + 描边
