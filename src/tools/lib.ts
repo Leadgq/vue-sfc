@@ -18,16 +18,17 @@ const getCurrentTime = (): string => {
     return `${year}-${month}-${day} ${hours}:${mini}:${seconds}`;
 }
 // 加载文件夹中的数据
-export const loadFile = async () => {
-    const module = import.meta.glob("../mock/AQYD.ts");
-    let moduleData = {};
-    let data = await Object.values(module)[0]() as Record<string, any>;
-    if (data) {
-        moduleData = data.default;
-    }
-    return moduleData;
+export const loadFile = () => {
+    return new Promise((resolve) => {
+        const worker = new Worker(new URL('./worker.ts', import.meta.url), {type: 'module'})
+        worker.postMessage({
+            info: 'load'
+        })
+        worker.onmessage = (result: Record<string, any>) => {
+            resolve(result.data);
+        }
+    })
 }
-
 // 下载文件
 export const downloadFile = (url: string | Blob, name: string) => {
     fileSaver.saveAs(url, name);
