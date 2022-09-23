@@ -19,6 +19,7 @@ type aMapInstance = {
 }
 let cityList: any = []
 let cacheMap = new Map();
+let polylineArray: any[] = [];
 // 无法匹配的辖区数据
 const specialCityInfo = [
     {belongToProvince: '大连', cityCode: '210298', city: '开发区', level: 'district', center: [121.901641, 39.063867]},
@@ -38,7 +39,12 @@ const specialCityInfo = [
     {belongToProvince: '铁岭', cityCode: '211283', city: '凡河新区', level: 'district', center: [123.733652, 42.222791]}
 ];
 // 加载地图
-export const loadMap = async ({contraction, viewType = 'province', viewCityCode = '210000', toViewType}: aMapInstance): Promise<void> => {
+export const loadMap = async ({
+                                  contraction,
+                                  viewType = 'province',
+                                  viewCityCode = '210000',
+                                  toViewType
+                              }: aMapInstance): Promise<void> => {
     return new Promise((resolve) => {
         map = new AMap.Map(contraction, {
             resizeEnable: true,
@@ -238,7 +244,7 @@ export const changeMapView = (viewType: string, viewCityCode: string) => {
     });
 }
 // 缓存岛屿描边信息
-const cacheMaskMap = (viewCityCode: string, data: Array<any>) => {
+const cacheMaskMap = (viewCityCode: string, data: any[]) => {
     if (!cacheMap.has(viewCityCode)) {
         cacheMap.set(viewCityCode, data)
     }
@@ -268,14 +274,17 @@ const handlerMaskMapData = (bounds: any[]): any[] => {
 const handlerAMapAction = (maskMap: any[], viewType: string) => {
     // 组装数据进行掩模
     map.setMask(maskMap.map(item => [item]));
-
     // 添加描边，提高加载速度，只描大型岛屿
-    maskMap.filter(item => item.length > 50).forEach(mask => new AMap.Polyline({
-        path: mask,
-        strokeColor: '#298BAB',
-        strokeWeight: 4,
-        map: map
-    }));
+    maskMap.filter(item => item.length > 50).forEach(mask => {
+            let poly = new AMap.Polyline({
+                path: mask,
+                strokeColor: '#298BAB',
+                strokeWeight: 4,
+            })
+            polylineArray.push(poly);
+            map.add(poly);
+        }
+    );
     // 添加高度面
     if (!object3DLayer) return;
     object3DLayer.clear();
@@ -287,6 +296,10 @@ const handlerAMapAction = (maskMap: any[], viewType: string) => {
     });
     object3DLayer.add(wall);
 }
+// 移除掩模线
+export const removePolyline = () => {
+    polylineArray.forEach((item) => map.remove(item));
+};
 /**
  * 区域掩模 + 描边
  * @param viewCityCode

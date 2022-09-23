@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import {changeMapView, drawCityMakers, drawDistrictMaker, loadMap} from "@/tools/amap";
+import {changeMapView, drawCityMakers, drawDistrictMaker, loadMap, removePolyline} from "@/tools/amap";
 import {loadFile} from "@/tools/lib";
 import {ElMessage} from 'element-plus'
 // 地图类型
@@ -50,6 +50,7 @@ const backViewType = (index: number) => {
   const {viewCityCode, viewType, name} = stackItemObject;
   handlerViewType(viewType, viewCityCode, name);
   stackItem.splice(index + 1, stackItem.length - 1);
+  removePolyline();
 };
 // 加载数据
 const loadData = async () => {
