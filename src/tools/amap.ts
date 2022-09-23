@@ -38,12 +38,7 @@ const specialCityInfo = [
     {belongToProvince: '铁岭', cityCode: '211283', city: '凡河新区', level: 'district', center: [123.733652, 42.222791]}
 ];
 // 加载地图
-export const loadMap = async ({
-                                  contraction,
-                                  viewType = 'province',
-                                  viewCityCode = '210000',
-                                  toViewType
-                              }: aMapInstance): Promise<void> => {
+export const loadMap = async ({contraction, viewType = 'province', viewCityCode = '210000', toViewType}: aMapInstance): Promise<void> => {
     return new Promise((resolve) => {
         map = new AMap.Map(contraction, {
             resizeEnable: true,
