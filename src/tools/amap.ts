@@ -39,12 +39,7 @@ const specialCityInfo = [
     {belongToProvince: '铁岭', cityCode: '211283', city: '凡河新区', level: 'district', center: [123.733652, 42.222791]}
 ];
 // 加载地图
-export const loadMap = async ({
-                                  contraction,
-                                  viewType = 'province',
-                                  viewCityCode = '210000',
-                                  toViewType
-                              }: aMapInstance): Promise<void> => {
+export const loadMap = async ({contraction, viewType = 'province', viewCityCode = '210000', toViewType}: aMapInstance): Promise<void> => {
     return new Promise((resolve) => {
         map = new AMap.Map(contraction, {
             resizeEnable: true,
@@ -257,7 +252,7 @@ const getCacheMapData = (viewCityCode: string): any[] | undefined => {
 }
 // 处理岛屿描边信息
 const handlerMaskMapData = (bounds: any[]): any[] => {
-    return bounds.map(cake => cake.map((item: any) => [item.getLng(), item.getLat()])).map(cake => {
+    return bounds.map(cake => cake.map((item: Record<string, any>) => [item.getLng(), item.getLat()])).map(cake => {
         let shrink = 1;
         // 大型陆块描边量减半
         if (cake.length > 10000) {
@@ -271,6 +266,7 @@ const handlerMaskMapData = (bounds: any[]): any[] => {
         return filteredCake;
     });
 }
+// 描边 + 掩模
 const handlerAMapAction = (maskMap: any[], viewType: string) => {
     // 组装数据进行掩模
     map.setMask(maskMap.map(item => [item]));

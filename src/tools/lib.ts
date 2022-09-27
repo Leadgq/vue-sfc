@@ -33,3 +33,13 @@ export const loadFile = () => {
 export const downloadFile = (url: string | Blob, name: string) => {
     fileSaver.saveAs(url, name);
 }
+
+export const handlerMoreData = () => {
+    return new Promise((resolve) => {
+        const worker = new Worker(new URL('./worker.ts', import.meta.url), {type: 'module'})
+        worker.postMessage('handlerData');
+        worker.onmessage = (result: Record<string, any>) => {
+            resolve(result.data);
+        }
+    })
+}
