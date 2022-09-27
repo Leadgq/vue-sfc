@@ -17,29 +17,33 @@ const getCurrentTime = (): string => {
     const seconds = date.getSeconds().toString().padStart(2, '0');
     return `${year}-${month}-${day} ${hours}:${mini}:${seconds}`;
 }
-// 加载文件夹中的数据
-export const loadFile = () => {
+// 下载文件
+export const downloadFile = (url: string | Blob, name: string) => {
+    fileSaver.saveAs(url, name);
+}
+// 处理大文件
+export const handlerMoreData = async () => {
+    const worker = await initWebWorker();
     return new Promise((resolve) => {
-        const worker = new Worker(new URL('./worker.ts', import.meta.url), {type: 'module'})
-        worker.postMessage({
-            info: 'load'
-        })
+        worker.postMessage('handlerData');
         worker.onmessage = (result: Record<string, any>) => {
             resolve(result.data);
         }
     })
 }
-// 下载文件
-export const downloadFile = (url: string | Blob, name: string) => {
-    fileSaver.saveAs(url, name);
-}
-
-export const handlerMoreData = () => {
+// 加载文件夹中的数据
+export const loadFile = async () => {
+    const worker = await initWebWorker();
     return new Promise((resolve) => {
-        const worker = new Worker(new URL('./worker.ts', import.meta.url), {type: 'module'})
-        worker.postMessage('handlerData');
+        worker.postMessage('load')
         worker.onmessage = (result: Record<string, any>) => {
             resolve(result.data);
         }
+    })
+}
+const initWebWorker = ():Promise<Worker> =>{
+    return new Promise((resolve)=>{
+        const worker = new Worker(new URL('./worker.ts', import.meta.url), {type: 'module'})
+        resolve(worker);
     })
 }
