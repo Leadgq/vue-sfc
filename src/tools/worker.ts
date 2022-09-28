@@ -1,4 +1,3 @@
-// @ts-ignore
 onmessage = async function (event) {
     if (event.data === 'load') {
         const data = await loadFileData();
@@ -8,7 +7,6 @@ onmessage = async function (event) {
         postMessage(data)
     }
 }
-
 // 子线程加载数据
 const loadFileData = async () => {
     const module = import.meta.glob("../mock/AQYD.ts");
@@ -19,12 +17,11 @@ const loadFileData = async () => {
     }
     return moduleData;
 }
-
 // 超大数据处理
 const handlerBigFileData = async (): Promise<number> => {
     let result = 0;
     return new Promise((resolve) => {
-        for (let i = 0; i < 1000000; i++) {
+        for (let i = 0; i < 50000; i++) {
             result += i;
         }
         resolve(result);

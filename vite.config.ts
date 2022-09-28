@@ -36,6 +36,16 @@ export default ({command, mode}: viteConfig) => {
         resolve: {
             alias: {'@': path.resolve(__dirname, 'src')}
         },
+        build: {
+            lib: {
+                entry: path.resolve(__dirname, "src/main.ts"),
+                name: 'MyLib',
+                fileName: 'my-lib'
+            },
+        },
+        worker: {
+            format: 'es'
+        },
         server: {
             port: 5173,
             open: true,

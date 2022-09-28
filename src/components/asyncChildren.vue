@@ -1,38 +1,19 @@
-<template>
-  <div>渲染</div>
-
-  <el-button @click="modify">按钮</el-button>
-</template>
-
-
-<script lang="ts" setup>
-import {getUseInfo} from "@/api/user"
-import {handlerMoreData} from "@/tools/lib"
-
-const test = () => {
-  for (let i = 0; i < 50000; i++) {
-    console.log(i)
-  }
-}
-const modify = () => {
-  console.log("点击事件");
-}
-onMounted(async () => {
-  console.time();
-  const result = await handlerMoreData();
-  console.log(result);
-  console.timeEnd()
-  const data = await getUseInfo();
-  console.log(data.result);
+<script setup lang="ts">
+const counter = ref(1)
+const doubled = computed(() => counter.value * 2)
+watch(doubled, () => console.log(doubled.value))
+watchEffect(() => console.log("Count: ", doubled.value))
+counter.value = 2
+setTimeout(() => {
+  counter.value = 4
 })
 </script>
 
-<script lang="ts">
-export default {
-  name: "asyncChildren"
-}
-</script>
+<template>
+  <div>
+    <p>
+      {{ doubled }}
+    </p>
+  </div>
+</template>
 
-<style scoped>
-
-</style>

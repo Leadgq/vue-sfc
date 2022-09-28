@@ -1,8 +1,8 @@
 <template>
-
+  <div>123</div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "asyncChildren2.vue"
 }

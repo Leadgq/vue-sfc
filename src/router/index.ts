@@ -18,7 +18,7 @@ const router = createRouter({
     routes: [...BaseRouters, ...workRoutes],
 })
 // 引入路由入口
-export const setRouter = async (app: App) => {
+export const setRouter =  (app: App) => {
     new Guard(router);
     app.use(router);
 }

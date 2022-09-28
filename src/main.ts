@@ -5,7 +5,7 @@ import router, {setRouter} from "@/router/index";
 import {loadTailWind} from "@/plugin/tailwind";
 import {loadElementStyle} from "@/plugin/loadElement";
 
-async function bootstrap() {
+router.isReady().then(() => {
     const app = createApp(App);
     // 引入TailWind
     loadTailWind();
@@ -15,8 +15,5 @@ async function bootstrap() {
     setStore(app);
     // 引入router
     setRouter(app);
-    await router.isReady();
     app.mount('#app')
-}
-
-await bootstrap();
+})
