@@ -35,8 +35,8 @@ let loginRules = reactive<FormRules>({
 });
 let loginData = reactive({
   name: '',
-  password: undefined,
-  phone: undefined
+  password: '',
+  phone: ''
 })
 const ruleFormRef = ref<FormInstance>();
 const {login} = loginHook();

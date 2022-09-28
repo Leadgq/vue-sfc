@@ -7,9 +7,9 @@ export type userInfoResponseType = {
 }
 // 请求登录参数
 export type loginUserType = {
-    name?: string;
-    password?: string;
-    phone?: number
+    name: string;
+    password: string | number;
+    phone: number | string
 }
 // 请求注册参数
 export type registerUserType = {
