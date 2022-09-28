@@ -46,8 +46,7 @@ const handlerViewType = async (viewType: string, viewCityCode: string, cityName:
 const backViewType = (index: number) => {
   // 如果点击的是最后一个
   if (index === stackItem.length - 1) return;
-  let stackItemObject = stackItem[index];
-  const {viewCityCode, viewType, name} = stackItemObject;
+  const {viewCityCode, viewType, name} = stackItem[index];
   handlerViewType(viewType, viewCityCode, name);
   stackItem.splice(index + 1, stackItem.length - 1);
   removePolyline();
