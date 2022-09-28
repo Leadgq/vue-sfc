@@ -31,6 +31,21 @@ export default [
         },
     },
     {
+        url: '/api/login',
+        method: 'post',
+        timeout: 100,
+        response: {
+            code: 200,
+            message: '成功',
+            result: {
+                name: '测试者',
+                token: Random.string(),
+                id: 1,
+                age: 12
+            },
+        },
+    },
+    {
         url: '/api/getUserInfoPromises',
         method: 'get',
         timeout: 100,

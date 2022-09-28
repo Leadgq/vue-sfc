@@ -1,13 +1,15 @@
 // 用户响应
 export type userInfoResponseType = {
     name: number | string | undefined;
-    age: number  | undefined;
+    age: number | undefined;
     token: string;
     id: number | string | undefined;
 }
 // 请求登录参数
-export type userRequestType = {
-    id: number | string
+export type loginUserType = {
+    name?: string;
+    password?: string;
+    phone?: number
 }
 // 请求注册参数
 export type registerUserType = {

@@ -1,6 +1,6 @@
-import {getUseInfo, getUserInfoPromises} from '@/api/user';
+import {getUserInfoPromises, login} from '@/api/user';
 import {defineStore} from "pinia"
-import {userInfoResponseType} from "@/types/userStoreType"
+import {loginUserType, userInfoResponseType} from "@/types/userStoreType"
 
 const userStore = defineStore('userStore', {
     state: () => {
@@ -18,8 +18,8 @@ const userStore = defineStore('userStore', {
         }
     },
     actions: {
-        async getUseInfoAction() {
-            let res = await getUseInfo();
+        async loginRequest(data: loginUserType) {
+            let res = await login(data);
             this.userInfo = res.result;
         },
         async getUserInfoPromise() {
