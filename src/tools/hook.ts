@@ -15,7 +15,7 @@ export const loginHook = () => {
     const pathAction = async (data: loginUserType) => {
         await storeInstance.loginRequest(data);
         await storeInstance.getUserInfoPromise();
-        await router.push({path: '/async/async_children'})
+        await router.push({path: '/async/async_children2'})
     }
     return {
         login
