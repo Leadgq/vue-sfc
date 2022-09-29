@@ -3,7 +3,7 @@
     <ul>
       <li v-for="item in  data" :key="item.key">
         {{ item.title }}
-        <treeChildren :data="item.children" v-if="item.children && item.children.length > 0"/>
+        <treeChildren :data="item.children" v-if="isAvailableArray(item.children)"/>
       </li>
     </ul>
   </div>
@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import {TreeData} from "@/types/tree"
-
+import {isAvailableArray} from "@/tools/lib";
 defineProps<{ data: TreeData[] }>()
 </script>
 

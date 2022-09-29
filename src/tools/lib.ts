@@ -32,7 +32,7 @@ export const handlerMoreData = async () => {
     })
 }
 // 加载文件夹中的数据
-export const loadFile = async (fileName:string) => {
+export const loadFile = async (fileName: string) => {
     const worker = await initWebWorker();
     return new Promise((resolve) => {
         worker.postMessage({
@@ -49,4 +49,8 @@ const initWebWorker = (): Promise<Worker> => {
         const worker = new Worker(new URL('./worker.ts', import.meta.url), {type: 'module'})
         resolve(worker);
     })
+}
+
+export const isAvailableArray = (arr: any[]) => {
+    return Array.isArray(arr) && arr.length > 0;
 }
