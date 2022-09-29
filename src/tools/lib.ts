@@ -50,7 +50,7 @@ const initWebWorker = (): Promise<Worker> => {
         resolve(worker);
     })
 }
-
-export const isAvailableArray = (arr: any[]) => {
-    return Array.isArray(arr) && arr.length > 0;
-}
+// 是否是一个可用数组
+export const isAvailableArray = (arr: any[]) => arr && Array.isArray(arr) && arr.length > 0;
+// 是否是一个空对象
+export const checkObjectIsEmpty = (obj: Record<string, any>) => Reflect.ownKeys(obj).length === 0 && obj.constructor === Object;
