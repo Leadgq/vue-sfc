@@ -11,16 +11,16 @@ const isAvailableArray = (arr: any[]) => {
 };
 
 // 拼接字符串
-const handlerData = (data: distanceType[]) => {
+const handlerDistanceData = (distanceArray: distanceType[]) => {
     let str: string = '';
-    if (data.length === 1) {
-        str = data.reduce((str, cur) => {
+    if (distanceArray.length === 1) {
+        str = distanceArray.reduce((str, cur) => {
             const {lon, lat} = cur;
             return str + `${lon},${lat}`;
         }, '');
     }
-    if (data.length > 1) {
-        data.forEach((item) => {
+    if (distanceArray.length > 1) {
+        distanceArray.forEach((item) => {
             const {lon, lat} = item;
             str += `${lon},${lat}|`;
         });
@@ -31,8 +31,8 @@ const handlerData = (data: distanceType[]) => {
 
 // 处理参数
 const parmaHandler = (from: distanceType[], to: distanceType[]) => {
-    let distanceFrom = handlerData(from);
-    let distanceTo = handlerData(to);
+    let distanceFrom = handlerDistanceData(from);
+    let distanceTo = handlerDistanceData(to);
     return {
         distanceFrom,
         distanceTo
