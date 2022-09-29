@@ -1,9 +1,6 @@
 import fileSaver from 'file-saver'
 // 千分符
-export const toLocalString = (num: number | string) => {
-    if (!num) throw new Error('请传入字符串或者数字');
-    return typeof num === 'string' ? Number(num).toLocaleString() : num.toLocaleString()
-}
+export const toLocalString = (num: number | string) => typeof num === 'string' ? Number(num).toLocaleString() : num.toLocaleString()
 // 返回当前时间
 export const currentTime = computed(() => getCurrentTime());
 // 获取当前时间
