@@ -54,7 +54,7 @@ const backViewType = (index: number) => {
 // 加载数据
 const loadData = async () => {
   // 匹配数据
-  const result = await loadFile() as Record<string, {
+  const result = await loadFile('AQYD') as Record<string, {
     cityList: any[],
     projectList: any[],
   }>;

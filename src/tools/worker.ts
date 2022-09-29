@@ -1,19 +1,25 @@
 onmessage = async function (event) {
-    if (event.data === 'load') {
-        const data = await loadFileData();
+    if (event.data.type === 'load') {
+        const data = await loadFileData(event.data.fileName);
         postMessage(data)
-    } else if (event.data === 'handlerData') {
+    } else if (event.data.type === 'handlerData') {
         const data = await handlerBigFileData();
         postMessage(data)
     }
 }
 // 子线程加载数据
-const loadFileData = async () => {
-    const module = import.meta.glob("../mock/AQYD.ts");
-    let moduleData = {};
-    let data = await Object.values(module)[0]() as Record<string, any>;
-    if (data) {
-        moduleData = data.default;
+const loadFileData = async (name = 'AQYD') => {
+    let moduleData: any;
+    const modules = import.meta.glob("../mock/*.ts") as Record<string, any>
+    let promiseFn: () => Promise<Record<string, any>>;
+    for (let [key, value] of Object.entries(modules)) {
+        if (key.includes(name)) {
+            promiseFn = value
+            let data = await promiseFn();
+            if (data) {
+                moduleData = data.default;
+            }
+        }
     }
     return moduleData;
 }

@@ -19,5 +19,9 @@ declare module '@vue/runtime-core' {
     ElInput: typeof import('element-plus/es')['ElInput']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TreeChildren: typeof import('./src/components/treeComponent/treeChildren.vue')['default']
+    TreeComponent: typeof import('./src/components/treeComponent.vue')['default']
+    TreeComponentTest: typeof import('./src/components/treeComponent/treeComponentTest.vue')['default']
+    TreeData: typeof import('./src/components/TreeData.vue')['default']
   }
 }

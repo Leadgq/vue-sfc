@@ -7,13 +7,15 @@
     <el-button @click="id++">effect测试</el-button>
     <div>{{ tip }}</div>
   </div>
+  <hr/>
+  <TreeComponentTest/>
 </template>
 <script lang="ts" setup>
 import {effectTest} from "@/api/effect"
 import AsyncTest from "@/components/asyncTest.vue"
+import TreeComponentTest from "@/components/treeComponent/treeComponentTest.vue"
 
 const asyncComponent = ref<InstanceType<typeof AsyncTest> | null>(null)
-
 let flag = ref(true);
 let distance = ref('header')
 
