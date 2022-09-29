@@ -14,6 +14,7 @@
 import {effectTest} from "@/api/effect"
 import AsyncTest from "@/components/asyncTest.vue"
 import TreeComponentTest from "@/components/treeComponent/treeComponentTest.vue"
+import {ElMessage} from "element-plus";
 
 const asyncComponent = ref<InstanceType<typeof AsyncTest> | null>(null)
 let flag = ref(true);
@@ -30,8 +31,10 @@ let tip = ref('');
 const stop = watchEffect(async () => {
   const data = await effectTest(id.value);
   tip.value = data.result + id.value.toString() + '次'
+  ElMessage.success(tip.value);
   if (id.value >= 10) {
     stop();
+    ElMessage.error('调用stop停止effect');
   }
 })
 </script>
