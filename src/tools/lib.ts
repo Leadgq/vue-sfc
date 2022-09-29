@@ -22,7 +22,9 @@ export const downloadFile = (url: string | Blob, name: string) => {
 export const handlerMoreData = async () => {
     const worker = await initWebWorker();
     return new Promise((resolve) => {
-        worker.postMessage('handlerData');
+        worker.postMessage({
+            type: 'handlerData'
+        });
         worker.onmessage = (result: Record<string, any>) => {
             resolve(result.data);
         }
