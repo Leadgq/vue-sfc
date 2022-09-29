@@ -54,5 +54,15 @@ export default [
             message: '成功',
             result: ['async_look', 'async_edit']
         }
+    },
+    {
+        url: '/api/effect',
+        method: 'get',
+        timeout: 100,
+        response: {
+            code: 200,
+            message: '成功',
+            result: 'ok'
+        }
     }
 ] as MockMethod[]
