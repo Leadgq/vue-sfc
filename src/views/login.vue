@@ -42,7 +42,7 @@ const ruleFormRef = ref<FormInstance>();
 const {login} = loginHook();
 
 const loginUser = () => {
-  login(loginData, ruleFormRef.value!);
+  login(loginData, unref(ruleFormRef)!);
 }
 </script>
 

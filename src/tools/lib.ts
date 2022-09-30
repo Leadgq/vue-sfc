@@ -1,4 +1,5 @@
 import fileSaver from 'file-saver'
+import {Ref} from "vue";
 // 千分符
 export const toLocalString = (num: number | string) => typeof num === 'string' ? Number(num).toLocaleString() : num.toLocaleString()
 // 返回当前时间
@@ -50,6 +51,8 @@ const initWebWorker = (): Promise<Worker> => {
     })
 }
 // 是否是一个可用数组
-export const isAvailableArray = (arr: any[]) => arr && Array.isArray(arr) && arr.length > 0;
+export const isAvailableArray = (arr: any[] | Ref<any[]>) => arr && Array.isArray(unref(arr)) && unref(arr).length > 0;
 // 是否是一个空对象
-export const checkObjectIsEmpty = (obj: Record<string, any>) => Reflect.ownKeys(obj).length === 0 && obj.constructor === Object;
+export const checkObjectIsEmpty = (obj: Record<string, any> | Ref<Record<string, any>>) => Reflect.ownKeys(unref(obj)).length === 0 && unref(obj).constructor === Object;
+// 求和
+export const sum = (num1: number | Ref<number>, num2: number | Ref<number>) => unref(num1) + unref(num2);
