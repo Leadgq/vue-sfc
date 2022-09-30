@@ -7,8 +7,8 @@ const userStore = defineStore('userStore', {
     state: () => {
         return {
             userInfo: <userInfoResponseType>{},
-            userPromises: [] as string[],
-            expire: undefined as undefined | number
+            userPromises: <string[]>[],
+            expire: <undefined | number>undefined
         }
     },
     getters: {
