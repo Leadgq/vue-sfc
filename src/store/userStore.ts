@@ -43,6 +43,7 @@ const userStore = defineStore('userStore', {
         // 修改用户状态 ==>只有设置过期时间
         modifyUserState() {
             this.userInfo = {} as userInfoResponseType;
+            this.userPromises = [];
         }
     },
     persist: {

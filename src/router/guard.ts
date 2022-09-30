@@ -21,7 +21,9 @@ class Guard {
 
     protected isLogin() {
         const store = UserStore();
+        // 检查过期并且是否存在过期时间配置
         if (store.checkExpire()) {
+            // 过期重置用户信息
             store.modifyUserState();
         }
         return store.userInfoValue.token;
