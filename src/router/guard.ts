@@ -21,6 +21,9 @@ class Guard {
 
     protected isLogin() {
         const store = UserStore();
+        if (store.checkExpire()) {
+            store.modifyUserState();
+        }
         return store.userInfoValue.token;
     }
 }

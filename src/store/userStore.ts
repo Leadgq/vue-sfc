@@ -7,7 +7,8 @@ const userStore = defineStore('userStore', {
     state: () => {
         return {
             userInfo: <userInfoResponseType>{},
-            userPromises: [] as string[]
+            userPromises: [] as string[],
+            expire: undefined as undefined | number
         }
     },
     getters: {
@@ -30,6 +31,15 @@ const userStore = defineStore('userStore', {
         async getUserInfoPromise() {
             const data = await getUserInfoPromises();
             this.userPromises = data.result;
+        },
+        modifyExpire(expire: number) {
+            this.expire = expire;
+        },
+        checkExpire() {
+            if (this.expire) return this.expire < Date.now();
+        },
+        modifyUserState() {
+            this.userInfo = {} as userInfoResponseType;
         }
     },
     persist: {
