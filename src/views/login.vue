@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import {loginHook} from "@/tools/hook";
+import {loginHook} from "@/tools/hook/hook";
 import type {FormInstance, FormRules} from 'element-plus'
 
 let loginRules = reactive<FormRules>({
@@ -27,7 +27,7 @@ let loginRules = reactive<FormRules>({
   ],
   password: [
     {required: true, message: '请输入密码', trigger: 'blur'},
-    {min: 3, max: 5, message: '密码长度3到5位', trigger: 'blur'},
+    {min: 6, max: 15, message: '密码长度6到15位', trigger: 'blur'},
   ],
   phone: [
     {required: true, message: '请输入手机号', trigger: 'blur'}

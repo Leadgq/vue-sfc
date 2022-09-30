@@ -1,5 +1,7 @@
 import axios, {AxiosRequestConfig} from 'axios';
 import {ElMessage} from "element-plus";
+import help from "@/tools/help/help";
+
 
 export type responseResult<T> = {
     code: number;
@@ -56,9 +58,9 @@ export default class Axios {
     }
 
     private static loadLocation() {
-        const userInfo = localStorage.getItem('user_info');
+        const userInfo = help.get('user_info');
         if (userInfo) {
-            return JSON.parse(userInfo).userInfo.token;
+            return userInfo.token;
         } else {
             return undefined;
         }

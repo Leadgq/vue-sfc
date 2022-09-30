@@ -40,6 +40,7 @@ export default [
             result: {
                 name: '测试者',
                 token: Random.string(),
+                expire: 10000,
                 id: 1,
                 age: 12
             },

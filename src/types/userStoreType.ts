@@ -3,6 +3,7 @@ export type userInfoResponseType = {
     name: number | string | undefined;
     age: number | undefined;
     token: string;
+    expire?: number;
     id: number | string | undefined;
 }
 // 请求登录参数

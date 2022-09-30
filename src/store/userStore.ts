@@ -1,6 +1,7 @@
 import {getUserInfoPromises, login} from '@/api/user';
 import {defineStore} from "pinia"
 import {loginUserType, userInfoResponseType} from "@/types/userStoreType"
+import util from "@/tools/help/help"
 
 const userStore = defineStore('userStore', {
     state: () => {
@@ -20,7 +21,11 @@ const userStore = defineStore('userStore', {
     actions: {
         async loginRequest(data: loginUserType) {
             let res = await login(data);
-            this.userInfo = res.result;
+            Object.assign(this.userInfo, res.result)
+            const {expire} = res.result;
+            if (expire) {
+                this.userInfo.expire = util.set(expire);
+            }
         },
         async getUserInfoPromise() {
             const data = await getUserInfoPromises();
@@ -33,7 +38,12 @@ const userStore = defineStore('userStore', {
             {
                 key: 'user_info',
                 storage: localStorage,
-                paths: ['userInfo', 'userPromises']
+                paths: ['userInfo']
+            },
+            {
+                key: 'user_promises',
+                storage: localStorage,
+                paths: ['userPromises']
             }
         ]
     }

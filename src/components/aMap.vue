@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import {changeMapView, drawCityMakers, drawDistrictMaker, loadMap, removePolyline} from "@/tools/amap";
+import {changeMapView, drawCityMakers, drawDistrictMaker, loadMap, removePolyline} from "@/tools/gaudMap/amap";
 import {loadFile} from "@/tools/lib";
 import {ElMessage} from 'element-plus'
 // 地图类型
