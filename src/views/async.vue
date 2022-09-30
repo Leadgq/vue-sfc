@@ -1,6 +1,13 @@
 <template>
   <div class="async">
-    <router-view></router-view>
+    <router-view #default="{route,Component}">
+      <transition :enter-active-class="`animate__animated ${route.meta?.transitionEnter}`"
+                  :leave-active-class="`animate__animated ${route.meta?.transitionLeave}`"
+                  :appear="true"
+      >
+        <component :is="Component"/>
+      </transition>
+    </router-view>
   </div>
 </template>
 

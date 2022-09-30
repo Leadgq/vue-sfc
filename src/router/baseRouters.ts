@@ -1,6 +1,6 @@
-import { RouteRecordRaw} from 'vue-router'
+import {RouteRecordRaw} from 'vue-router'
 
-const  baseRouters =[
+const baseRouters = [
     {
         path: '/login',
         name: 'login',
@@ -23,4 +23,4 @@ const  baseRouters =[
 ] as RouteRecordRaw[];
 
 
-export  default baseRouters ;
+export default baseRouters;

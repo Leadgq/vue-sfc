@@ -9,13 +9,19 @@ export const workRoutes = [
             {
                 path: 'async_children',
                 name: 'async_children',
-                meta: {permissions: 'async_look'},
+                meta: {
+                    transitionEnter: 'animate__fadeIn',
+                    transitionLeave: 'animate__out',
+                },
                 component: () => import("@/components/asyncChildren.vue"),
             },
             {
                 path: 'async_children2',
                 name: 'async_children2',
-                meta: {permissions: 'async_children2'},
+                meta: {
+                    transitionEnter: 'animate__fadeIn',
+                    transitionLeave: 'animate__out',
+                },
                 component: () => import("@/components/asyncChildren2.vue"),
             }
         ]

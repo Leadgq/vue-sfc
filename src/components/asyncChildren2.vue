@@ -1,14 +1,16 @@
 <template>
   <div>
-    <AsyncTest ref="asyncComponent">
-      <template #[distance]="{headerProps}">我要渲染的地方是{{ distance }} {{ headerProps }}</template>
-    </AsyncTest>
-    <el-button @click="flag = !flag">按钮</el-button>
-    <el-button @click="id++">effect测试</el-button>
-    <div>{{ tip }}</div>
+    <div>
+      <AsyncTest ref="asyncComponent">
+        <template #[distance]="{headerProps}">我要渲染的地方是{{ distance }} {{ headerProps }}</template>
+      </AsyncTest>
+      <el-button @click="flag = !flag">按钮</el-button>
+      <el-button @click="id++">effect测试</el-button>
+      <div>{{ tip }}</div>
+    </div>
+    <hr/>
+    <TreeComponentTest/>
   </div>
-  <hr/>
-  <TreeComponentTest/>
 </template>
 <script lang="ts" setup>
 import {effectTest} from "@/api/effect"

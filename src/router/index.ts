@@ -10,6 +10,9 @@ declare module "vue-router" {
         title?: string
         // 权限
         permissions?: string,
+        // 动画
+        transitionEnter?: string,
+        transitionLeave?: string,
     }
 }
 

@@ -22,8 +22,10 @@ const {count, inc, dec, reset} = useCounter(0, {min: 0, max: 10})
 </script>
 
 <template>
-  <p>Count: {{ count }}</p>
-  <el-button @click="inc">inc</el-button>
-  <el-button @click="dec">dec</el-button>
-  <el-button @click="reset">reset</el-button>
+  <div>
+    <p>Count: {{ count }}</p>
+    <el-button @click="inc">inc</el-button>
+    <el-button @click="dec">dec</el-button>
+    <el-button @click="reset">reset</el-button>
+  </div>
 </template>
