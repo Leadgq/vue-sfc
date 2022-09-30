@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { ElMessage } from "element-plus";
-import 'element-plus/es/components/message/style/css'
 export type responseResult<T> = {
     code: number;
     message: string,
@@ -22,11 +21,7 @@ export default class Axios {
                 const response = await this.instance.request<D>(config);
                 resolve(response.data)
             } catch (error) {
-                ElMessage({
-                    showClose: false,
-                    message: '网络错误',
-                    type: 'error',
-                })
+                ElMessage.error('网络错误');
                 reject(error);
             }
         })
