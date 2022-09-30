@@ -11,8 +11,6 @@ declare module '@vue/runtime-core' {
     AsyncChildren: typeof import('./src/components/asyncChildren.vue')['default']
     AsyncChildren2: typeof import('./src/components/asyncChildren2.vue')['default']
     AsyncTest: typeof import('./src/components/asyncTest.vue')['default']
-    Children: typeof import('./src/components/children.vue')['default']
-    ChildrenSet: typeof import('./src/components/childrenSet.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
@@ -20,8 +18,6 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TreeChildren: typeof import('./src/components/treeComponent/treeChildren.vue')['default']
-    TreeComponent: typeof import('./src/components/treeComponent.vue')['default']
     TreeComponentTest: typeof import('./src/components/treeComponent/treeComponentTest.vue')['default']
-    TreeData: typeof import('./src/components/TreeData.vue')['default']
   }
 }

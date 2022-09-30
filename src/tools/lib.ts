@@ -53,6 +53,6 @@ const initWebWorker = (): Promise<Worker> => {
 // 是否是一个可用数组
 export const isAvailableArray = (arr: any[] | Ref<any[]>) => arr && Array.isArray(unref(arr)) && unref(arr).length > 0;
 // 是否是一个空对象
-export const checkObjectIsEmpty = (obj: Record<string, any> | Ref<Record<string, any>>) => Reflect.ownKeys(unref(obj)).length === 0 && unref(obj).constructor === Object;
+export const checkObjectNotEmpty = (obj: Record<string, any> | Ref<Record<string, any>>) => Reflect.ownKeys(unref(obj)).length === 0 && unref(obj).constructor === Object;
 // 求和
 export const sum = (num1: number | Ref<number>, num2: number | Ref<number>) => unref(num1) + unref(num2);
