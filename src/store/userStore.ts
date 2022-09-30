@@ -32,12 +32,15 @@ const userStore = defineStore('userStore', {
             const data = await getUserInfoPromises();
             this.userPromises = data.result;
         },
+        // 修改过期时间
         modifyExpire(expire: number) {
             this.expire = expire;
         },
+        // 检查过期时间
         checkExpire() {
             if (this.expire) return this.expire < Date.now();
         },
+        // 修改用户状态 ==>只有设置过期时间
         modifyUserState() {
             this.userInfo = {} as userInfoResponseType;
         }
