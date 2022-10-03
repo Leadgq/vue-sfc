@@ -31,6 +31,7 @@ export const loadFile = async (fileName: string) => {
         }
     })
 }
+// 初始化web-worker
 const initWebWorker = (): Promise<Worker> => {
     return new Promise((resolve) => {
         const worker = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' })
@@ -49,4 +50,10 @@ export const flatten = (arr: any[] | Ref<any[]>): any[] => {
         const { children } = cur;
         return isAvailableArray(children) ? prev.concat(flatten(children), { ...cur }) : prev.concat({ ...cur })
     }, [])
+}
+// 寻找某个节点下所有的子节点
+export const findTreeNode = (arr: any[] | Ref<any[]>,id:string | number | Ref<number | string>) :any[] => { 
+    const nodeId = unref(id);
+    const nodeList = flatten(arr);
+    return  flatten(nodeList.filter(item => item.key === nodeId));
 }
