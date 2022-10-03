@@ -81,7 +81,7 @@ onMounted(() => {
 });
 const handlerWorker = () => {
   if (isAvailableArray(todoList)) {
-    const { id } = todoList.value[0];
+    const { id } = todoList.value.at(-1)!;
     workerId.value = id;
   }
 };
