@@ -1,31 +1,57 @@
-<script setup lang='ts'>
-interface UseCounterOptions {
-  min: number
-  max: number
-}
-
-function useCounter(initialValue = 0, options: UseCounterOptions) {
-  const {min, max} = options;
-  let count = ref(initialValue);
-  const inc = () => count.value = Math.min(unref(count) + 1, max);
-  const dec = () => count.value = Math.max(unref(count) - 1, min);
-  const reset = () => count.value = initialValue;
-  return {
-    inc,
-    count,
-    reset,
-    dec
-  }
-}
-
-const {count, inc, dec, reset} = useCounter(0, {min: 0, max: 10})
-</script>
-
 <template>
   <div>
-    <p>Count: {{ count }}</p>
-    <el-button @click="inc">inc</el-button>
-    <el-button @click="dec">dec</el-button>
-    <el-button @click="reset">reset</el-button>
+    <div v-for="(item, index) in [...cityMap.values()]" :key="index">
+      <div v-for="(cItem, cIndex) in item" :key="cIndex">{{ cItem?.cityName }}</div>
+    </div>
   </div>
 </template>
+<script setup lang="ts">
+let cityMap = ref(new Map());
+const mockData = (): Promise<any[]> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve([
+        {
+          cityName: "大连",
+          children: [
+            {
+              cityName: "沙河口区",
+              cityCode: "210000",
+            },
+            {
+              cityName: "高新园区",
+              cityCode: "220000",
+            },
+          ],
+        },
+        {
+          cityName: "沈阳",
+          children: [
+            {
+              cityName: "大东区",
+              cityCode: "210000",
+            },
+            {
+              cityName: "浑南新区",
+              cityCode: "220000",
+            },
+          ],
+        },
+      ]);
+    }, 1000);
+  });
+};
+
+onMounted(() => {
+  handlerCityData();
+});
+
+const handlerCityData = async () => {
+  const result = (await mockData()) as any[];
+  result.forEach((item) => {
+    cityMap.value.set(item.cityName, item.children);
+  });
+  console.log(cityMap.value.get("沈阳"));
+};
+</script>
+<style lang="scss" scoped></style>
