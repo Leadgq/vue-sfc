@@ -51,7 +51,6 @@ const handlerCityData = async () => {
   result.forEach((item) => {
     cityMap.value.set(item.cityName, item.children);
   });
-  console.log(cityMap.value.get("沈阳"));
 };
 </script>
 <style lang="scss" scoped></style>
