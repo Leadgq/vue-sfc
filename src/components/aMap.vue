@@ -1,7 +1,12 @@
 <template>
   <div class="content">
     <div class="nav">
-      <div v-for="(item,index) in stackItem " :key="index" class="nav-item" @click="backViewType(index)">
+      <div
+        v-for="(item, index) in stackItem"
+        :key="index"
+        class="nav-item"
+        @click="backViewType(index)"
+      >
         <span>{{ item.name }}</span>
         <span class="row"> > </span>
       </div>
@@ -11,9 +16,15 @@
 </template>
 
 <script setup lang="ts">
-import {changeMapView, drawCityMakers, drawDistrictMaker, loadMap, removePolyline} from "@/tools/gaudMap/amap";
-import {loadFile} from "@/tools/lib";
-import {ElMessage} from 'element-plus'
+import {
+  changeMapView,
+  drawCityMakers,
+  drawDistrictMaker,
+  loadMap,
+  removePolyline,
+} from "@/tools/gaudMap/amap";
+import { loadFile } from "@/tools/lib";
+import { ElMessage } from "element-plus";
 // 地图类型
 type viewTypes = {
   viewType: string;
@@ -25,17 +36,23 @@ let currentViewType = reactive<viewTypes>({
   viewCityCode: "210000",
   name: "辽宁省",
 });
+// 路由视角
+let routerName = $ref("AQYD");
 // 视角站
 let stackItem: viewTypes[] = $ref([]);
 // 调整向下视角
 const toViewType = (viewType?: string, viewCityCode?: string, cityName?: string) => {
   if (viewType && viewCityCode && cityName) {
     handlerViewType(viewType, viewCityCode, cityName);
-    stackItem.push({...currentViewType});
+    stackItem.push({ ...currentViewType });
   }
 };
 //公共行为
-const handlerViewType = async (viewType: string, viewCityCode: string, cityName: string) => {
+const handlerViewType = async (
+  viewType: string,
+  viewCityCode: string,
+  cityName: string
+) => {
   currentViewType.viewType = viewType;
   currentViewType.viewCityCode = viewCityCode;
   currentViewType.name = cityName;
@@ -46,7 +63,7 @@ const handlerViewType = async (viewType: string, viewCityCode: string, cityName:
 const backViewType = (index: number) => {
   // 如果点击的是最后一个
   if (index === stackItem.length - 1) return;
-  const {viewCityCode, viewType, name} = stackItem[index];
+  const { viewCityCode, viewType, name } = stackItem[index];
   handlerViewType(viewType, viewCityCode, name);
   stackItem.splice(index + 1, stackItem.length - 1);
   removePolyline();
@@ -54,38 +71,53 @@ const backViewType = (index: number) => {
 // 加载数据
 const loadData = async () => {
   // 匹配数据
-  const result = await loadFile('AQYD') as Record<string, {
-    cityList: any[],
-    projectList: any[],
-  }>;
-  const {viewCityCode} = currentViewType;
+  const result = (await loadFile(routerName)) as Record<
+    string,
+    {
+      cityList: any[];
+      projectList: any[];
+    }
+  >;
+  const { viewCityCode } = currentViewType;
   let data = result[viewCityCode];
   // 如果匹配到
   if (data) {
-    if (currentViewType.viewType === 'district') {
+    if (currentViewType.viewType === "district") {
       let districtData = handlerDistrictData(data.projectList);
-      drawDistrictMaker(districtData, currentViewType.viewType, currentViewType.viewCityCode);
+      drawDistrictMaker(
+        districtData,
+        currentViewType.viewType,
+        currentViewType.viewCityCode
+      );
     } else {
-      drawCityMakers(data.cityList, currentViewType.viewType, currentViewType.viewCityCode)
+      drawCityMakers(
+        data.cityList,
+        currentViewType.viewType,
+        currentViewType.viewCityCode
+      );
     }
   } else {
-    ElMessage.error('当前区域暂无数据')
+    ElMessage.error("当前区域暂无数据");
   }
-}
+};
 // 处理区级数据
 const handlerDistrictData = (list: any[]) => {
-  return (list || []).map((item: any) => {
-    return {
-      ...item,
-      center: [item.longitude, item.latitude],
-      cityName: item?.name,
-      level: 'district'
-    };
-  }).filter((item: { longitude: string, latitude: string }) => filterData(item.longitude, item.latitude))
-}
+  return (list || [])
+    .map((item: any) => {
+      return {
+        ...item,
+        center: [item.longitude, item.latitude],
+        cityName: item?.name,
+        level: "district",
+      };
+    })
+    .filter((item: { longitude: string; latitude: string }) =>
+      filterData(item.longitude, item.latitude)
+    );
+};
 const filterData = (longitude: string, latitude: string) => {
-  return longitude && latitude && latitude !== '0' && longitude !== '0'
-}
+  return longitude && latitude && latitude !== "0" && longitude !== "0";
+};
 onMounted(async () => {
   // 加载地图
   await loadMap({
@@ -95,7 +127,7 @@ onMounted(async () => {
     toViewType,
   });
   // 默认放入
-  stackItem.push({...currentViewType});
+  stackItem.push({ ...currentViewType });
   // 加载数据
   await loadData();
 });
@@ -109,7 +141,7 @@ onMounted(async () => {
       @apply cursor-pointer;
       &:last-of-type {
         .row {
-          @apply hidden ;
+          @apply hidden;
         }
       }
     }
@@ -130,19 +162,18 @@ onMounted(async () => {
     }
 
     &:deep(.city-info-window) {
-      background: rgba(3, 2, 19, 0.8500);
-      box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.1000);
+      background: rgba(3, 2, 19, 0.85);
+      box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.1);
       @apply flex flex-col  p-[16px]  rounded-[6px];
       .info-window-name {
         @apply text-[18px] text-white;
       }
     }
 
-    &:deep( .point) {
+    &:deep(.point) {
       background-image: url("@/assets/maker/ponit.png");
       @apply bg-cover;
     }
   }
-
 }
 </style>
