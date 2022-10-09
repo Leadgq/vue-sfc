@@ -19,14 +19,18 @@ const userStore = defineStore('userStore', {
         }
     },
     actions: {
+        // 登录逻辑
         async loginRequest(data: loginUserType) {
-            let res = await login(data);
-            Object.assign(this.userInfo, res.result)
-            const {expire} = res.result;
+            const loginResponse = await login(data);
+            //合并对象
+            Object.assign(this.userInfo,loginResponse.result);
+            const {expire} = loginResponse.result;
+            // 如果后台数据中包含过期时间
             if (expire) {
                 this.userInfo.expire = util.setExpire(expire);
             }
         },
+        // 获取权限
         async getUserInfoPromise() {
             const data = await getUserInfoPromises();
             this.userPromises = data.result;
