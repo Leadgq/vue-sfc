@@ -2,9 +2,7 @@
   <div class="async_children">
     <div>
       <AsyncTest ref="asyncComponent">
-        <template #[distance]="{ headerProps }"
-          >我要渲染的地方是{{ distance }} {{ headerProps }}</template
-        >
+        <template #[distance]="{ headerProps }">我要渲染的地方是{{ distance }} {{ headerProps }}</template>
       </AsyncTest>
       <el-button @click="flag = !flag">按钮</el-button>
       <el-button @click="id++">effect测试</el-button>
@@ -27,11 +25,11 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { effectTest } from "@/api/effect";
+import {effectTest} from "@/api/effect";
 import AsyncTest from "@/components/asyncTest.vue";
 import TreeComponentTest from "@/components/treeComponent/treeComponentTest.vue";
-import { ElMessage } from "element-plus";
-import { isAvailableArray } from "@/tools/lib";
+import {ElMessage} from "element-plus";
+import {isAvailableArray} from "@/tools/lib";
 
 const asyncComponent = ref<InstanceType<typeof AsyncTest> | null>(null);
 let flag = ref(true);
@@ -88,7 +86,7 @@ const handlerWorker = () => {
 </script>
 <script lang="ts">
 export default {
-  name: "asyncChildren2.vue",
+  name: "asyncChildren2",
 };
 </script>
 <style lang="scss" scoped>

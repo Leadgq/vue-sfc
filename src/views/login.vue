@@ -46,6 +46,11 @@ const loginUser = () => {
 }
 </script>
 
+<script lang="ts">
+export default {
+  name: 'login'
+}
+</script>
 <style lang="scss" scoped>
 .login {
   @apply w-[400px];
