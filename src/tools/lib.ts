@@ -47,8 +47,8 @@ export const flatten = (arr: any[] | Ref<any[]>): any[] => {
         return isAvailableArray(children) ? prev.concat(flatten(children), {...cur}) : prev.concat({...cur})
     }, [])
 }
-// 寻找某个节点下所有的子节点
-export const findTreeNode = (arr: any[] | Ref<any[]>, id: string | Ref<string>): any[] => {
+// 寻找某个节点下所有的子节点不包括当前节点
+export const findTreeChildrenNode = (arr: any[] | Ref<any[]>, id: string | Ref<string>): any[] => {
     const nodeId = unref(id);
     const flattenList = flatten(arr);
     const nodeList = flatten(flattenList.filter(item => item.key === nodeId));
