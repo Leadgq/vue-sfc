@@ -21,7 +21,7 @@
 import {loginHook} from "@/tools/hook/hook";
 import type {FormInstance, FormRules} from 'element-plus'
 import {isAvailablePhone} from "@/tools/lib";
-
+// 检查手机号
 const checkPhone = (rule: any, value: any, callback: any) => {
   if (!isAvailablePhone(value)) {
     return callback(new Error('检查手机号是否正确'))
@@ -29,6 +29,7 @@ const checkPhone = (rule: any, value: any, callback: any) => {
     callback();
   }
 }
+// 规则
 let loginRules = reactive<FormRules>({
   name: [
     {required: true, message: '请输入用户名', trigger: 'blur'},
@@ -49,7 +50,6 @@ let loginData = reactive({
 })
 const ruleFormRef = ref<FormInstance>();
 const {login} = loginHook();
-
 const loginUser = () => {
   login(loginData, unref(ruleFormRef)!);
 }

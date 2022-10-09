@@ -1,5 +1,4 @@
 import {isAvailableArray} from "@/tools/lib"
-import userStore from "@/store/userStore";
 
 interface IData {
     expire?: number;
@@ -30,11 +29,8 @@ export default {
         }
         return locationData || null;
     },
-    set(expire: number) {
-        const store = userStore();
-        const expires = new Date().getTime() + expire * 1000
-        store.modifyExpire(expires);
-        return expires;
+    setExpire(expire: number) {
+        return new Date().getTime() + expire * 1000;
     },
     remove(key: string): void {
         localStorage.removeItem(key);

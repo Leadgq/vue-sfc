@@ -7,8 +7,7 @@ const userStore = defineStore('userStore', {
     state: () => {
         return {
             userInfo: <userInfoResponseType>{},
-            userPromises: <string[]>[],
-            expire: <undefined | number>undefined
+            userPromises: <string[]>[]
         }
     },
     getters: {
@@ -25,20 +24,16 @@ const userStore = defineStore('userStore', {
             Object.assign(this.userInfo, res.result)
             const {expire} = res.result;
             if (expire) {
-                this.userInfo.expire = util.set(expire);
+                this.userInfo.expire = util.setExpire(expire);
             }
         },
         async getUserInfoPromise() {
             const data = await getUserInfoPromises();
             this.userPromises = data.result;
         },
-        // 修改过期时间
-        modifyExpire(expire: number) {
-            this.expire = expire;
-        },
         // 检查过期时间
         checkExpire() {
-            if (this.expire) return this.expire < Date.now();
+            if (this.userInfo.expire) return this.userInfo.expire < Date.now();
         },
         // 修改用户状态 ==>只有设置过期时间
         modifyUserState() {
