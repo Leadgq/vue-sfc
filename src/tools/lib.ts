@@ -63,18 +63,20 @@ export const isAvailableIdCard = (idCard: string | Ref<string>) => /(^\d{15}$)|(
 export const setCookie = (key: string | Ref<string>, value: any | Ref, expire: number | Ref<number>) => {
     const d = new Date();
     d.setDate(d.getDate() + unref(expire));
-    document.cookie = `${key}=${value};expires=${d.toUTCString()}`
+    document.cookie = `${unref(key)}=${unref(value)};expires=${d.toUTCString()}`
 }
 // 读取cookie
 export const getCookie = (key: string | Ref<string>) => {
     const cookieStr = decodeURI(document.cookie);
-    const arr = cookieStr.split(';');
     let cookieValue = '';
-    for (let i = 0; i < arr.length; i++) {
-        const temp = arr[i].split('=');
-        if (temp[0] === key) {
-            cookieValue = temp[1];
-            break
+    const cookieArray = cookieStr.split(';');
+    if (isAvailableArray(cookieArray)) {
+        for (let i = 0; i < cookieArray.length; i++) {
+            const temp = cookieArray[i].split('=');
+            if (temp[0] === key) {
+                cookieValue = temp[1];
+                break
+            }
         }
     }
     return cookieValue
