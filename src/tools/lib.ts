@@ -75,7 +75,7 @@ export const getCookie = (key: string | Ref<string>) => {
     if (isAvailableArray(cookieArray)) {
         for (let i = 0; i < cookieArray.length; i++) {
             const temp = cookieArray[i].split('=');
-            if (temp[0] === key) {
+            if (temp[0] === unref(key)) {
                 cookieValue = temp[1];
                 break
             }
