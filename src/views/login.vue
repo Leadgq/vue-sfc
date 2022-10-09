@@ -12,6 +12,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="loginUser">登录</el-button>
+        <el-checkbox v-model="checkState" label="记住密码" size="large" class="ml-5"/>
       </el-form-item>
     </el-form>
   </div>
@@ -20,7 +21,11 @@
 <script lang="ts" setup>
 import {loginHook} from "@/tools/hook/hook";
 import type {FormInstance, FormRules} from 'element-plus'
-import {isAvailablePhone} from "@/tools/lib";
+import {isAvailableObject, isAvailablePhone, setCookie} from "@/tools/lib";
+import userStore from "@/store/userStore";
+import {encode} from 'js-base64';
+
+const storeInstance = userStore();
 // 检查手机号
 const checkPhone = (rule: any, value: any, callback: any) => {
   if (!isAvailablePhone(value)) {
@@ -48,10 +53,29 @@ let loginData = reactive({
   password: '',
   phone: ''
 })
+let checkState = ref(false);
 const ruleFormRef = ref<FormInstance>();
 const {login} = loginHook();
 const loginUser = () => {
   login(loginData, unref(ruleFormRef)!);
+  modifyState();
+}
+onMounted(() => {
+  handlerRememberPasswordState()
+})
+// 处理记住密码操作
+const handlerRememberPasswordState = () => {
+  checkState.value = storeInstance.rememberPasswordState;
+  if (checkState.value) {
+    console.log(encode(window.location.origin))
+  }
+}
+// 修改记住密码状态
+const modifyState = () => {
+  storeInstance.modifyRememberPasswordState(checkState.value);
+  if (checkState.value && isAvailableObject(loginData)) {
+    setCookie(encode(`${window.location.origin}`), encode(JSON.stringify(loginData)), 1000)
+  }
 }
 </script>
 

@@ -8,7 +8,8 @@ const userStore = defineStore('userStore', {
     state: () => {
         return {
             userInfo: <userInfoResponseType>{},
-            userPromises: <string[]>[]
+            userPromises: <string[]>[],
+            rememberPasswordState: false
         }
     },
     getters: {
@@ -44,6 +45,10 @@ const userStore = defineStore('userStore', {
         modifyUserState() {
             this.userInfo = <userInfoResponseType>{};
             this.userPromises = <string[]>[];
+        },
+        // 修改记住密码状态
+        modifyRememberPasswordState(state:boolean) {
+            this.rememberPasswordState = state;
         }
     },
     persist: {
@@ -58,6 +63,11 @@ const userStore = defineStore('userStore', {
                 key: 'user_promises',
                 storage: localStorage,
                 paths: ['userPromises']
+            },
+            {
+                key: 'rememberPasswordState',
+                storage: localStorage,
+                paths: ['rememberPasswordState']
             }
         ]
     }
