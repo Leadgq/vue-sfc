@@ -20,10 +20,10 @@
 <script lang="ts" setup>
 import {loginHook} from "@/tools/hook/hook";
 import type {FormInstance, FormRules} from 'element-plus'
+import {isAvailablePhone} from "@/tools/lib";
 
 const checkPhone = (rule: any, value: any, callback: any) => {
-  const reg = /^1[3,4,5,6,7,8,9][0-9]{9}$/;
-  if (!reg.test(value)) {
+  if (!isAvailablePhone(value)) {
     return callback(new Error('检查手机号是否正确'))
   } else {
     callback();
