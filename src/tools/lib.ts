@@ -48,10 +48,12 @@ export const flatten = (arr: any[] | Ref<any[]>): any[] => {
     }, [])
 }
 // 寻找某个节点下所有的子节点
-export const findTreeNode = (arr: any[] | Ref<any[]>, id: string | number | Ref<number | string>): any[] => {
+export const findTreeNode = (arr: any[] | Ref<any[]>, id: string | Ref<string>): any[] => {
     const nodeId = unref(id);
-    const nodeList = flatten(arr);
-    return flatten(nodeList.filter(item => item.key === nodeId));
+    const flattenList = flatten(arr);
+    const nodeList = flatten(flattenList.filter(item => item.key === nodeId));
+    // 去除根节点
+    return nodeList.filter(item => item.key !== nodeId)
 }
 // 是否是一个可用的手机号
 export const isAvailablePhone = (phone: string | Ref<string>) => /^1[3,4,5,6,7,8,9][0-9]{9}$/.test(unref(phone))
