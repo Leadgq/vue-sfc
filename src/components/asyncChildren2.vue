@@ -1,9 +1,9 @@
 <template>
   <div class="async_children">
     <div>
-      <AsyncTest ref="asyncComponent">
+      <SlotTest ref="asyncComponent">
         <template #[distance]="{ headerProps }">我要渲染的地方是{{ distance }} {{ headerProps }}</template>
-      </AsyncTest>
+      </SlotTest>
       <el-button @click="flag = !flag">按钮</el-button>
       <el-button @click="id++">effect测试</el-button>
       <div>{{ tip }}</div>
@@ -26,12 +26,12 @@
 </template>
 <script lang="ts" setup>
 import {effectTest} from "@/api/effect";
-import AsyncTest from "@/components/asyncTest.vue";
+import SlotTest from "@/components/slotTest.vue";
 import TreeComponentTest from "@/components/treeComponent/treeComponentTest.vue";
 import {ElMessage} from "element-plus";
 import {isAvailableArray} from "@/tools/lib";
 
-const asyncComponent = ref<InstanceType<typeof AsyncTest> | null>(null);
+const asyncComponent = ref<InstanceType<typeof SlotTest> | null>(null);
 let flag = ref(true);
 let distance = ref("header");
 
