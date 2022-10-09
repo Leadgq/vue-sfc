@@ -4,7 +4,7 @@ import router from "@/router";
 import {FormInstance} from 'element-plus'
 
 export const loginHook = () => {
-    const storeInstance = userStore();
+    const userStoreInstance = userStore();
     const login = async (data: loginUserType, ruleFormRef: FormInstance) => {
         await ruleFormRef.validate((valid: boolean) => {
             if (valid) {
@@ -13,8 +13,11 @@ export const loginHook = () => {
         })
     };
     const pathAction = async (data: loginUserType) => {
-        await storeInstance.loginRequest(data);
-        await storeInstance.getUserInfoPromise();
+        // 请求登录
+        await userStoreInstance.loginRequest(data);
+        // 获取用户权限
+        await userStoreInstance.getUserInfoPromise();
+        // 路由跳转
         await router.push({path: '/async/async_children2'})
     }
     return {
