@@ -2,7 +2,7 @@ import {getUserInfoPromises, login} from '@/api/user';
 import {defineStore} from "pinia"
 import {loginUserType, userInfoResponseType} from "@/types/userStoreType"
 import util from "@/tools/help/help"
-import {loadRoutes} from "@/router/loadRoutes";
+
 
 const userStore = defineStore('userStore', {
     state: () => {
@@ -35,8 +35,6 @@ const userStore = defineStore('userStore', {
         async getUserInfoPromise() {
             const data = await getUserInfoPromises();
             this.userPromises = data.result;
-            // 加载路由，分配权限
-            await loadRoutes();
         },
         // 检查过期时间
         checkExpire() {

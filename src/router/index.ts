@@ -2,7 +2,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 import Guard from "@/router/Guard"
 import BaseRouters from "@/router/baseRouters";
 import {App} from "vue";
-
+import {workRoutes} from "@/router/wokerRoutes"
 // 额外声明路由元信息
 declare module "vue-router" {
     interface RouteMeta {
@@ -17,7 +17,7 @@ declare module "vue-router" {
 
 const router = createRouter({
     history: createWebHistory(),
-    routes: [...BaseRouters],
+    routes: [...BaseRouters, ...workRoutes],
 })
 // 引入路由入口
 export const setRouter = (app: App) => {
