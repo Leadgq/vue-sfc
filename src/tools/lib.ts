@@ -1,7 +1,7 @@
 import fileSaver from 'file-saver'
 import {Ref} from "vue";
 // 千分符
-export const toLocalString = (num: number | string | Ref<string | number>) => typeof unref(num) === 'string' ? Number(unref(num)).toLocaleString() : unref(num).toLocaleString();
+export const toThousands = (num: number | string | Ref<string | number>) => typeof unref(num) === 'string' ? Number(unref(num)).toLocaleString() : unref(num).toLocaleString();
 // 下载文件
 export const downloadFile = (url: string | Blob | Ref<string | Blob>, name: string | Ref<string>) => fileSaver.saveAs(unref(url), unref(name));
 // 处理大文件
@@ -52,8 +52,7 @@ export const findTreeChildrenNode = (arr: any[] | Ref<any[]>, id: string | Ref<s
     const nodeId = unref(id);
     const flattenList = flatten(arr);
     const nodeList = flatten(flattenList.filter(item => item.key === nodeId));
-    // 去除根节点
-    return nodeList.filter(item => item.key !== nodeId)
+    return isAvailableArray(nodeList) ? nodeList.filter(item => item.key !== nodeId) : []
 }
 // 是否是一个可用的手机号
 export const isAvailablePhone = (phone: string | Ref<string>) => /^1[3,4,5,6,7,8,9][0-9]{9}$/.test(unref(phone))
