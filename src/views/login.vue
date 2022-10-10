@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <div class="login-content">
-      <div class="container-left"><img :src="bgImg" alt="" /></div>
+      <div class="container-left"><img :src="LoginBg" alt="" /></div>
       <div class="container-right">
         <el-form :model="loginData" label-width="90px" :rules="loginRules" ref="ruleFormRef">
           <el-form-item label="用户名:" prop="name">
@@ -29,7 +29,6 @@ import type {FormInstance, FormRules} from "element-plus";
 import {getCookie, isAvailableObjectValue, isAvailablePhone, setCookie} from "@/tools/lib";
 import userStore from "@/store/userStore";
 import {decode, encode} from "js-base64";
-import bgImg from "@/assets/bg.jpg";
 import {loginUserType} from "@/types/userStoreType";
 
 const userStoreInstance = userStore();

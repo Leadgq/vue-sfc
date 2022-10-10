@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="(item, index) in [...cityMap.values()]" :key="index">
+    <div v-for="(item, index) in cityMap.values()" :key="index">
       <div v-for="(cItem, cIndex) in item" :key="cIndex">{{ cItem?.cityName }}</div>
     </div>
   </div>

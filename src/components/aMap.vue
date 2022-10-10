@@ -16,15 +16,9 @@
 </template>
 
 <script setup lang="ts">
-import {
-  changeMapView,
-  drawCityMakers,
-  drawDistrictMaker,
-  loadMap,
-  removePolyline,
-} from "@/tools/gaudMap/amap";
-import { loadFile } from "@/tools/lib";
-import { ElMessage } from "element-plus";
+import {changeMapView, drawCityMakers, drawDistrictMaker, loadMap, removePolyline,} from "@/tools/gaudMap/amap";
+import {loadFile} from "@/tools/lib";
+import {ElMessage} from "element-plus";
 // 地图类型
 type viewTypes = {
   viewType: string;
@@ -156,7 +150,7 @@ onMounted(async () => {
       }
 
       .city-marker-img {
-        background: url("@/assets/maker/icon_city_marker.png");
+        background: url("@/assets/image/maker/icon_city_marker.png");
         @apply w-[20px] h-[25px] object-cover bg-center bg-top bg-cover;
       }
     }
@@ -171,7 +165,7 @@ onMounted(async () => {
     }
 
     &:deep(.point) {
-      background-image: url("@/assets/maker/ponit.png");
+      background-image: url("@/assets/image/maker/ponit.png");
       @apply bg-cover;
     }
   }
