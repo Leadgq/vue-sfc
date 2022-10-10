@@ -24,7 +24,7 @@ export default ({command, mode}: viteConfig) => {
                 localEnabled: command === 'serve',
             }),
             AutoImport({
-                imports: ['vue', 'vue-router'],
+                imports: ['vue', 'vue-router', {'@vueuse/core': ['useInfiniteScroll']}],
                 dts: "src/auto-import.d.ts"
             }),
             Components({

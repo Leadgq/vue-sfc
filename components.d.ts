@@ -10,7 +10,6 @@ declare module '@vue/runtime-core' {
     AMap: typeof import('./src/components/aMap.vue')['default']
     AsyncChildren: typeof import('./src/components/asyncChildren.vue')['default']
     AsyncChildren2: typeof import('./src/components/asyncChildren2.vue')['default']
-    AsyncTest: typeof import('./src/components/asyncTest.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCheckbox: typeof import('element-plus/es')['ElCheckbox']
     ElForm: typeof import('element-plus/es')['ElForm']
