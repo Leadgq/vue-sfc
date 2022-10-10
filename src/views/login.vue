@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <div class="login-content">
-      <div class="container-left"><img :src="LoginBg" alt="" /></div>
+      <div class="container-left"><img :src="bgImg" alt="" /></div>
       <div class="container-right">
         <el-form :model="loginData" label-width="90px" :rules="loginRules" ref="ruleFormRef">
           <el-form-item label="用户名:" prop="name">
@@ -30,6 +30,7 @@ import {getCookie, isAvailableObjectValue, isAvailablePhone, setCookie} from "@/
 import userStore from "@/store/userStore";
 import {decode, encode} from "js-base64";
 import {loginUserType} from "@/types/userStoreType";
+import bgImg from "@/assets/image/login/bg.jpg"
 
 const userStoreInstance = userStore();
 // 检查手机号

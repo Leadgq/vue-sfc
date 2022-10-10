@@ -4,7 +4,6 @@ import AutoImport from "unplugin-auto-import/vite"
 import Components from 'unplugin-vue-components/vite';
 import {ElementPlusResolver} from 'unplugin-vue-components/resolvers';
 import {viteMockServe} from 'vite-plugin-mock'
-import ViteImages from 'vite-plugin-vue-images'
 import path from "path";
 
 type viteConfig = {
@@ -32,21 +31,10 @@ export default ({command, mode}: viteConfig) => {
                 resolvers: [ElementPlusResolver()],
                 dts: true,
                 include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
-            }),
-            ViteImages({
-                dirs: ['src/assets/image'],
-                extensions: ['jpg', 'jpeg', 'png', 'svg', 'webp'],
             })
         ],
         resolve: {
             alias: {'@': path.resolve(__dirname, 'src')}
-        },
-        build: {
-            lib: {
-                entry: path.resolve(__dirname, "src/main.ts"),
-                name: 'MyLib',
-                fileName: 'my-lib'
-            },
         },
         worker: {
             format: 'es'
