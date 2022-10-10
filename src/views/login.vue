@@ -24,13 +24,13 @@
 </template>
 
 <script lang="ts" setup>
-import { loginHook } from "@/tools/hook/hook";
-import type { FormInstance, FormRules } from "element-plus";
-import { getCookie, isAvailableObject, isAvailablePhone, setCookie } from "@/tools/lib";
+import {loginHook} from "@/tools/hook/hook";
+import type {FormInstance, FormRules} from "element-plus";
+import {getCookie, isAvailableObject, isAvailableObjectValue, isAvailablePhone, setCookie} from "@/tools/lib";
 import userStore from "@/store/userStore";
-import { encode, decode } from "js-base64";
+import {decode, encode} from "js-base64";
 import bgImg from "@/assets/bg.jpg";
-import { loginUserType } from "@/types/userStoreType";
+import {loginUserType} from "@/types/userStoreType";
 
 const userStoreInstance = userStore();
 // 检查手机号
@@ -82,6 +82,7 @@ const handlerRememberPasswordState = () => {
 };
 // 修改记住密码状态
 const modifyState = () => {
+  if (!isAvailableObjectValue(loginData)) return;
   userStoreInstance.modifyRememberPasswordState(checkState.value);
   if (checkState.value && isAvailableObject(loginData)) {
     setCookie(encode(`${window.location.origin}`), encode(JSON.stringify(loginData)), 1000);
