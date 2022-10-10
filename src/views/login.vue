@@ -83,8 +83,8 @@ const handlerRememberPasswordState = () => {
 // 修改记住密码状态
 const modifyState = () => {
   if (!isAvailableObjectValue(loginData)) return;
+  userStoreInstance.modifyRememberPasswordState(checkState.value);
   if (checkState.value) {
-    userStoreInstance.modifyRememberPasswordState(checkState.value);
     setCookie(encode(`${window.location.origin}`), encode(JSON.stringify(loginData)), 1000);
   }
 };
