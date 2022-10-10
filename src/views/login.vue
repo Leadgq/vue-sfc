@@ -26,7 +26,7 @@
 <script lang="ts" setup>
 import {loginHook} from "@/tools/hook/hook";
 import type {FormInstance, FormRules} from "element-plus";
-import {getCookie, isAvailableObject, isAvailableObjectValue, isAvailablePhone, setCookie} from "@/tools/lib";
+import {getCookie, isAvailableObjectValue, isAvailablePhone, setCookie} from "@/tools/lib";
 import userStore from "@/store/userStore";
 import {decode, encode} from "js-base64";
 import bgImg from "@/assets/bg.jpg";
@@ -83,8 +83,8 @@ const handlerRememberPasswordState = () => {
 // 修改记住密码状态
 const modifyState = () => {
   if (!isAvailableObjectValue(loginData)) return;
-  userStoreInstance.modifyRememberPasswordState(checkState.value);
-  if (checkState.value && isAvailableObject(loginData)) {
+  if (checkState.value) {
+    userStoreInstance.modifyRememberPasswordState(checkState.value);
     setCookie(encode(`${window.location.origin}`), encode(JSON.stringify(loginData)), 1000);
   }
 };
