@@ -32,7 +32,7 @@ import { encode, decode } from "js-base64";
 import bgImg from "@/assets/bg.jpg";
 import { loginUserType } from "@/types/userStoreType";
 
-const storeInstance = userStore();
+const userStoreInstance = userStore();
 // 检查手机号
 const checkPhone = (rule: any, value: any, callback: any) => {
   if (!isAvailablePhone(value)) {
@@ -70,7 +70,7 @@ onMounted(() => {
 });
 // 处理记住密码操作
 const handlerRememberPasswordState = () => {
-  checkState.value = storeInstance.rememberPasswordState;
+  checkState.value = userStoreInstance.rememberPasswordState;
   if (checkState.value) {
     // cookie解密
     const cookiesValues = getCookie(encode(window.location.origin));
@@ -82,7 +82,7 @@ const handlerRememberPasswordState = () => {
 };
 // 修改记住密码状态
 const modifyState = () => {
-  storeInstance.modifyRememberPasswordState(checkState.value);
+  userStoreInstance.modifyRememberPasswordState(checkState.value);
   if (checkState.value && isAvailableObject(loginData)) {
     setCookie(encode(`${window.location.origin}`), encode(JSON.stringify(loginData)), 1000);
   }
