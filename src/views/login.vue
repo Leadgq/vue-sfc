@@ -1,9 +1,7 @@
 <template>
   <div class="login-container">
     <div class="login-content">
-      <div class="container-left">
-        <img :src="bgImg" alt="" />
-      </div>
+      <div class="container-left"><img :src="bgImg" alt="" /></div>
       <div class="container-right">
         <el-form :model="loginData" label-width="90px" :rules="loginRules" ref="ruleFormRef">
           <el-form-item label="用户名:" prop="name">
@@ -32,12 +30,7 @@ import { getCookie, isAvailableObject, isAvailablePhone, setCookie } from "@/too
 import userStore from "@/store/userStore";
 import { encode, decode } from "js-base64";
 import bgImg from "@/assets/bg.jpg";
-
-interface loginType {
-  name: string;
-  password: string;
-  phone: string;
-}
+import { loginUserType } from "@/types/userStoreType";
 
 const storeInstance = userStore();
 // 检查手机号
@@ -60,7 +53,7 @@ let loginRules = reactive<FormRules>({
     { validator: checkPhone, trigger: "blur" },
   ],
 });
-let loginData = reactive<loginType>({
+let loginData = reactive<loginUserType>({
   name: "",
   password: "",
   phone: "",
@@ -82,7 +75,7 @@ const handlerRememberPasswordState = () => {
     // cookie解密
     const cookiesValues = getCookie(encode(window.location.origin));
     if (cookiesValues) {
-      const formValue = JSON.parse(decode(cookiesValues)) as loginType;
+      const formValue = JSON.parse(decode(cookiesValues)) as loginUserType;
       Object.assign(loginData, formValue);
     }
   }
