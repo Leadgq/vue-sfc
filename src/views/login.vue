@@ -101,7 +101,7 @@ const handlerRememberPasswordState = () => {
   checkState.value = userStoreInstance.rememberPasswordState;
   if (checkState.value) {
     // cookie解密
-    const cookiesValues = getCookie(encode(window.location.origin));
+    const cookiesValues = getCookie(encode(`User${window.location.origin}`), 'login');
     if (cookiesValues) {
       const formValue = JSON.parse(decode(cookiesValues)) as loginUserType;
       const {name, password, phone} = formValue;
@@ -114,7 +114,7 @@ const modifyState = () => {
   if (!isAvailableObjectValue(loginData)) return;
   userStoreInstance.modifyRememberPasswordState(checkState.value);
   if (checkState.value) {
-    setCookie(encode(`${window.location.origin}`), encode(JSON.stringify(loginData)), 1000);
+    setCookie(encode(`User${window.location.origin}`), encode(JSON.stringify(loginData)), 1000);
   }
 };
 </script>

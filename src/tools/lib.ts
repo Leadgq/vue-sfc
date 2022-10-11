@@ -69,14 +69,17 @@ export const setCookie = (key: string | Ref<string>, value: any | Ref, expire: n
     document.cookie = `${unref(key)}=${unref(value)};expires=${d.toUTCString()}`
 }
 // 读取cookie
-export const getCookie = (key: string | Ref<string>) => {
+export const getCookie = (key: string | Ref<string>, type?: string) => {
     const cookieStr = decodeURI(document.cookie);
     let cookieValue = '';
     const cookieArray = cookieStr.split(';');
     if (isAvailableArray(cookieArray)) {
         for (let i = 0; i < cookieArray.length; i++) {
-            const temp = cookieArray[i].split('=');
-            if (temp[0] === unref(key)) {
+            const temp = cookieArray[i].split('=').filter(item => item);
+            if (type && type === 'login' && temp[0] === unref(key).slice(0, unref(key).length - 2)) {
+                cookieValue = temp[1];
+                break
+            } else if (!type && temp[0] === unref(key)) {
                 cookieValue = temp[1];
                 break
             }
