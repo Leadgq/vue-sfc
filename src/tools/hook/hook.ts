@@ -3,7 +3,7 @@ import {loginUserType} from "@/types/userStoreType";
 import router from "@/router";
 import {FormInstance} from 'element-plus'
 
-export const loginHook = () => {
+export const useLogin = () => {
     const loginData = reactive<loginUserType>({
         name: "",
         password: "",

@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-import {loginHook} from "@/tools/hook/hook";
+import {useLogin} from "@/tools/hook/hook";
 import type {FormInstance, FormRules} from "element-plus";
 import {getCookie, isAvailableObjectValue, isAvailablePhone, setCookie} from "@/tools/lib";
 import userStore from "@/store/userStore";
@@ -57,7 +57,7 @@ let loginRules = reactive<FormRules>({
 let checkState = ref(false);
 const ruleFormRef = ref<FormInstance>();
 // 登录hook
-const {login, loginData} = loginHook();
+const {login, loginData} = useLogin();
 const loginUser = () => {
   login(unref(ruleFormRef)!);
   modifyState();
