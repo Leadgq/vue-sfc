@@ -8,19 +8,23 @@
       <el-button @click="id++">effect测试</el-button>
       <div>{{ tip }}</div>
     </div>
-    <hr />
-    <TreeComponentTest />
+    <hr/>
+    <TreeComponentTest/>
     <div :class="styleDiv" class="">样式测试</div>
     <el-button @click="modifyStyle">修改样式</el-button>
-    <hr />
+    <hr/>
     <div
-      v-for="item in todoList"
-      :key="item.id"
-      class="todo"
-      :class="{ active: workerId === item.id }"
-      @click="workerId = item.id"
+        v-for="item in todoList"
+        :key="item.id"
+        class="todo"
+        :class="{ active: workerId === item.id }"
+        @click="workerId = item.id"
     >
       {{ item.name }}
+    </div>
+    <hr/>
+    <div class="w-[200px] h-[100px] bg-red-400 overflow-y-auto" ref="el">
+      <div v-for="(item,index) in useInfiniteArray" :key="index">{{ item }}</div>
     </div>
   </div>
 </template>
@@ -29,20 +33,20 @@ import {effectTest} from "@/api/effect";
 import SlotTest from "@/components/slotTest.vue";
 import TreeComponentTest from "@/components/treeComponent/treeComponentTest.vue";
 import {ElMessage} from "element-plus";
-import {isAvailableArray} from "@/tools/lib";
+import {isAvailableArray, randomMax} from "@/tools/lib";
 
 const asyncComponent = ref<InstanceType<typeof SlotTest> | null>(null);
 let flag = ref(true);
 let distance = ref("header");
 
 watch(
-  flag,
-  (newValue) => {
-    distance.value = newValue ? "header" : "main";
-  },
-  {
-    flush: "post",
-  }
+    flag,
+    (newValue) => {
+      distance.value = newValue ? "header" : "main";
+    },
+    {
+      flush: "post",
+    }
 );
 //watchEffect
 let id = ref(1);
@@ -79,10 +83,36 @@ onMounted(() => {
 });
 const handlerWorker = () => {
   if (isAvailableArray(todoList)) {
-    const { id } = todoList.value.at(-1)!;
+    const {id} = todoList.value.at(-1)!;
     workerId.value = id;
   }
 };
+const el = ref<HTMLElement | null>(null)
+let useInfiniteArray = ref<any[]>([])
+
+const loadMore = (): Promise<any[]> => {
+  let list = <any>[];
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      for (let i = 0; i < 5; i++) {
+        list.push(randomMax(5, 10))
+      }
+      resolve(list);
+    }, 1000)
+  })
+}
+onMounted(() => {
+  loadArrayData()
+})
+useInfiniteScroll(el, () => {
+  loadArrayData();
+}, {
+  distance: 10
+})
+const loadArrayData = async (): Promise<void> => {
+  const data = await loadMore();
+  useInfiniteArray.value = [...useInfiniteArray.value, ...data]
+}
 </script>
 <script lang="ts">
 export default {
@@ -94,10 +124,12 @@ export default {
   .common {
     @apply w-[300px] cursor-pointer text-center text-white;
   }
+
   .normal {
     @apply bg-violet-400;
     @extend .common;
   }
+
   .error {
     @apply bg-red-500;
     @extend .common;

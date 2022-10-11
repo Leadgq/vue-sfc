@@ -86,3 +86,7 @@ export const getCookie = (key: string | Ref<string>) => {
 };
 //删除cookie
 export const delCookie = (key: string | Ref<string>) => document.cookie = `${encodeURIComponent(unref(key))}=;expires=${new Date()}`
+// 生成随机数不包括最大值
+export const randomMax = (min: number, max: number) => Math.floor(Math.random() * (max - min) + min);
+// 生成随机数包括最大值
+export const randomIncludeMax = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min)
