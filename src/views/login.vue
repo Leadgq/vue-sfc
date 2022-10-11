@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <div class="login-content">
-      <div class="container-left"><img :src="bgImg" alt=""/></div>
+      <div class="container-left"><img :src="bgImg" alt="" class="login-img"/></div>
       <div class="container-right">
         <el-form :model="loginData" label-width="90px" :rules="loginRules" ref="ruleFormRef">
           <el-form-item label="用户名:" prop="name">
@@ -102,7 +102,7 @@ export default {
     .container-left {
       @apply w-[400px] h-full;
 
-      img {
+      .login-img {
         @apply w-full h-full object-cover;
       }
     }

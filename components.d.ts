@@ -21,7 +21,4 @@ declare module '@vue/runtime-core' {
     TreeChildren: typeof import('./src/components/treeComponent/treeChildren.vue')['default']
     TreeComponentTest: typeof import('./src/components/treeComponent/treeComponentTest.vue')['default']
   }
-  export interface ComponentCustomProperties {
-    vInfiniteScroll: typeof import('element-plus/es')['ElInfiniteScroll']
-  }
 }
