@@ -38,7 +38,7 @@ const initWebWorker = (): Promise<Worker> => {
 }
 // 是否是一个可用数组
 export const isAvailableArray = (arr: any[] | Ref<any[]>) => arr && Array.isArray(unref(arr)) && unref(arr).length > 0;
-// 是否是一个空对象
+// 是否是一个可用对象
 export const isAvailableObject = (obj: Record<string, any> | Ref<Record<string, any>>) => Reflect.ownKeys(unref(obj)).length !== 0 && unref(obj).constructor === Object;
 // 对象中所有项是否都有值
 export const isAvailableObjectValue = (obj: Record<string, any> | Ref<Record<string, any>>) => isAvailableObject(obj) && Object.values(unref(obj)).every(item => item);

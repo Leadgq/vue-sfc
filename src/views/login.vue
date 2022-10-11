@@ -1,21 +1,21 @@
 <template>
   <div class="login-container">
     <div class="login-content">
-      <div class="container-left"><img :src="bgImg" alt="" /></div>
+      <div class="container-left"><img :src="bgImg" alt=""/></div>
       <div class="container-right">
         <el-form :model="loginData" label-width="90px" :rules="loginRules" ref="ruleFormRef">
           <el-form-item label="用户名:" prop="name">
-            <el-input v-model.trim="loginData.name" />
+            <el-input v-model.trim="loginData.name"/>
           </el-form-item>
           <el-form-item label="密码:" prop="password">
-            <el-input v-model.trim="loginData.password" type="password" />
+            <el-input v-model.trim="loginData.password" type="password"/>
           </el-form-item>
           <el-form-item label="手机号:" prop="phone">
-            <el-input v-model.trim="loginData.phone" type="text" :maxlength="11" />
+            <el-input v-model.trim="loginData.phone" type="text" :maxlength="11"/>
           </el-form-item>
           <el-form-item class="login-action">
             <el-button type="primary" @click="loginUser" class="login-btn">登录</el-button>
-            <el-checkbox v-model="checkState" label="记住密码" size="large" class="ml-8" />
+            <el-checkbox v-model="checkState" label="记住密码" size="large" class="ml-8"/>
           </el-form-item>
         </el-form>
       </div>
@@ -43,26 +43,23 @@ const checkPhone = (rule: any, value: any, callback: any) => {
 };
 // 规则
 let loginRules = reactive<FormRules>({
-  name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+  name: [{required: true, message: "请输入用户名", trigger: "blur"}],
   password: [
-    { required: true, message: "请输入密码", trigger: "blur" },
-    { min: 6, max: 15, message: "密码长度6到15位", trigger: "blur" },
+    {required: true, message: "请输入密码", trigger: "blur"},
+    {min: 6, max: 15, message: "密码长度6到15位", trigger: "blur"},
   ],
   phone: [
-    { required: true, message: "请输入手机号", trigger: "blur" },
-    { validator: checkPhone, trigger: "blur" },
+    {required: true, message: "请输入手机号", trigger: "blur"},
+    {validator: checkPhone, trigger: "blur"},
   ],
 });
-let loginData = reactive<loginUserType>({
-  name: "",
-  password: "",
-  phone: "",
-});
+// 记住密码状态
 let checkState = ref(false);
 const ruleFormRef = ref<FormInstance>();
-const { login } = loginHook();
+// 登录hook
+const {login, loginData} = loginHook();
 const loginUser = () => {
-  login(loginData, unref(ruleFormRef)!);
+  login(unref(ruleFormRef)!);
   modifyState();
 };
 onMounted(() => {

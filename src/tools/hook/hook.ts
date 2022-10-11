@@ -4,23 +4,29 @@ import router from "@/router";
 import {FormInstance} from 'element-plus'
 
 export const loginHook = () => {
+    const loginData = reactive<loginUserType>({
+        name: "",
+        password: "",
+        phone: "",
+    })
     const userStoreInstance = userStore();
-    const login = async (data: loginUserType, ruleFormRef: FormInstance) => {
+    const login = async (ruleFormRef: FormInstance) => {
         await ruleFormRef.validate((valid: boolean) => {
             if (valid) {
-                pathAction(data);
+                pathAction();
             }
         })
     };
-    const pathAction = async (data: loginUserType) => {
+    const pathAction = async () => {
         // 请求登录
-        await userStoreInstance.loginRequest(data);
+        await userStoreInstance.loginRequest(loginData);
         // 获取用户权限
         await userStoreInstance.getUserInfoPromise();
         // 路由跳转
         await router.push({path: '/async/async_children2'})
     }
     return {
-        login
+        login,
+        loginData
     }
 }
