@@ -13,6 +13,12 @@
           <el-form-item label="手机号:" prop="phone">
             <el-input v-model.trim="loginData.phone" type="text" :maxlength="11"/>
           </el-form-item>
+          <el-form-item label="验证码:" prop="code">
+            <div class="code-container">
+              <el-input type="text" v-model="loginData.code" :maxlength="4"/>
+              <span class="code" @click="getCodeImg">{{ codeImg }}</span>
+            </div>
+          </el-form-item>
           <el-form-item class="login-action">
             <el-button type="primary" @click="loginUser" class="login-btn">登录</el-button>
             <el-checkbox v-model="checkState" label="记住密码" size="large" class="ml-8"/>
@@ -31,6 +37,7 @@ import userStore from "@/store/userStore";
 import {decode, encode} from "js-base64";
 import {loginUserType} from "@/types/userStoreType";
 import bgImg from "@/assets/image/login/bg.jpg"
+import {getCodeImg} from "@/api/code";
 
 const userStoreInstance = userStore();
 // 检查手机号
@@ -41,6 +48,13 @@ const checkPhone = (rule: any, value: any, callback: any) => {
     callback();
   }
 };
+const checkCode = (rule: any, value: any, callback: any) => {
+  if (value !== codeImg.value) {
+    return callback(new Error("验证码输入有误"));
+  } else {
+    callback();
+  }
+}
 // 规则
 let loginRules = reactive<FormRules>({
   name: [{required: true, message: "请输入用户名", trigger: "blur"}],
@@ -52,9 +66,14 @@ let loginRules = reactive<FormRules>({
     {required: true, message: "请输入手机号", trigger: "blur"},
     {validator: checkPhone, trigger: "blur"},
   ],
+  code: [
+    {required: true, message: "请输入验证码", trigger: "blur"},
+    {validator: checkCode, trigger: "submit"},
+  ]
 });
 // 记住密码状态
 let checkState = ref(false);
+let codeImg = ref('');
 const ruleFormRef = ref<FormInstance>();
 // 登录hook
 const {login, loginData} = useLogin();
@@ -64,7 +83,12 @@ const loginUser = () => {
 };
 onMounted(() => {
   handlerRememberPasswordState();
+  handlerImgCode();
 });
+const handlerImgCode = async () => {
+  const data = await getCodeImg();
+  codeImg.value = data.result.code;
+}
 // 处理记住密码操作
 const handlerRememberPasswordState = () => {
   checkState.value = userStoreInstance.rememberPasswordState;
@@ -73,7 +97,8 @@ const handlerRememberPasswordState = () => {
     const cookiesValues = getCookie(encode(window.location.origin));
     if (cookiesValues) {
       const formValue = JSON.parse(decode(cookiesValues)) as loginUserType;
-      Object.assign(loginData, formValue);
+      const {name, password, phone} = formValue;
+      Object.assign(loginData, {name, password, phone});
     }
   }
 };
@@ -112,6 +137,13 @@ export default {
 
       &:deep(.el-form-item) {
         @apply mb-7;
+      }
+
+      .code-container {
+        @apply flex items-center w-full  items-center w-full;
+        .code {
+          @apply w-[90px]  h-[30px] ml-3 text-center bg-violet-200 text-white flex  justify-center items-center  cursor-pointer;
+        }
       }
 
       .login-action {

@@ -4,6 +4,15 @@ import {MockMethod} from 'vite-plugin-mock'
 
 export default [
     {
+        url: '/api/code',
+        method: 'get',
+        response: {
+            result: {
+                code: Random.string('lower', 4, 4)
+            }
+        }
+    },
+    {
         url: '/api/getUserInfo',
         method: 'get',
         timeout: 1000,

@@ -8,6 +8,7 @@ export const useLogin = () => {
         name: "",
         password: "",
         phone: "",
+        code: ''
     })
     const userStoreInstance = userStore();
     const login = async (ruleFormRef: FormInstance) => {

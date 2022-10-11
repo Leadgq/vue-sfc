@@ -10,7 +10,8 @@ export type userInfoResponseType = {
 export type loginUserType = {
     name: string;
     password: string | number;
-    phone: number | string
+    phone: number | string;
+    code: string
 }
 // 请求注册参数
 export type registerUserType = {
