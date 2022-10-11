@@ -1,4 +1,4 @@
-import {defineConfig, loadEnv} from 'vite'
+import {defineConfig, loadEnv, UserConfigExport} from 'vite'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from "unplugin-auto-import/vite"
 import Components from 'unplugin-vue-components/vite';
@@ -11,7 +11,7 @@ type viteConfig = {
     mode: string,
     ssrBuild: boolean
 }
-export default ({command, mode}: viteConfig) => {
+export default ({command, mode}: viteConfig): UserConfigExport => {
     //环境变量
     const env = loadEnv(mode, __dirname);
     return defineConfig({
@@ -19,9 +19,15 @@ export default ({command, mode}: viteConfig) => {
             vue({
                 reactivityTransform: true
             }),
+            // 生成开启mock，可通过prodEnabled控制
             viteMockServe({
                 mockPath: './src/mock',
                 localEnabled: command === 'serve',
+                prodEnabled: command !== 'serve' && Boolean(env.VITE_MOCK_STATE),
+                injectCode: `
+                  import { setupProdMockServer } from './mock/mockProdServer';
+                  setupProdMockServer();
+                `,
             }),
             AutoImport({
                 imports: ['vue', 'vue-router', {'@vueuse/core': ['useInfiniteScroll']}],
