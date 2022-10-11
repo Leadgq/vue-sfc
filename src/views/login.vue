@@ -48,8 +48,9 @@ const checkPhone = (rule: any, value: any, callback: any) => {
     callback();
   }
 };
-const checkCode = (rule: any, value: any, callback: any) => {
-  if (value !== codeImg.value) {
+//检查验证码
+const checkCode = (rule: any, codeValue: any, callback: any) => {
+  if (codeValue !== codeImg.value) {
     return callback(new Error("验证码输入有误"));
   } else {
     callback();
@@ -73,18 +74,24 @@ let loginRules = reactive<FormRules>({
 });
 // 记住密码状态
 let checkState = ref(false);
+//验证码字符串
 let codeImg = ref('');
+// 表单实例
 const ruleFormRef = ref<FormInstance>();
 // 登录hook
 const {login, loginData} = useLogin();
+// 登录逻辑
 const loginUser = () => {
   login(unref(ruleFormRef)!);
   modifyState();
 };
 onMounted(() => {
+  // 处理记住密码操作
   handlerRememberPasswordState();
+  // 处理验证码
   handlerImgCode();
 });
+// 处理验证码
 const handlerImgCode = async () => {
   const data = await getCodeImg();
   codeImg.value = data.result.code;
