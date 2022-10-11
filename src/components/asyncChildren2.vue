@@ -23,7 +23,7 @@
       {{ item.name }}
     </div>
     <hr/>
-    <div class="w-[200px] h-[100px] bg-red-400 overflow-y-auto" ref="el">
+    <div class="container" ref="el">
       <div v-for="(item,index) in useInfiniteArray" :key="index">{{ item }}</div>
     </div>
   </div>
@@ -140,6 +140,10 @@ export default {
     &.active {
       @apply bg-red-400;
     }
+  }
+
+  .container {
+    @apply w-[200px] h-[100px] bg-red-400 overflow-y-auto;
   }
 }
 </style>
