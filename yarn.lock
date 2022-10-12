@@ -317,6 +317,14 @@
     "@vueuse/shared" "9.1.1"
     vue-demi "*"
 
+"@vueuse/math@^9.3.0":
+  version "9.3.0"
+  resolved "https://registry.npmmirror.com/@vueuse/math/-/math-9.3.0.tgz#6a766662e3c34ae5add632c9a315b21e01c732a9"
+  integrity sha512-uCHxm9t3cNLQNKXZBHCxT9fJXDYiZcNn9PegpCei4bpxMcLR8QCbNzoAggxmI7m4M6qaFSz8am3cqAM+6Ecy8Q==
+  dependencies:
+    "@vueuse/shared" "9.3.0"
+    vue-demi "*"
+
 "@vueuse/metadata@9.1.1":
   version "9.1.1"
   resolved "https://registry.yarnpkg.com/@vueuse/metadata/-/metadata-9.1.1.tgz#b3fe4b97e62096f7566cd8eb107c503998b2c9a6"
