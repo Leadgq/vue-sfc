@@ -46,7 +46,7 @@ export const isAvailableObjectValue = (obj: Record<string, any> | Ref<Record<str
 export const flatten = (arr: any[] | Ref<any[]>): any[] => {
     return unref(arr).reduce((prev, cur) => {
         const {children} = cur;
-        return isAvailableArray(children) ? prev.concat(flatten(children), {...cur}) : prev.concat({...cur})
+        return isAvailableArray(children) ? prev.concat(flatten(children), cur) : prev.concat(cur)
     }, [])
 }
 // 寻找某个节点下所有的子节点不包括当前节点
