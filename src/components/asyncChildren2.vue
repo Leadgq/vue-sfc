@@ -6,6 +6,7 @@
       </SlotTest>
       <el-button @click="flag = !flag">按钮</el-button>
       <el-button @click="id++">effect测试</el-button>
+      <el-button @click="backView">返回</el-button>
       <div>{{ tip }}</div>
     </div>
     <hr/>
@@ -34,6 +35,7 @@ import SlotTest from "@/components/slotTest.vue";
 import TreeComponentTest from "@/components/treeComponent/treeComponentTest.vue";
 import {ElMessage} from "element-plus";
 import {isAvailableArray, randomMax} from "@/tools/lib";
+import router from "@/router";
 
 const asyncComponent = ref<InstanceType<typeof SlotTest> | null>(null);
 let flag = ref(true);
@@ -112,6 +114,9 @@ useInfiniteScroll(el, () => {
 const loadArrayData = async (): Promise<void> => {
   const data = await loadMore();
   useInfiniteArray.value = [...useInfiniteArray.value, ...data]
+}
+const backView = () => {
+  router.back();
 }
 </script>
 <script lang="ts">

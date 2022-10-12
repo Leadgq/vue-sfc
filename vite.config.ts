@@ -34,9 +34,12 @@ export default ({command, mode}: viteConfig): UserConfigExport => {
                 dts: "src/auto-import.d.ts"
             }),
             Components({
+                dirs: ['src/components'],
                 resolvers: [ElementPlusResolver()],
                 dts: true,
                 include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
+                exclude: [/[\\/]node_modules[\\/]/, /[\\/]\.git[\\/]/, /[\\/]\.nuxt[\\/]/],
+                deep: true,
             })
         ],
         resolve: {

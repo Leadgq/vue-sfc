@@ -1,12 +1,10 @@
 <template>
   <div class="map">
-    <Map />
+    <AMap/>
   </div>
 </template>
 
-<script setup lang="ts">
-import Map from "@/components/aMap.vue";
-</script>
+<script setup lang="ts"></script>
 
 <style lang="scss" scoped>
 .map {
