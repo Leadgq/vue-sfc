@@ -76,7 +76,7 @@ export const getCookie = (key: string | Ref<string>, type?: string) => {
     if (isAvailableArray(cookieArray)) {
         for (let i = 0; i < cookieArray.length; i++) {
             const temp = cookieArray[i].split('=').filter(item => item);
-            if (type && type === 'login' && temp[0] === unref(key).slice(0, unref(key).length - 2)) {
+            if (type && type === 'login' && temp[0].trim() === unref(key).slice(0, unref(key).length - 2)) {
                 cookieValue = temp[1];
                 break
             } else if (!type && temp[0] === unref(key)) {
