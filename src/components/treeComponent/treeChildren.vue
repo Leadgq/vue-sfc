@@ -28,7 +28,7 @@ const emit = defineEmits<{
 }>()
 const treeRef = ref<any>()
 const selectTree = () => {
-  console.log(findParentNode(nodeTree.value!,'1-2-1'));
+  console.log(findParentNode(nodeTree.value!, '1-2-1'));
 }
 </script>
 

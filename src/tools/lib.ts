@@ -58,12 +58,12 @@ export const findTreeChildrenNode = (arr: TreeData[] | Ref<TreeData[]>, id: stri
     return isAvailableArray(nodeList) ? nodeList.filter(item => item.key !== nodeId) : []
 }
 const toFlatArray = (tree: TreeData[] | Ref<TreeData[]>, parentId?: string): TreeData[] => {
-    return unref(tree).reduce((t: TreeData[], _) => {
-        const child = _.children
+    return unref(tree).reduce((tree: TreeData[], cur) => {
+        const child = cur.children
         return [
-            ...t,
-            parentId ? {..._, parentId} : _,
-            ...(child && child.length ? toFlatArray(child, _.key) : [])]
+            ...tree,
+            parentId ? {...cur, parentId} : cur,
+            ...(child && child.length ? toFlatArray(child, cur.key) : [])]
     }, []);
 }
 const getIds = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: string): string[] => {
