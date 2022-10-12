@@ -68,10 +68,10 @@ const toFlatArray = (tree: TreeData[] | Ref<TreeData[]>, parentId?: string): Tre
 }
 const getIds = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: string): string[] => {
     let ids = [nodeId]
-    let child = unref(flatArray).find(_ => _.key === nodeId)
+    let child = unref(flatArray).find(tree => tree.key === nodeId)
     while (child && child.parentId) {
         ids = [child.parentId, ...ids]
-        child = unref(flatArray).find(_ => _.key === child?.parentId)
+        child = unref(flatArray).find(tree => tree.key === child?.parentId)
     }
     return ids.filter(item => item !== nodeId);
 }
