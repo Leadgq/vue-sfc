@@ -13,9 +13,7 @@ export const useLogin = () => {
     const userStoreInstance = userStore();
     const login = async (ruleFormRef: FormInstance) => {
         await ruleFormRef.validate((valid: boolean) => {
-            if (valid) {
-                pathAction();
-            }
+            if (valid)  pathAction();
         })
     };
     const pathAction = async () => {

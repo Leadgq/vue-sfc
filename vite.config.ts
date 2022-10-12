@@ -30,7 +30,7 @@ export default ({command, mode}: viteConfig): UserConfigExport => {
                 `,
             }),
             AutoImport({
-                imports: ['vue', 'vue-router', {'@vueuse/core': ['useInfiniteScroll']}],
+                imports: ['vue', 'vue-router', '@vueuse/core'],
                 dts: "src/auto-import.d.ts"
             }),
             Components({
