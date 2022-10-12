@@ -1,25 +1,34 @@
 <template>
   <div class="tree">
-    <ul>
-      <li v-for="item in  data" :key="item.key">
-        <el-checkbox v-model="item.check" @change="selectNode(data,item)">{{ item.title }}</el-checkbox>
-        <treeChildren :data="item.children" v-if="isAvailableArray(item.children)"/>
-      </li>
-    </ul>
+    <el-tree
+        ref="treeRef"
+        :data="data"
+        show-checkbox
+        default-expand-all
+        node-key="key"
+        highlight-current
+        :props="{ label: 'title'}"
+    />
+    <el-button @click="selectTree">发送</el-button>
   </div>
 </template>
-
 <script setup lang="ts">
-import {TreeData} from "@/types/tree"
-import {findTreeChildrenNode, isAvailableArray} from "@/tools/lib";
+import {TreeData} from "@/types/tree";
+import {findParentNode} from "@/tools/lib";
 
-defineProps<{ data: TreeData[] }>()
-
-const selectNode = (TreeData: TreeData[], item: TreeData) => {
-  if (item.children && item.check) {
-    const data = findTreeChildrenNode(TreeData, item.key);
-    data.forEach(item => item.check = true)
-  }
+const props = defineProps<{
+  data: TreeData[]
+}>()
+const nodeTree = ref<TreeData[]>();
+watch(() => props.data, (newTreeData: TreeData[]) => {
+  nodeTree.value = newTreeData;
+})
+const emit = defineEmits<{
+  (e: 'checkEdTree', ids: string[]): void
+}>()
+const treeRef = ref<any>()
+const selectTree = () => {
+  console.log(findParentNode(nodeTree.value!,'1-2-1'));
 }
 </script>
 

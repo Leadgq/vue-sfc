@@ -2,11 +2,11 @@
   <div class="async">
     <router-view #default="{ route, Component }">
       <transition
-        :enter-active-class="`animate__animated ${route.meta?.transitionEnter}`"
-        :leave-active-class="`animate__animated ${route.meta?.transitionLeave}`"
-        :appear="true"
+          :enter-active-class="`animate__animated ${route.meta?.transitionEnter}`"
+          :leave-active-class="`animate__animated ${route.meta?.transitionLeave}`"
+          :appear="true"
       >
-        <component :is="Component" />
+        <component :is="Component"/>
       </transition>
     </router-view>
   </div>

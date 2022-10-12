@@ -30,7 +30,7 @@ export default ({command, mode}: viteConfig): UserConfigExport => {
                 `,
             }),
             AutoImport({
-                imports: ['vue', 'vue-router', '@vueuse/core',{
+                imports: ['vue', 'vue-router', '@vueuse/core', {
                     '@vueuse/math': ['useSum'],
                 }],
                 dts: "src/auto-import.d.ts"

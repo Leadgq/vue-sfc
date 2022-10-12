@@ -1,5 +1,6 @@
 import fileSaver from 'file-saver'
 import {Ref} from "vue";
+import {TreeData} from "@/types/tree";
 // 千分符
 export const toThousands = (num: number | string | Ref<string | number>) => typeof unref(num) === 'string' ? Number(unref(num)).toLocaleString() : unref(num).toLocaleString();
 // 下载文件
@@ -43,18 +44,40 @@ export const isAvailableObject = (obj: Record<string, any> | Ref<Record<string, 
 // 对象中所有项是否都有值
 export const isAvailableObjectValue = (obj: Record<string, any> | Ref<Record<string, any>>) => isAvailableObject(obj) && Object.values(unref(obj)).every(item => item);
 // 压平数组
-export const flatten = (arr: any[] | Ref<any[]>): any[] => {
-    return unref(arr).reduce((prev, cur) => {
+export const flatten = (arr: TreeData[] | Ref<TreeData[]>): TreeData[] => {
+    return unref(arr).reduce((prev: TreeData[], cur: TreeData) => {
         const {children} = cur;
-        return isAvailableArray(children) ? prev.concat(flatten(children), cur) : prev.concat(cur)
+        return isAvailableArray(children) ? prev.concat(flatten(children), {...cur}) : prev.concat({...cur})
     }, [])
 }
 // 寻找某个节点下所有的子节点不包括当前节点
-export const findTreeChildrenNode = (arr: any[] | Ref<any[]>, id: string | Ref<string>): any[] => {
+export const findTreeChildrenNode = (arr: TreeData[] | Ref<TreeData[]>, id: string | Ref<string>): TreeData[] => {
     const nodeId = unref(id);
     const flattenList = flatten(arr);
     const nodeList = flatten(flattenList.filter(item => item.key === nodeId));
     return isAvailableArray(nodeList) ? nodeList.filter(item => item.key !== nodeId) : []
+}
+const toFlatArray = (tree: TreeData[] | Ref<TreeData[]>, parentId?: string): TreeData[] => {
+    return unref(tree).reduce((t: TreeData[], _) => {
+        const child = _.children
+        return [
+            ...t,
+            parentId ? {..._, parentId} : _,
+            ...(child && child.length ? toFlatArray(child, _.key) : [])]
+    }, []);
+}
+const getIds = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: string): string[] => {
+    let ids = [nodeId]
+    let child = unref(flatArray).find(_ => _.key === nodeId)
+    while (child && child.parentId) {
+        ids = [child.parentId, ...ids]
+        child = unref(flatArray).find(_ => _.key === child?.parentId)
+    }
+    return ids.filter(item => item !== nodeId);
+}
+// 寻找某个节点的父节点
+export const findParentNode = (tree: any, nodeId: string): any => {
+    return getIds(toFlatArray(tree), nodeId);
 }
 // 是否是一个可用的手机号
 export const isAvailablePhone = (phone: string | Ref<string>) => /^1[3,4,5,6,7,8,9][0-9]{9}$/.test(unref(phone))
