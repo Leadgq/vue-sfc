@@ -2,21 +2,42 @@
 import {TreeData} from "@/types/tree";
 import {Ref} from "vue";
 import {isAvailableArray} from "@/tools/lib";
-// 压平树
-export const flatten = (arr: TreeData[] | Ref<TreeData[]>, isProxy?: boolean): TreeData[] => {
+
+/**
+ *  @description 压平树状数组
+ *  @description isProxy: 被压平的树是否保持响应式   默认:false
+ *  @return TreeData[]
+ * */
+export const flatten = (arr: TreeData[] | Ref<TreeData[]>, isProxy = false): TreeData[] => {
     return unref(arr).reduce((prev: TreeData[], cur: TreeData) => {
         const {children} = cur;
         const proxyStateObject = isProxy ? cur : {...cur}
         return isAvailableArray(children) ? prev.concat(flatten(children, isProxy), proxyStateObject) : prev.concat(proxyStateObject)
     }, [])
 }
-// 寻找某个节点下所有的子节点不包括当前节点
-export const findTreeChildrenNode = (arr: TreeData[] | Ref<TreeData[]>, id: string | Ref<string>): TreeData[] => {
+/**
+ *  @description 寻找某个节点下所有的子节点不包括当前节点
+ *  @description isProxy: 子节点是否保持响应式   默认:false
+ *  @return TreeData[]
+ * */
+export const findTreeChildrenNode = (arr: TreeData[] | Ref<TreeData[]>, id: string | Ref<string>, isProxy: boolean): TreeData[] => {
     const nodeId = unref(id);
-    const flattenList = flatten(arr);
-    const nodeList = flatten(flattenList.filter(item => item.key === nodeId));
+    const flattenList = flatten(arr, isProxy);
+    const nodeList = flatten(flattenList.filter(item => item.key === nodeId), isProxy);
     return isAvailableArray(nodeList) ? nodeList.filter(item => item.key !== nodeId) : []
 }
+/**
+ *  @description 寻找某个节点的父节点id
+ *  @return string[] | []
+ * */
+export const findParentNodeKey = (tree: TreeData[] | Ref<TreeData[]>, nodeId: string): string[] | [] => getIds(toFlatArray(tree), nodeId);
+/**
+ *  @description 寻找某个节点的所有父节点
+ *  @description isProxy:  父节点是否保持响应式   默认:false
+ *  @return TreeData[]
+ * */
+export const findParentNode = (tree: TreeData[], nodeId: string, isProxy: boolean): TreeData[] => getParentObjectByKeys(toFlatArray(tree), nodeId, isProxy);
+
 // 压平树、给所有子节点添加父节点标记
 const toFlatArray = (tree: TreeData[] | Ref<TreeData[]>, parentId?: string): TreeData[] => {
     return unref(tree).reduce((treeArray: TreeData[], cur) => {
@@ -36,10 +57,6 @@ const getIds = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: string): string
     }
     return ids.filter(item => item !== nodeId);
 }
-// 寻找某个节点的父节点id
-export const findParentNodeKey = (tree: TreeData[] | Ref<TreeData[]>, nodeId: string): string[] | [] => {
-    return getIds(toFlatArray(tree), nodeId);
-}
 // 返回所有父亲节点对象
 const getParentObjectByKeys = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: string, isProxy: boolean): TreeData[] => {
     let parentArray: TreeData[] = [];
@@ -49,8 +66,4 @@ const getParentObjectByKeys = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: 
         child = unref(flatArray).find(tree => tree.key === child?.parentId)
     }
     return parentArray.filter(item => item.key !== nodeId);
-}
-// 寻找某个节点的所有父节点
-export const findParentNode = (tree: TreeData[], nodeId: string, isProxy: boolean) => {
-    return getParentObjectByKeys(toFlatArray(tree), nodeId, isProxy);
 }
