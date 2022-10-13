@@ -57,7 +57,8 @@ export const findTreeChildrenNode = (arr: TreeData[] | Ref<TreeData[]>, id: stri
     const nodeList = flatten(flattenList.filter(item => item.key === nodeId));
     return isAvailableArray(nodeList) ? nodeList.filter(item => item.key !== nodeId) : []
 }
-const toFlatArray = (tree: TreeData[] | Ref<TreeData[]>, parentId?: string): TreeData[] => {
+// 压平树、给所有子节点添加父节点标记
+export const toFlatArray = (tree: TreeData[] | Ref<TreeData[]>, parentId?: string): TreeData[] => {
     return unref(tree).reduce((treeArray: TreeData[], cur) => {
         const child = cur.children
         return [
