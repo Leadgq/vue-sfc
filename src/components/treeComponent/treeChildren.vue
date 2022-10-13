@@ -14,7 +14,7 @@
 </template>
 <script setup lang="ts">
 import {TreeData} from "@/types/tree";
-import {toFlatArray} from "@/tools/lib";
+import {findParentNode, findParentNodeKey} from "@/tools/lib";
 
 const props = defineProps<{
   data: TreeData[]
@@ -28,7 +28,8 @@ const emit = defineEmits<{
 }>()
 const treeRef = ref<any>()
 const selectTree = () => {
-  console.log(toFlatArray(nodeTree.value!));
+  console.log(findParentNodeKey(nodeTree.value!,'1-2-1'));
+  console.log(findParentNode(nodeTree.value!,'1-2-1'));
 }
 </script>
 

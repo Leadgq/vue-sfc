@@ -68,17 +68,31 @@ export const toFlatArray = (tree: TreeData[] | Ref<TreeData[]>, parentId?: strin
     }, []);
 }
 const getIds = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: string): string[] => {
-    let ids = [nodeId]
-    let child = unref(flatArray).find(tree => tree.key === nodeId)
+    let ids = [nodeId];
+    let child = unref(flatArray).find(tree => tree.key === nodeId);
     while (child && child.parentId) {
-        ids = [child.parentId, ...ids]
-        child = unref(flatArray).find(tree => tree.key === child?.parentId)
+        ids = [child.parentId, ...ids];
+        child = unref(flatArray).find(tree => tree.key === child?.parentId);
     }
     return ids.filter(item => item !== nodeId);
 }
-// 寻找某个节点的父节点
-export const findParentNode = (tree: any, nodeId: string): any => {
+// 寻找某个节点的父节点id
+export const findParentNodeKey = (tree: TreeData[] | Ref<TreeData[]>, nodeId: string): string[] | [] => {
     return getIds(toFlatArray(tree), nodeId);
+}
+// 返回所有父亲节点对象
+const getParentObjectByKeys = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: string) => {
+    let parentArray: TreeData[] = [];
+    let child = unref(flatArray).find(tree => tree.key === nodeId);
+    while (child) {
+        parentArray = parentArray.concat({...child});
+        child = unref(flatArray).find(tree => tree.key === child?.parentId)
+    }
+    return parentArray.filter(item => item.key !== nodeId);
+}
+// 寻找某个节点的所有父节点
+export const findParentNode = (tree: TreeData[], nodeId: string) => {
+    return getParentObjectByKeys(toFlatArray(tree), nodeId);
 }
 // 是否是一个可用的手机号
 export const isAvailablePhone = (phone: string | Ref<string>) => /^1[3,4,5,6,7,8,9][0-9]{9}$/.test(unref(phone))
