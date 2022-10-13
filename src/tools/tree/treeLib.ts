@@ -33,11 +33,10 @@ export const findTreeChildrenNode = (arr: TreeData[] | Ref<TreeData[]>, id: stri
 export const findParentNodeKey = (tree: TreeData[] | Ref<TreeData[]>, nodeId: string): string[] | [] => getIds(toFlatArray(tree), nodeId);
 /**
  *  @description 寻找某个节点的所有父节点
- *  @description isProxy:  父节点是否保持响应式   默认:false
+ *  @description isProxy:  父节点是否保持响应式   默认:false   linealNode : 是否只要直系节点
  *  @return TreeData[]
  * */
-export const findParentNode = (tree: TreeData[], nodeId: string, isProxy: boolean): TreeData[] => getParentObjectByKeys(toFlatArray(tree), nodeId, isProxy);
-
+export const findParentNode = (tree: TreeData[], nodeId: string, isProxy: boolean, linealNode = false): TreeData[] => getParentObjectByKeys(toFlatArray(tree), nodeId, isProxy, linealNode);
 // 压平树、给所有子节点添加父节点标记
 const toFlatArray = (tree: TreeData[] | Ref<TreeData[]>, parentId?: string): TreeData[] => {
     return unref(tree).reduce((treeArray: TreeData[], cur) => {
@@ -58,12 +57,23 @@ const getIds = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: string): string
     return ids.filter(item => item !== nodeId);
 }
 // 返回所有父亲节点对象
-const getParentObjectByKeys = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: string, isProxy: boolean): TreeData[] => {
+const getParentObjectByKeys = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: string, isProxy: boolean, linealNode: boolean): TreeData[] => {
     let parentArray: TreeData[] = [];
     let child = unref(flatArray).find(tree => tree.key === nodeId);
-    while (child) {
-        parentArray = isProxy ? parentArray.concat(child) : parentArray.concat({...child});
-        child = unref(flatArray).find(tree => tree.key === child?.parentId)
+    // 寻找全部父节点，递归
+    if (!linealNode) {
+        while (child) {
+            parentArray = isProxy ? parentArray.concat(child) : parentArray.concat({...child});
+            child = unref(flatArray).find(tree => tree.key === child?.parentId)
+        }
+    } else {
+        // 寻找直系节点
+        if (child) {
+            let linealParentNode = unref(flatArray).find((tree) => tree.key === child?.parentId);
+            if (linealParentNode) {
+                parentArray = isProxy ? parentArray.concat(linealParentNode) : parentArray.concat({...linealParentNode});
+            }
+        }
     }
     return parentArray.filter(item => item.key !== nodeId);
 }
