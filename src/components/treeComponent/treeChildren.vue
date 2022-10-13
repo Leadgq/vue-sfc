@@ -9,12 +9,10 @@
         highlight-current
         :props="{ label: 'title'}"
     />
-    <el-button @click="selectTree">发送</el-button>
   </div>
 </template>
 <script setup lang="ts">
 import {TreeData} from "@/types/tree";
-import {findParentNode, findParentNodeKey} from "@/tools/lib";
 
 const props = defineProps<{
   data: TreeData[]
@@ -27,10 +25,6 @@ const emit = defineEmits<{
   (e: 'checkEdTree', ids: string[]): void
 }>()
 const treeRef = ref<any>()
-const selectTree = () => {
-  console.log(findParentNodeKey(nodeTree.value!,'1-2-1'));
-  console.log(findParentNode(nodeTree.value!,'1-2-1'));
-}
 </script>
 
 <script lang="ts">

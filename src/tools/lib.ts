@@ -81,7 +81,7 @@ export const findParentNodeKey = (tree: TreeData[] | Ref<TreeData[]>, nodeId: st
     return getIds(toFlatArray(tree), nodeId);
 }
 // 返回所有父亲节点对象
-const getParentObjectByKeys = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: string) => {
+const getParentObjectByKeys = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: string): TreeData[] => {
     let parentArray: TreeData[] = [];
     let child = unref(flatArray).find(tree => tree.key === nodeId);
     while (child) {
