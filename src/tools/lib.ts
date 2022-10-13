@@ -63,7 +63,7 @@ export const toFlatArray = (tree: TreeData[] | Ref<TreeData[]>, parentId?: strin
         const child = cur.children
         return [
             ...treeArray,
-            parentId ? {...cur, parentId} : cur,
+            parentId ? {...cur, parentId} : {...cur},
             ...(isAvailableArray(child) ? toFlatArray(child, cur.key) : [])]
     }, []);
 }
