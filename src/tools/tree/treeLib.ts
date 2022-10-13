@@ -8,11 +8,11 @@ import {isAvailableArray} from "@/tools/lib";
  *  @description isProxyState: 被压平的树是否保持响应式   默认:false
  *  @return TreeData[]
  * */
-export const flatten = (arr: TreeData[] | Ref<TreeData[]>, isProxyState = false): TreeData[] => {
+export const flattenArray = (arr: TreeData[] | Ref<TreeData[]>, isProxyState = false): TreeData[] => {
     return unref(arr).reduce((prev: TreeData[], cur: TreeData) => {
         const {children} = cur;
         const proxyStateObject = isProxyState ? cur : {...cur}
-        return isAvailableArray(children) ? prev.concat(flatten(children, isProxyState), proxyStateObject) : prev.concat(proxyStateObject)
+        return isAvailableArray(children) ? prev.concat(flattenArray(children, isProxyState), proxyStateObject) : prev.concat(proxyStateObject)
     }, [])
 }
 /**
@@ -22,8 +22,8 @@ export const flatten = (arr: TreeData[] | Ref<TreeData[]>, isProxyState = false)
  * */
 export const findTreeChildrenNode = (arr: TreeData[] | Ref<TreeData[]>, id: string | Ref<string>, isProxyState: boolean): TreeData[] => {
     const nodeId = unref(id);
-    const flattenList = flatten(arr, isProxyState);
-    const nodeList = flatten(flattenList.filter(item => item.key === nodeId), isProxyState);
+    const flattenList = flattenArray(arr, isProxyState);
+    const nodeList = flattenArray(flattenList.filter(item => item.key === nodeId), isProxyState);
     return isAvailableArray(nodeList) ? nodeList.filter(item => item.key !== nodeId) : []
 }
 /**
