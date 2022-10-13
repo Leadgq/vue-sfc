@@ -32,7 +32,8 @@
 <script lang="ts" setup>
 import {useLogin} from "@/tools/hook/hook";
 import type {FormInstance, FormRules} from "element-plus";
-import {getCookie, isAvailableObjectValue, isAvailablePhone, setCookie} from "@/tools/lib";
+import {isAvailableObjectValue, isAvailablePhone} from "@/tools/lib";
+import {getCookie, setCookie} from "@/tools/cookie/cookieLib";
 import userStore from "@/store/userStore";
 import {decode, encode} from "js-base64";
 import {loginUserType} from "@/types/userStoreType";
