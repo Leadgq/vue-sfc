@@ -44,10 +44,11 @@ export const isAvailableObject = (obj: Record<string, any> | Ref<Record<string, 
 // 对象中所有项是否都有值
 export const isAvailableObjectValue = (obj: Record<string, any> | Ref<Record<string, any>>) => isAvailableObject(obj) && Object.values(unref(obj)).every(item => item);
 // 压平数组
-export const flatten = (arr: TreeData[] | Ref<TreeData[]>): TreeData[] => {
+export const flatten = (arr: TreeData[] | Ref<TreeData[]>, isProxy?: boolean): TreeData[] => {
     return unref(arr).reduce((prev: TreeData[], cur: TreeData) => {
         const {children} = cur;
-        return isAvailableArray(children) ? prev.concat(flatten(children), {...cur}) : prev.concat({...cur})
+        const proxyStateObject = isProxy ? cur : {...cur}
+        return isAvailableArray(children) ? prev.concat(flatten(children, isProxy), proxyStateObject) : prev.concat(proxyStateObject)
     }, [])
 }
 // 寻找某个节点下所有的子节点不包括当前节点
@@ -63,7 +64,7 @@ export const toFlatArray = (tree: TreeData[] | Ref<TreeData[]>, parentId?: strin
         const child = cur.children
         return [
             ...treeArray,
-            parentId ? {...cur, parentId} : {...cur},
+            parentId ? Object.assign(cur, {parentId}) : cur,
             ...(isAvailableArray(child) ? toFlatArray(child, cur.key) : [])]
     }, []);
 }
@@ -81,18 +82,18 @@ export const findParentNodeKey = (tree: TreeData[] | Ref<TreeData[]>, nodeId: st
     return getIds(toFlatArray(tree), nodeId);
 }
 // 返回所有父亲节点对象
-const getParentObjectByKeys = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: string): TreeData[] => {
+const getParentObjectByKeys = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: string, isProxy: boolean): TreeData[] => {
     let parentArray: TreeData[] = [];
     let child = unref(flatArray).find(tree => tree.key === nodeId);
     while (child) {
-        parentArray = parentArray.concat({...child});
+        parentArray = isProxy ? parentArray.concat(child) : parentArray.concat({...child});
         child = unref(flatArray).find(tree => tree.key === child?.parentId)
     }
     return parentArray.filter(item => item.key !== nodeId);
 }
 // 寻找某个节点的所有父节点
-export const findParentNode = (tree: TreeData[], nodeId: string) => {
-    return getParentObjectByKeys(toFlatArray(tree), nodeId);
+export const findParentNode = (tree: TreeData[], nodeId: string, isProxy: boolean) => {
+    return getParentObjectByKeys(toFlatArray(tree), nodeId, isProxy);
 }
 // 是否是一个可用的手机号
 export const isAvailablePhone = (phone: string | Ref<string>) => /^1[3,4,5,6,7,8,9][0-9]{9}$/.test(unref(phone))
