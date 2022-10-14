@@ -9,22 +9,32 @@
         highlight-current
         :props="{ label: 'title'}"
     />
+    <div>{{ testValue }}</div>
+    <el-button @click="modifyData">修改</el-button>
   </div>
 </template>
 <script setup lang="ts">
 import {TreeData} from "@/types/tree";
 
 const props = defineProps<{
-  data: TreeData[]
+  data: TreeData[],
+  testValue: string
 }>()
+
+let content = ref(props.testValue);
 const nodeTree = ref<TreeData[]>();
 watch(() => props.data, (newTreeData: TreeData[]) => {
   nodeTree.value = newTreeData;
 })
 const emit = defineEmits<{
-  (e: 'checkEdTree', ids: string[]): void
+  (e: 'checkEdTree', ids: string[]): void,
+  (e: 'update:testValue', value: string): void,
 }>()
-const treeRef = ref<any>()
+
+const modifyData = () => {
+  content.value = '父子组件同时被修改';
+  emit('update:testValue', content.value);
+}
 </script>
 
 <script lang="ts">
