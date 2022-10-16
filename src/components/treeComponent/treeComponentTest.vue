@@ -2,16 +2,23 @@
   <div>
     <TreeChildren :data="treeDataArray" />
     <TreeOption :data="treeDataArray" />
+    <TreeChildren :data="treeDataArray" v-model:testValue="testValue" v-if="flag" />
   </div>
 </template>
 
 <script setup lang="ts">
-import TreeChildren from "@/components/treeComponent/treeChildren.vue";
 import { loadFile } from "@/tools/lib";
 import { TreeData } from "@/types/tree";
 import TreeOption from "@/components/treeComponent/treeOption.vue";
 
+const TreeChildren = defineAsyncComponent({
+  loader: () => import("@/components/treeComponent/treeChildren.vue"),
+  delay: 5000,
+  timeout: 3000,
+});
+let flag = ref(false);
 let treeDataArray = ref<TreeData[]>([]);
+let testValue = ref("父组件的值");
 const load = async () => {
   treeDataArray.value = (await loadFile("treeData")) as TreeData[];
 };
