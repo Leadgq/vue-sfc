@@ -3,5 +3,6 @@ export interface TreeData {
     title: string;
     parentId?: string;
     children: TreeData[];
+    indeterminate: boolean,
     check: Boolean
 }
