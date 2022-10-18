@@ -47,17 +47,18 @@ const handlerNodeAction = (item: TreeData, message?: string) => {
       // 处理自己的父节点状态
       handlerParentTreeNodeState(item, message);
     } else if (message === "father") {
-      // 处理根节点
-      handlerRootNode(item);
+      // 处理子节点
+      handlerAllChildrenNode(item);
       // 处理自己的父节点状态
       handlerParentTreeNodeState(item, message);
     } else {
-      // 根节点决定子节点状态
-      handlerRootNode(item);
+      // 处理子节点
+      handlerAllChildrenNode(item);
     }
   })
 };
-const handlerRootNode = (item: TreeData) => {
+// 处理子节点
+const handlerAllChildrenNode = (item: TreeData) => {
   const children = findTreeChildrenNode(treeData.value, item.key, true);
   modifyChildrenNode(item, children);
 };
