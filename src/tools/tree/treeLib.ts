@@ -51,6 +51,9 @@ export const findAllBrotherNode = (tree: TreeData[] | Ref<TreeData[]>, nodeId: s
         // 获取当前父节点所有子节点
         return findTreeChildrenNode(parentNode, key, isProxyState).filter(item => item.key !== nodeId);
     } else {
+        if (import.meta.env.VITE_ENVIRONMENT === 'server') {
+            console.warn('current node may be rootNde or not parent node')
+        }
         return [];
     }
 }
