@@ -1,8 +1,8 @@
 <template>
   <div>
-    <TreeChildren :data="treeDataArray"/>
-    <TreeOption :data="treeDataArray"/>
     <TreeChildren :data="treeDataArray" v-model:testValue="testValue" v-if="flag"/>
+    <TreeOption :data="treeDataArray"/>
+    <el-button @click="flag = !flag">异步显示</el-button>
     {{ data.x }} --- {{ data.y }}
   </div>
 </template>
