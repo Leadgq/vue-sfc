@@ -2,7 +2,7 @@
   <div class="tree">
     <el-tree
         ref="treeRef"
-        :data="data"
+        :data="tree"
         show-checkbox
         default-expand-all
         node-key="key"
@@ -20,6 +20,7 @@ const props = defineProps<{
   data: TreeData[],
   testValue: string
 }>()
+let tree = ref<TreeData[]>(props.data);
 let contentValue = ref(props.testValue);
 const emit = defineEmits<{
   (e: 'checkEdTree', ids: string[]): void,
