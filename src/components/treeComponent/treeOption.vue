@@ -44,12 +44,13 @@ const treeData = computed(() => props.data);
 const handlerNodeAction = (item: TreeData, message?: string) => {
   nextTick(() => {
     if (message === "son") {
-      handlerSonTreeNode(item);
+      // 处理自己的父节点状态
+      handlerParentTreeNodeState(item);
     } else if (message === "father") {
-      // 处理所有子节点
+      // 处理根节点
       handlerRootNode(item);
       // 处理自己的父节点状态
-      handlerSonTreeNode(item);
+      handlerParentTreeNodeState(item);
     } else {
       // 根节点决定子节点状态
       handlerRootNode(item);
@@ -67,7 +68,7 @@ const modifyChildrenNode = (item: TreeData, children: TreeData[]) => {
   children.forEach((tree) => (tree.check = item.check));
 };
 // 子节点决定父节点状态
-const handlerSonTreeNode = (item: TreeData) => {
+const handlerParentTreeNodeState = (item: TreeData) => {
   // 寻找当前节点的父节点
   let parentNode = findParentNode(treeData.value!, item.key, true, true).at(0);
   if (parentNode) {

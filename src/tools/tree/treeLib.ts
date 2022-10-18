@@ -1,7 +1,7 @@
 // 压平数组
-import { TreeData } from "@/types/tree";
-import { Ref } from "vue";
-import { isAvailableArray } from "@/tools/lib";
+import {TreeData} from "@/types/tree";
+import {Ref} from "vue";
+import {isAvailableArray} from "@/tools/lib";
 
 /**
  *  @description 压平树状数组
@@ -11,8 +11,8 @@ import { isAvailableArray } from "@/tools/lib";
 
 export const flattenArray = (arr: TreeData[] | Ref<TreeData[]>, isProxyState = false): TreeData[] => {
     return unref(arr).reduce((prev: TreeData[], cur: TreeData) => {
-        const { children } = cur;
-        const proxyStateObject = isProxyState ? cur : { ...cur }
+        const {children} = cur;
+        const proxyStateObject = isProxyState ? cur : {...cur}
         return isAvailableArray(children) ? prev.concat(flattenArray(children, isProxyState), proxyStateObject) : prev.concat(proxyStateObject)
     }, [])
 }
@@ -22,7 +22,7 @@ export const flattenArray = (arr: TreeData[] | Ref<TreeData[]>, isProxyState = f
  *  @description isProxyState: 子节点是否保持响应式   默认:false
  *  @return TreeData[]
  * */
-export const findTreeChildrenNode = (arr: TreeData[] | Ref<TreeData[]>, id: string | Ref<string>, isProxyState: boolean): TreeData[] => {
+export const findTreeChildrenNode = (arr: TreeData[] | Ref<TreeData[]>, id: string | Ref<string>, isProxyState = false): TreeData[] => {
     const nodeId = unref(id);
     const flattenList = flattenArray(arr, isProxyState);
     const nodeList = flattenArray(flattenList.filter(item => item.key === nodeId), isProxyState);
@@ -43,7 +43,7 @@ export const findParentNodeKey = (tree: TreeData[] | Ref<TreeData[]>, nodeId: st
 export const findParentNode = (tree: TreeData[] | Ref<TreeData[]>, nodeId: string, isProxyState: boolean, linealNode = false): TreeData[] => getParentObjectByKeys(toFlatArray(tree), nodeId, isProxyState, linealNode);
 
 // 获取所有兄弟节点
-export const findAllBrotherNode = (tree: TreeData[] | Ref<TreeData[]>, nodeId: string, isProxyState: boolean): TreeData[] | [] => {
+export const findAllBrotherNode = (tree: TreeData[] | Ref<TreeData[]>, nodeId: string, isProxyState = false): TreeData[] | [] => {
     // 获取直系父节点
     const parentNode = findParentNode(tree, nodeId, isProxyState, true);
     const key = parentNode.at(0)?.key;
@@ -61,7 +61,7 @@ const toFlatArray = (tree: TreeData[] | Ref<TreeData[]>, parentId?: string): Tre
         const child = cur.children
         return [
             ...treeArray,
-            parentId ? Object.assign(cur, { parentId }) : cur,
+            parentId ? Object.assign(cur, {parentId}) : cur,
             ...(isAvailableArray(child) ? toFlatArray(child, cur.key) : [])]
     }, []);
 }
@@ -85,7 +85,7 @@ const getParentObjectByKeys = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: 
     // 寻找全部父节点，递归
     if (!linealNode) {
         while (child) {
-            parentArray = IsProxyState ? parentArray.concat(child) : parentArray.concat({ ...child });
+            parentArray = IsProxyState ? parentArray.concat(child) : parentArray.concat({...child});
             child = unref(flatArray).find(tree => tree.key === child?.parentId)
         }
     } else {
@@ -93,7 +93,7 @@ const getParentObjectByKeys = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: 
         if (child) {
             let linealParentNode = unref(flatArray).find((tree) => tree.key === child?.parentId);
             if (linealParentNode) {
-                parentArray = IsProxyState ? parentArray.concat(linealParentNode) : parentArray.concat({ ...linealParentNode });
+                parentArray = IsProxyState ? parentArray.concat(linealParentNode) : parentArray.concat({...linealParentNode});
             }
         }
     }
