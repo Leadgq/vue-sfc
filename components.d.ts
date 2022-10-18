@@ -19,10 +19,8 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SlotTest: typeof import('./src/components/slotTest.vue')['default']
-    Tree: typeof import('./src/components/treeComponent/tree/tree.vue')['default']
     TreeChildren: typeof import('./src/components/treeComponent/treeChildren.vue')['default']
     TreeComponentTest: typeof import('./src/components/treeComponent/treeComponentTest.vue')['default']
-    TreeNode: typeof import('./src/components/treeComponent/tree/treeNode.vue')['default']
     TreeOption: typeof import('./src/components/treeComponent/treeOption.vue')['default']
   }
 }

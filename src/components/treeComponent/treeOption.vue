@@ -2,25 +2,28 @@
   <div>
     <div v-for="fatherItem in treeData" :key="fatherItem.key">
       <el-checkbox
-        v-model="fatherItem.check"
-        :indeterminate="fatherItem.indeterminate"
-        @input="handlerNodeAction(fatherItem)"
+          v-model="fatherItem.check"
+          :indeterminate="fatherItem.indeterminate"
+          @input="handlerNodeAction(fatherItem)"
       >
-        {{ fatherItem.title }}</el-checkbox
+        {{ fatherItem.title }}
+      </el-checkbox
       >
       <div v-for="cItem in fatherItem.children" :key="cItem.key" class="px-4">
         <el-checkbox
-          v-model="cItem.check"
-          :indeterminate="cItem.indeterminate"
-          @input="handlerNodeAction(cItem, 'father')"
+            v-model="cItem.check"
+            :indeterminate="cItem.indeterminate"
+            @input="handlerNodeAction(cItem, 'father')"
         >
-          {{ cItem.title }}</el-checkbox
+          {{ cItem.title }}
+        </el-checkbox
         >
         <div v-for="sonItem in cItem.children" :key="sonItem.key" class="px-4">
           <el-checkbox
-            v-model="sonItem.check"
-            @input="handlerNodeAction(sonItem, 'son')"
-            >{{ sonItem.title }}</el-checkbox
+              v-model="sonItem.check"
+              @input="handlerNodeAction(sonItem, 'son')"
+          >{{ sonItem.title }}
+          </el-checkbox
           >
         </div>
       </div>
@@ -30,18 +33,14 @@
 </template>
 
 <script setup lang="ts">
-import { TreeData } from "@/types/tree";
-import { findParentNode, findTreeChildrenNode, flattenArray } from "@/tools/tree/treeLib";
+import {TreeData} from "@/types/tree";
+import {findParentNode, findTreeChildrenNode, flattenArray} from "@/tools/tree/treeLib";
+import {ElMessage} from 'element-plus'
+
 const props = defineProps<{
   data: TreeData[];
 }>();
-const treeData = ref<TreeData[]>();
-watch(
-  () => props.data,
-  (newTreeData) => {
-    treeData.value = newTreeData;
-  }
-);
+const treeData = computed(() => props.data);
 const handlerNodeAction = (item: TreeData, message?: string) => {
   if (message === "son") {
     setTimeout(() => handlerSonTreeNode(item), 0);
@@ -86,9 +85,9 @@ const handlerCommon = (parentNode: TreeData) => {
   // 当前节点的所有子节点
   const childrenNode = findTreeChildrenNode(treeData.value!, parentNode.key, true);
   // 子节点都选中的状态
-  const state = childrenNode.every((tree) => tree.check === true);
+  const state = childrenNode.every((tree) => tree.check);
   // 子节点部分选中
-  const indeterminateState = childrenNode.some((tree) => tree.check === true);
+  const indeterminateState = childrenNode.some((tree) => tree.check);
   // 如果部分选中
   if (indeterminateState) {
     parentNode.check = false;
@@ -107,8 +106,12 @@ const handlerCommon = (parentNode: TreeData) => {
 };
 const selectAllCheckTree = () => {
   const checkedNode = flattenArray(treeData.value!, false)
-    .filter((item) => item.check)
-    .map((item) => item.key);
+      .filter((item) => item.check)
+      .map((item) => item.key);
+  ElMessage({
+    type: 'success',
+    message: `你选择的节点${checkedNode.toString()}`
+  })
 };
 </script>
 
