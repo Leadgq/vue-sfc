@@ -1,6 +1,7 @@
 <template>
   <div>
     <TreeChildren :data="treeDataArray" v-model:testValue="testValue" v-if="flag"/>
+    <div>{{ testValue }}</div>
     <TreeOption :data="treeDataArray"/>
     <el-button @click="flag = !flag">异步显示</el-button>
     {{ data.x }} --- {{ data.y }}
