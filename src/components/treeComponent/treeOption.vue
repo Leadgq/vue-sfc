@@ -7,8 +7,7 @@
           @change="handlerNodeAction(fatherItem)"
       >
         {{ fatherItem.title }}
-      </el-checkbox
-      >
+      </el-checkbox>
       <div v-for="cItem in fatherItem.children" :key="cItem.key" class="px-4">
         <el-checkbox
             v-model="cItem.check"
@@ -16,15 +15,13 @@
             @change="handlerNodeAction(cItem, 'father')"
         >
           {{ cItem.title }}
-        </el-checkbox
-        >
+        </el-checkbox>
         <div v-for="sonItem in cItem.children" :key="sonItem.key" class="px-4">
           <el-checkbox
               v-model="sonItem.check"
               @change="handlerNodeAction(sonItem, 'son')"
           >{{ sonItem.title }}
-          </el-checkbox
-          >
+          </el-checkbox>
         </div>
       </div>
     </div>
