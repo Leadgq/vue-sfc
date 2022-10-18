@@ -42,20 +42,18 @@ const props = defineProps<{
 }>();
 const treeData = computed(() => props.data);
 const handlerNodeAction = (item: TreeData, message?: string) => {
-  nextTick(() => {
-    if (message === "son") {
-      // 处理自己的父节点状态
-      handlerParentTreeNodeState(item, message);
-    } else if (message === "father") {
-      // 处理子节点
-      handlerAllChildrenNode(item);
-      // 处理自己的父节点状态
-      handlerParentTreeNodeState(item, message);
-    } else {
-      // 处理子节点
-      handlerAllChildrenNode(item);
-    }
-  })
+  if (message === "son") {
+    // 处理自己的父节点状态
+    handlerParentTreeNodeState(item, message);
+  } else if (message === "father") {
+    // 处理子节点
+    handlerAllChildrenNode(item);
+    // 处理自己的父节点状态
+    handlerParentTreeNodeState(item, message);
+  } else {
+    // 处理子节点
+    handlerAllChildrenNode(item);
+  }
 };
 // 处理子节点
 const handlerAllChildrenNode = (item: TreeData) => {
