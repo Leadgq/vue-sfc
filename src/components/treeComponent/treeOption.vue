@@ -58,7 +58,7 @@ const handlerNodeAction = (item: TreeData, message?: string) => {
   })
 };
 const handlerRootNode = (item: TreeData) => {
-  const children = findTreeChildrenNode(treeData.value!, item.key, true);
+  const children = findTreeChildrenNode(treeData.value, item.key, true);
   modifyChildrenNode(item, children);
 };
 // 修改子节点的状态，父节点为true 所有为true,反之亦然
@@ -70,7 +70,7 @@ const modifyChildrenNode = (item: TreeData, children: TreeData[]) => {
 // 子节点决定父节点状态
 const handlerParentTreeNodeState = (item: TreeData) => {
   // 寻找当前节点的父节点
-  let parentNode = findParentNode(treeData.value!, item.key, true, true).at(0);
+  let parentNode = findParentNode(treeData.value, item.key, true, true).at(0);
   if (parentNode) {
     handlerCommon(parentNode);
     // 寻找根节点、因为所有子节点都对根节点起了作用
@@ -79,14 +79,14 @@ const handlerParentTreeNodeState = (item: TreeData) => {
 };
 const checkParentNodeState = (item: TreeData) => {
   // 寻找当前节点的根节点
-  let rootNode = findParentNode(treeData.value!, item.key, true, false).at(-1);
+  let rootNode = findParentNode(treeData.value, item.key, true, false).at(-1);
   if (rootNode) {
     handlerCommon(rootNode);
   }
 };
 const handlerCommon = (parentNode: TreeData) => {
   // 当前节点的所有子节点
-  const childrenNode = findTreeChildrenNode(treeData.value!, parentNode.key, true);
+  const childrenNode = findTreeChildrenNode(treeData.value, parentNode.key, true);
   // 子节点都选中的状态
   const state = childrenNode.every((tree) => tree.check);
   // 子节点部分选中
@@ -108,7 +108,7 @@ const handlerCommon = (parentNode: TreeData) => {
   }
 };
 const selectAllCheckTree = () => {
-  const checkedNode = flattenArray(treeData.value!, false)
+  const checkedNode = flattenArray(treeData.value, false)
       .filter((item) => item.check)
       .map((item) => item.key);
   ElMessage({
