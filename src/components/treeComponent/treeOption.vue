@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w-[600px] bg-white mt-2 px-1">
     <div v-for="fatherItem in treeData" :key="fatherItem.key">
       <el-checkbox
           v-model="fatherItem.check"
