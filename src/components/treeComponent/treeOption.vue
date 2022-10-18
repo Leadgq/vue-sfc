@@ -4,7 +4,7 @@
       <el-checkbox
           v-model="fatherItem.check"
           :indeterminate="fatherItem.indeterminate"
-          @input="handlerNodeAction(fatherItem)"
+          @change="handlerNodeAction(fatherItem)"
       >
         {{ fatherItem.title }}
       </el-checkbox
@@ -13,7 +13,7 @@
         <el-checkbox
             v-model="cItem.check"
             :indeterminate="cItem.indeterminate"
-            @input="handlerNodeAction(cItem, 'father')"
+            @change="handlerNodeAction(cItem, 'father')"
         >
           {{ cItem.title }}
         </el-checkbox
@@ -21,7 +21,7 @@
         <div v-for="sonItem in cItem.children" :key="sonItem.key" class="px-4">
           <el-checkbox
               v-model="sonItem.check"
-              @input="handlerNodeAction(sonItem, 'son')"
+              @change="handlerNodeAction(sonItem, 'son')"
           >{{ sonItem.title }}
           </el-checkbox
           >
@@ -42,17 +42,19 @@ const props = defineProps<{
 }>();
 const treeData = computed(() => props.data);
 const handlerNodeAction = (item: TreeData, message?: string) => {
-  if (message === "son") {
-    setTimeout(() => handlerSonTreeNode(item), 0);
-  } else if (message === "father") {
-    // 处理所有子节点
-    setTimeout(() => handlerRootNode(item), 0);
-    // 处理自己的父节点状态
-    setTimeout(() => handlerSonTreeNode(item), 0);
-  } else {
-    // 根节点决定子节点状态
-    setTimeout(() => handlerRootNode(item), 0);
-  }
+  nextTick(() => {
+    if (message === "son") {
+      handlerSonTreeNode(item);
+    } else if (message === "father") {
+      // 处理所有子节点
+      handlerRootNode(item);
+      // 处理自己的父节点状态
+      handlerSonTreeNode(item);
+    } else {
+      // 根节点决定子节点状态
+      handlerRootNode(item);
+    }
+  })
 };
 const handlerRootNode = (item: TreeData) => {
   const children = findTreeChildrenNode(treeData.value!, item.key, true);
