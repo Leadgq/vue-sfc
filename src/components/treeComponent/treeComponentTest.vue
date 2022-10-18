@@ -1,16 +1,19 @@
 <template>
   <div>
-    <TreeChildren :data="treeDataArray" />
-    <TreeOption :data="treeDataArray" />
-    <TreeChildren :data="treeDataArray" v-model:testValue="testValue" v-if="flag" />
+    <TreeChildren :data="treeDataArray"/>
+    <TreeOption :data="treeDataArray"/>
+    <TreeChildren :data="treeDataArray" v-model:testValue="testValue" v-if="flag"/>
+    {{ data.x }} --- {{ data.y }}
   </div>
 </template>
 
 <script setup lang="ts">
-import { loadFile } from "@/tools/lib";
-import { TreeData } from "@/types/tree";
+import {loadFile} from "@/tools/lib";
+import {TreeData} from "@/types/tree";
 import TreeOption from "@/components/treeComponent/treeOption.vue";
+import {useSharedMouse} from "@/tools/hook/useMouseHook";
 
+const data = useSharedMouse();
 const TreeChildren = defineAsyncComponent({
   loader: () => import("@/components/treeComponent/treeChildren.vue"),
   delay: 5000,
