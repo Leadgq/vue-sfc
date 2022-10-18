@@ -45,12 +45,12 @@ const handlerNodeAction = (item: TreeData, message?: string) => {
   nextTick(() => {
     if (message === "son") {
       // 处理自己的父节点状态
-      handlerParentTreeNodeState(item);
+      handlerParentTreeNodeState(item, message);
     } else if (message === "father") {
       // 处理根节点
       handlerRootNode(item);
       // 处理自己的父节点状态
-      handlerParentTreeNodeState(item);
+      handlerParentTreeNodeState(item, message);
     } else {
       // 根节点决定子节点状态
       handlerRootNode(item);
@@ -65,16 +65,18 @@ const handlerRootNode = (item: TreeData) => {
 const modifyChildrenNode = (item: TreeData, children: TreeData[]) => {
   // 只要点击去掉半选状态
   item.indeterminate = false;
-  children.forEach((tree) => (tree.check = item.check));
+  children.forEach((tree) => tree.check = item.check);
 };
 // 子节点决定父节点状态
-const handlerParentTreeNodeState = (item: TreeData) => {
+const handlerParentTreeNodeState = (item: TreeData, message: string) => {
   // 寻找当前节点的父节点
   let parentNode = findParentNode(treeData.value, item.key, true, true).at(0);
   if (parentNode) {
     handlerCommon(parentNode);
-    // 寻找根节点、因为所有子节点都对根节点起了作用
-    checkParentNodeState(item);
+    if (message === 'son') {
+      // 当处于孙子节点，去寻找根节点
+      checkParentNodeState(item);
+    }
   }
 };
 const checkParentNodeState = (item: TreeData) => {
@@ -108,12 +110,10 @@ const handlerCommon = (parentNode: TreeData) => {
   }
 };
 const selectAllCheckTree = () => {
-  const checkedNode = flattenArray(treeData.value, false)
-      .filter((item) => item.check)
-      .map((item) => item.key);
+  const checkedNode = flattenArray(treeData.value, false).filter((item) => item.check).map((item) => item.key).toString();
   ElMessage({
     type: 'success',
-    message: `你选择的节点${checkedNode.toString()}`
+    message: `你选择的节点${checkedNode}`
   })
 };
 </script>
