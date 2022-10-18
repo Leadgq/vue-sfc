@@ -66,7 +66,7 @@ const handlerAllChildrenNode = (item: TreeData) => {
 const modifyChildrenNode = (item: TreeData, children: TreeData[]) => {
   // 只要点击去掉半选状态
   item.indeterminate = false;
-  children.forEach((tree) => tree.check = item.check);
+  children.forEach(tree => tree.check = item.check);
 };
 // 子节点决定父节点状态
 const handlerParentTreeNodeState = (item: TreeData, message: string) => {
@@ -91,9 +91,9 @@ const handlerCommon = (parentNode: TreeData) => {
   // 当前节点的所有子节点
   const childrenNode = findTreeChildrenNode(treeData.value, parentNode.key, true);
   // 子节点都选中的状态
-  const state = childrenNode.every((tree) => tree.check);
+  const state = childrenNode.every(tree => tree.check);
   // 子节点部分选中
-  const indeterminateState = childrenNode.some((tree) => tree.check);
+  const indeterminateState = childrenNode.some(tree => tree.check);
   // 如果部分选中
   if (indeterminateState) {
     parentNode.check = false;
@@ -111,7 +111,7 @@ const handlerCommon = (parentNode: TreeData) => {
   }
 };
 const selectAllCheckTree = () => {
-  const checkedNode = flattenArray(treeData.value, false).filter((item) => item.check).map((item) => item.key).toString();
+  const checkedNode = flattenArray(treeData.value, false).filter(item => item.check).map((item) => item.key).toString();
   ElMessage({
     type: 'success',
     message: `你选择的节点${checkedNode}`
