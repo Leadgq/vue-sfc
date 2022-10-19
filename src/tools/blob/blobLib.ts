@@ -1,4 +1,5 @@
-// base64转换为blob
+// base64转换为blob，返回的纯blob流、
+// 提交后台需要URL.createObjectURL(blob)
 export const dataUrlToBlob = (base64: string, mimeType: string) => {
     let bytes = window.atob(base64.split(",")[1]);
     let ab = new ArrayBuffer(bytes.length);
