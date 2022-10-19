@@ -13,7 +13,7 @@ export const isAvailableArray = (arr: any[] | Ref<any[]>) => isArray(arr) && Arr
 // 是否是一个可用对象
 export const isAvailableObject = (obj: Record<string, any> | Ref<Record<string, any>>) => isObject(obj) && Reflect.ownKeys(unref(obj)).length !== 0 && unref(obj).constructor === Object;
 // 对象中所有项是否都有值
-export const isAvailableObjectValue = (obj: Record<string, any> | Ref<Record<string, any>>) => isAvailableObject(obj) && Object.values(unref(obj)).every(item => item);
+export const isAvailableObjectValue = (obj: Record<string, any> | Ref<Record<string, any>>) => isAvailableObject(obj) && Object.values(unref(obj)).every(item => item && item !== 0);
 // 是否是一个函数
 export const isFunction = (fn: Function) => typeof fn === 'function';
 // 是否是一个Promise
