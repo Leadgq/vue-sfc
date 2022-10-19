@@ -13,8 +13,7 @@ export const recursionCompressH5 = (blob: Blob, type: string) => {
     let img = document.createElement("img");
     let canvas = document.createElement("canvas");
     return new Promise((resolve) => {
-        // @ts-ignore
-        img.src = blob;
+        img.src = URL.createObjectURL(blob);
         img.onload = () => {
             let screenWidth = img.width;
             let screenHeight = img.height;
