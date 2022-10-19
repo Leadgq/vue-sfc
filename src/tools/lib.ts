@@ -24,6 +24,8 @@ export const isAvailablePhone = (phone: string | Ref<string>) => /^1[3,4,5,6,7,8
 export const isAvailableEmail = (email: string | Ref<string>) => /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(unref(email))
 // 是否是一个可用的身份证号码
 export const isAvailableIdCard = (idCard: string | Ref<string>) => /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(unref(idCard))
+// 是否是一个固定电话
+export const isAvailableLandline = (tel: string | Ref<string>) => /^\d{3,4}-\d{7,8}(-\d{3,4})?$/.test(unref(tel));
 // 是否是一个可用的车牌号
 export const isAvailablecarNo = (no: string | Ref<string>) => {
     const cardNo = unref(no);
@@ -42,13 +44,16 @@ export const isAvailablecarNo = (no: string | Ref<string>) => {
 //只能输入字母
 export const letter = (letter: string | Ref<string>) => /^[a-zA-Z]*$/.test(unref(letter));
 // 只能是字母或者数字
-export const enOrNum = (value: string | Ref<string>) => /^[0-9a-zA-Z]*$/g.test(unref(value));
-// 是否是一个固定电话
-export const isAvailableLandline = (tel: string | Ref<string>) => /^\d{3,4}-\d{7,8}(-\d{3,4})?$/.test(unref(tel));
+export const enOrNum = (value: string | number | Ref<string | number>) => /^[0-9a-zA-Z]*$/g.test(unref(String(value)));
 // 生成随机数不包括最大值
 export const randomMax = (min: number, max: number) => Math.floor(Math.random() * (max - min) + min);
 // 生成随机数包括最大值
 export const randomIncludeMax = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min);
+// 手机号中间四位变成*
+export const telFormat = (tel: string | number | Ref<string | number>) => {
+    let telPhone = String(unref(tel));
+    return telPhone.substring(0, 3) + "****" + telPhone.substring(7);
+};
 // 处理大文件
 export const handlerMoreData = async () => {
     const worker = await initWebWorker();
