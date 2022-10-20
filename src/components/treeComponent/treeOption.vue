@@ -106,7 +106,7 @@ const handlerCommon = (parentNode: TreeData) => {
   }
 };
 const selectAllCheckTree = () => {
-  const checkedNode = flattenArray(treeData.value, false).filter(item => item.check).map((item) => item.key).toString();
+  const checkedNode = flattenArray(treeData.value, false).filter(item => item.check).map(item => item.key).toString();
   ElMessage({
     type: 'success',
     message: `你选择的节点${checkedNode}`
