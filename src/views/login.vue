@@ -143,12 +143,12 @@ export default {
     .container-right {
       @apply w-[380px];
 
-      &:deep(.el-form-item) {
+      :deep(.el-form-item) {
         @apply mb-7;
       }
 
       .code-container {
-        @apply flex w-full  ;
+        @apply flex w-full;
         .code {
           @apply w-[90px]  h-[30px] ml-3 text-center bg-violet-200 text-white flex  justify-center items-center  cursor-pointer;
         }

@@ -117,6 +117,7 @@ const selectAllCheckTree = () => {
 <script lang="ts">
 export default {
   name: "treeOption",
+  inheritAttrs: false
 };
 </script>
 

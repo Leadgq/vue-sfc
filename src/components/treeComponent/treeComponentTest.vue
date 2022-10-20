@@ -2,7 +2,7 @@
   <div>
     <TreeChildren :data="treeDataArray" v-model:testValue="testValue" v-if="flag"/>
     <div>{{ testValue }}</div>
-    <TreeOption :data="treeDataArray"/>
+    <TreeOption :data="treeDataArray" value="15"/>
     <el-button @click="flag = !flag">异步显示</el-button>
     {{ data.x }} --- {{ data.y }}
   </div>
