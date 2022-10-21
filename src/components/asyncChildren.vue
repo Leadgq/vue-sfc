@@ -45,12 +45,17 @@ const mockData = (): Promise<any[]> => {
 onMounted(() => {
   handlerCityData();
 });
-
+let cityData = ref<any[]>([]);
 const handlerCityData = async () => {
   const result = (await mockData()) as any[];
   result.forEach((item) => {
     cityMap.value.set(item.cityName, item.children);
   });
+  cityData.value = (result || []).map((item) => {
+    item[item.cityName] = item.children;
+    return item;
+  })
+  // cityData.value.filter(item => item[name]).flatMap(item => item[name]);
 };
 </script>
 <style lang="scss" scoped></style>
