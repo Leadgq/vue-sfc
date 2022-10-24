@@ -30,7 +30,7 @@ export const recursionCompressH5 = (blob: Blob, quality: number): Promise<string
     })
 }
 //blob转换为base64
-export const bolbToBase64 = (blob: Blob): Promise<string | ArrayBuffer> => {
+export const blobToBase64 = (blob: Blob): Promise<string | ArrayBuffer> => {
     return new Promise((resolve) => {
         const fileReader = new FileReader();
         fileReader.onload = (event) => {
