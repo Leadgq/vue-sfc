@@ -27,7 +27,7 @@ export const isAvailableIdCard = (idCard: string | Ref<string>) => /(^\d{15}$)|(
 // 是否是一个固定电话
 export const isAvailableLandline = (tel: string | Ref<string>) => /^\d{3,4}-\d{7,8}(-\d{3,4})?$/.test(unref(tel));
 // 是否是一个可用的车牌号
-export const isAvailablecarNo = (no: string | Ref<string>) => {
+export const isAvailableCarNo = (no: string | Ref<string>) => {
     const cardNo = unref(no);
     // 新能源车牌
     const newCardReg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}(([0-9]{5}[DF]$)|([DF][A-HJ-NP-Z0-9][0-9]{4}$))/
