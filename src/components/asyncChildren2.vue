@@ -90,10 +90,10 @@ const handlerWorker = () => {
   }
 };
 const el = ref<HTMLElement | null>(null)
-let useInfiniteArray = ref<any[]>([])
+let useInfiniteArray = ref<number[]>([])
 
-const loadMore = (): Promise<any[]> => {
-  let list = <any>[];
+const loadMore = (): Promise<number[]> => {
+  let list: number[] = [];
   return new Promise((resolve) => {
     setTimeout(() => {
       for (let i = 0; i < 5; i++) {
@@ -106,9 +106,7 @@ const loadMore = (): Promise<any[]> => {
 onMounted(() => {
   loadArrayData()
 })
-useInfiniteScroll(el, () => {
-  loadArrayData();
-}, {
+useInfiniteScroll(el, () => loadArrayData(), {
   distance: 10
 })
 const loadArrayData = async (): Promise<void> => {

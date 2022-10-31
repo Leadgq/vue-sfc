@@ -40,12 +40,12 @@ export const findParentNodeKey = (tree: TreeData[] | Ref<TreeData[]>, nodeId: st
  *  @description isProxyState:  父节点是否保持响应式   默认:false   linealNode : 是否只要直系节点
  *  @return TreeData[]
  * */
-export const findParentNode = (tree: TreeData[] | Ref<TreeData[]>, nodeId: string, isProxyState = false, linealNode = false): TreeData[] => getParentObjectByKeys(toFlatArray(tree), nodeId, isProxyState, linealNode);
+export const findTreeParentNode = (tree: TreeData[] | Ref<TreeData[]>, nodeId: string, isProxyState = false, linealNode = false): TreeData[] => getParentObjectByKeys(toFlatArray(tree), nodeId, isProxyState, linealNode);
 
 // 获取所有兄弟节点
 export const findAllBrotherNode = (tree: TreeData[] | Ref<TreeData[]>, nodeId: string, isProxyState = false): TreeData[] | [] => {
     // 获取直系父节点
-    const parentNode = findParentNode(tree, nodeId, isProxyState, true);
+    const parentNode = findTreeParentNode(tree, nodeId, isProxyState, true);
     const key = parentNode.at(0)?.key;
     if (parentNode && key) {
         // 获取当前父节点所有子节点

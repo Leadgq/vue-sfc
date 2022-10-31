@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import {TreeData} from "@/types/tree";
-import {findParentNode, findTreeChildrenNode, flattenArray} from "@/tools/tree/treeLib";
+import {findTreeChildrenNode, findTreeParentNode, flattenArray} from "@/tools/tree/treeLib";
 import {ElMessage} from 'element-plus'
 
 const props = defineProps<{
@@ -66,7 +66,7 @@ const modifyChildrenNode = (item: TreeData, children: TreeData[]) => {
 // 子节点决定父节点状态
 const handlerParentTreeNodeState = (item: TreeData, message: string) => {
   // 寻找当前节点的父节点
-  let parentNode = findParentNode(treeData.value, item.key, true, true).at(0);
+  let parentNode = findTreeParentNode(treeData.value, item.key, true, true).at(0);
   if (parentNode) {
     handlerCommon(parentNode);
     if (message === 'son') {
@@ -77,7 +77,7 @@ const handlerParentTreeNodeState = (item: TreeData, message: string) => {
 };
 const checkParentNodeState = (item: TreeData) => {
   // 寻找当前节点的根节点
-  let rootNode = findParentNode(treeData.value, item.key, true, false).at(-1);
+  let rootNode = findTreeParentNode(treeData.value, item.key, true, false).at(-1);
   if (rootNode) {
     handlerCommon(rootNode);
   }
