@@ -8,7 +8,6 @@ const dataUrlToBlob = (base64: string) => {
     }
     return new Blob([ab], {type: 'image/jpeg'});
 };
-
 // blob转base64
 export const blobToBase64 = (blob: Blob) => {
     return new Promise((resolve, reject) => {
@@ -22,7 +21,6 @@ export const blobToBase64 = (blob: Blob) => {
         };
     });
 };
-
 // base64计算图片大小
 export const imageSize = (base64Str: string) => {
     const indexBase64 = base64Str.indexOf('base64,');
@@ -30,7 +28,6 @@ export const imageSize = (base64Str: string) => {
     const str = base64Str.substr(indexBase64 + 6);
     return (str.length * 0.75).toFixed(2);
 };
-
 // 图片压缩逻辑
 const recursionCompressH5 = (blobUrl: Blob, quality: number, status: boolean): Promise<string> => {
     let canvas = document.createElement('canvas');
@@ -65,43 +62,55 @@ const recursionCompressH5 = (blobUrl: Blob, quality: number, status: boolean): P
 *   data : 数据源
 *   status : 是否是uni的环境  默认不是
 * */
-export const recursionCompress = (data: Blob | string, type: string, status = false): Promise<{
-    base64: string,
-    blobData: Blob
-}> => {
-    return new Promise((resolve) => {
-        if (type === 'base64' && typeof data === 'string') {
-            const blob = dataUrlToBlob(data);
-            // 计算大小
-            const quality = checkMagnification(blob.size);
-            // 压缩之后的base64
-            recursionCompressH5(blob, quality, status).then((base64) => {
-                // 压缩之后的blob
-                const blobData = dataUrlToBlob(base64);
-                resolve(
-                    {
-                        base64,
-                        blobData
-                    }
-                );
-            });
+export const recursionCompress = (data: Blob | string, status = false): Promise<{ base64: string, blobData: Blob }> => {
+    return new Promise(async (resolve) => {
+        if (typeof data === 'string') {
+            const result = await handlerBase64(data, status);
+            resolve(result);
             // 处理base64
-        } else if (type === 'blob' && typeof data === 'object') {
-            // 处理blob
-            const quality = checkMagnification(data.size);
-            recursionCompressH5(data, quality, status).then((base64) => {
-                // 压缩之后的blob
-                const blobData = dataUrlToBlob(base64);
-                resolve(
-                    {
-                        base64,
-                        blobData
-                    }
-                );
-            });
+        } else if (typeof data === 'object') {
+            const result = await handlerBlob(data, status);
+            resolve(result);
         }
     });
 };
+// 处理blob
+const handlerBlob = (data: Blob, status: boolean): Promise<{ base64: string, blobData: Blob }> => {
+    return new Promise(async (resolve) => {
+        // 处理blob
+        const quality = checkMagnification(data.size);
+        // 压缩之后的base64
+        const base64 = await recursionCompressH5(data, quality, status);
+        // 压缩之后的blob
+        const blobData = dataUrlToBlob(base64);
+        resolve(
+            {
+                base64,
+                blobData
+            }
+        );
+    })
+}
+// 处理base64
+const handlerBase64 = (data: string, status: boolean): Promise<{ base64: string, blobData: Blob }> => {
+    return new Promise(async (resolve) => {
+        // 如果是base64先转换为blob
+        const blob = dataUrlToBlob(data);
+        // 计算大小
+        const quality = checkMagnification(blob.size);
+        // 压缩之后的base64
+        const base64 = await recursionCompressH5(blob, quality, status);
+        // 压缩之后的blob
+        const blobData = dataUrlToBlob(base64);
+        resolve(
+            {
+                base64,
+                blobData
+            }
+        )
+    })
+}
+// 压缩比重
 const checkMagnification = (size: number) => {
     let resultSize = size / 1024 / 1024;
     let quality = 1;
