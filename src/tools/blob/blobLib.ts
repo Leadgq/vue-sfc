@@ -65,7 +65,10 @@ const recursionCompressH5 = (blobUrl: Blob, quality: number, status: boolean): P
 *   data : 数据源
 *   status : 是否是uni的环境  默认不是
 * */
-export const recursionCompress = (data: Blob | string, type: string, status = false) => {
+export const recursionCompress = (data: Blob | string, type: string, status = false): Promise<{
+    base64: string,
+    blobData: Blob
+}> => {
     return new Promise((resolve) => {
         if (type === 'base64' && typeof data === 'string') {
             const blob = dataUrlToBlob(data);
