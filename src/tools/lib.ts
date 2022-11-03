@@ -82,3 +82,20 @@ const initWebWorker = (): Promise<Worker> => {
         resolve(worker);
     })
 }
+
+interface job {
+    id?: number
+}
+// 二分
+const findInsertionIndex = (id: number, queue: job[]) => {
+    let start = 0
+    let end = queue.length
+    while (start < end) {
+        const middle = (start + end) >>> 1
+        const middleJobId = getId(queue[middle])
+        middleJobId < id ? (start = middle + 1) : (end = middle)
+    }
+    return start
+}
+// 返回id
+const getId = (obj: job): number => obj.id == null ? Infinity : obj.id
