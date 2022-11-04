@@ -12,14 +12,14 @@
         <el-checkbox
             v-model="cItem.check"
             :indeterminate="cItem.indeterminate"
-            @change="handlerNodeAction(cItem, 'father')"
+            @change="handlerNodeAction(cItem)"
         >
           {{ cItem.title }}
         </el-checkbox>
         <div v-for="sonItem in cItem.children" :key="sonItem.key" class="px-4">
           <el-checkbox
               v-model="sonItem.check"
-              @change="handlerNodeAction(sonItem, 'son')"
+              @change="handlerNodeAction(sonItem)"
           >{{ sonItem.title }}
           </el-checkbox>
         </div>
@@ -32,22 +32,37 @@
 <script setup lang="ts">
 import {TreeData} from "@/types/tree";
 import {findTreeChildrenNode, findTreeParentNode, flattenArray} from "@/tools/tree/treeLib";
+import {isAvailableArray} from "@/tools/lib"
 import {ElMessage} from 'element-plus'
 
 const props = defineProps<{
   data: TreeData[];
 }>();
-const treeData = computed(() => props.data);
-const handlerNodeAction = (item: TreeData, message?: string) => {
-  if (message === "son") {
+
+const treeData =  ref<TreeData[]>([]);
+
+watch(()=> props.data ,(newTreeData)=> treeData.value = InitTreeData(newTreeData))
+// 格式化树
+const InitTreeData = (TreeData: TreeData[], key?: string): TreeData[] => {
+  return TreeData.map((item) => {
+    return {
+      ...item,
+      parentId: key ? key : undefined,
+      children: isAvailableArray(item.children) ? InitTreeData(item.children, item.key) : []
+    }
+  })
+}
+// 节点处理
+const handlerNodeAction = (item: TreeData) => {
+  if (!item.children && item.parentId) {
     // 处理自己的父节点状态
-    handlerParentTreeNodeState(item, message);
-  } else if (message === "father") {
+    handlerParentTreeNodeState(item);
+  } else if (item.parentId) {
     // 处理子节点
     handlerAllChildrenNode(item);
     // 处理自己的父节点状态
-    handlerParentTreeNodeState(item, message);
-  } else {
+    handlerParentTreeNodeState(item);
+  } else  if (!item.parentId){
     // 处理子节点
     handlerAllChildrenNode(item);
   }
@@ -64,23 +79,10 @@ const modifyChildrenNode = (item: TreeData, children: TreeData[]) => {
   children.forEach(tree => tree.check = item.check);
 };
 // 子节点决定父节点状态
-const handlerParentTreeNodeState = (item: TreeData, message: string) => {
-  // 寻找当前节点的父节点
-  let parentNode = findTreeParentNode(treeData.value, item.key, true, true).at(0);
-  if (parentNode) {
-    handlerCommon(parentNode);
-    if (message === 'son') {
-      // 当处于孙子节点，去寻找根节点
-      checkParentNodeState(item);
-    }
-  }
-};
-const checkParentNodeState = (item: TreeData) => {
-  // 寻找当前节点的根节点
-  let rootNode = findTreeParentNode(treeData.value, item.key, true, false).at(-1);
-  if (rootNode) {
-    handlerCommon(rootNode);
-  }
+const handlerParentTreeNodeState = (item: TreeData) => {
+  // 寻找当前节点的所有父节点
+  let parentNodes = findTreeParentNode(treeData.value, item.key, true, false)
+  if (isAvailableArray(parentNodes)) parentNodes.forEach(item => handlerCommon(item))
 };
 const handlerCommon = (parentNode: TreeData) => {
   // 当前节点的所有子节点
