@@ -80,9 +80,9 @@ const handlerAllChildrenNode = (item: TreeData) => {
 const handlerParentTreeNodeState = (item: TreeData) => {
   // 寻找当前节点的所有父节点
   let parentNodes = findTreeParentNode(treeData.value, item.key, true, false)
-  if (isAvailableArray(parentNodes)) parentNodes.forEach(item => handlerCommon(item))
+  if (isAvailableArray(parentNodes)) parentNodes.forEach(item => handlerCommonAction(item))
 };
-const handlerCommon = (parentNode: TreeData) => {
+const handlerCommonAction = (parentNode: TreeData) => {
   // 当前节点的所有子节点
   const childrenNode = findTreeChildrenNode(treeData.value, parentNode.key, true);
   // 子节点都选中的状态
