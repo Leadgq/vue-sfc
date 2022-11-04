@@ -39,9 +39,9 @@ const props = defineProps<{
   data: TreeData[];
 }>();
 
-const treeData =  ref<TreeData[]>([]);
+const treeData = ref<TreeData[]>([]);
 
-watch(()=> props.data ,(newTreeData)=> treeData.value = InitTreeData(newTreeData))
+// watch(() => props.data, (newTreeData) => treeData.value = InitTreeData(newTreeData))
 // 格式化树
 const InitTreeData = (TreeData: TreeData[], key?: string): TreeData[] => {
   return TreeData.map((item) => {
@@ -52,6 +52,7 @@ const InitTreeData = (TreeData: TreeData[], key?: string): TreeData[] => {
     }
   })
 }
+watchEffect(() => treeData.value = InitTreeData(props.data), {flush: 'post'})
 // 节点处理
 const handlerNodeAction = (item: TreeData) => {
   if (!item.children && item.parentId) {
@@ -62,7 +63,7 @@ const handlerNodeAction = (item: TreeData) => {
     handlerAllChildrenNode(item);
     // 处理自己的父节点状态
     handlerParentTreeNodeState(item);
-  } else  if (!item.parentId){
+  } else if (!item.parentId) {
     // 处理子节点
     handlerAllChildrenNode(item);
   }
