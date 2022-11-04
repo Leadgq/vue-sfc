@@ -69,13 +69,11 @@ const handlerNodeAction = (item: TreeData) => {
 };
 // 处理子节点
 const handlerAllChildrenNode = (item: TreeData) => {
-  const children = findTreeChildrenNode(treeData.value, item.key, true);
-  modifyChildrenNode(item, children);
-};
-// 修改子节点的状态，父节点为true 所有为true,反之亦然
-const modifyChildrenNode = (item: TreeData, children: TreeData[]) => {
   // 只要点击去掉半选状态
   item.indeterminate = false;
+  // 当前节点下所有子节点
+  const children = findTreeChildrenNode(treeData.value, item.key, true);
+  // 修改子节点的状态，父节点为true 所有为true,反之亦然
   children.forEach(tree => tree.check = item.check);
 };
 // 子节点决定父节点状态
