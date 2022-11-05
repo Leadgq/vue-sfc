@@ -21,6 +21,7 @@ declare module '@vue/runtime-core' {
     SlotTest: typeof import('./src/components/slotTest.vue')['default']
     TreeChildren: typeof import('./src/components/treeComponent/treeChildren.vue')['default']
     TreeComponentTest: typeof import('./src/components/treeComponent/treeComponentTest.vue')['default']
+    TreeFather: typeof import('./src/components/treeComponent/treeFather.vue')['default']
     TreeOption: typeof import('./src/components/treeComponent/treeOption.vue')['default']
   }
 }

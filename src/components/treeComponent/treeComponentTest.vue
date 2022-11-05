@@ -1,8 +1,8 @@
 <template>
   <div>
     <TreeChildren :data="treeDataArray" v-model:testValue="testValue" v-if="flag"/>
+    <TreeFatherVue :data="treeDataArray"/>
     <div>{{ testValue }}</div>
-    <TreeOption :data="treeDataArray" value="15"/>
     <el-button @click="flag = !flag">异步显示</el-button>
     {{ data.x }} --- {{ data.y }}
   </div>
@@ -11,8 +11,8 @@
 <script setup lang="ts">
 import {loadFile} from "@/tools/lib";
 import {TreeData} from "@/types/tree";
-import TreeOption from "@/components/treeComponent/treeOption.vue";
-import {useSharedMouse} from "@/tools/hook/useMouseHook";
+import { useSharedMouse } from "@/tools/hook/useMouseHook";
+import TreeFatherVue from "./treeFather.vue";
 
 const data = useSharedMouse();
 const TreeChildren = defineAsyncComponent({
