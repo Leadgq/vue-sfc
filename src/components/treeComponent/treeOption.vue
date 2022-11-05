@@ -20,9 +20,7 @@ const bus = useEventBus<TreeData>("changeTree");
 const props = defineProps<{
   data: TreeData[];
 }>();
-const handlerNodeAction = (item: TreeData) => { 
-  bus.emit(item);
-}
+const handlerNodeAction = (item: TreeData) => bus.emit(item);
 </script>
 
 <script lang="ts">
