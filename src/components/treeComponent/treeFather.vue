@@ -18,7 +18,9 @@ const props = defineProps<{
 const bus = useEventBus<TreeData>('changeTree');
 const treeData = ref<TreeData[]>([]);
 // 初始化事件中转站、接受子组件的值 
-bus.on((item) => handlerNodeAction(item));
+const unsubscribe = bus.on((item) => handlerNodeAction(item));
+// 销毁
+onUnmounted(() => unsubscribe())
 
 // 格式化树
 const InitTreeData = (TreeData: TreeData[], key?: string): TreeData[] => {
