@@ -3,9 +3,11 @@
     <div v-for="(item, index) in cityMap.values()" :key="index">
       <div v-for="(cItem, cIndex) in item" :key="cIndex">{{ cItem?.cityName }}</div>
     </div>
+    <Father/>
   </div>
 </template>
 <script setup lang="ts">
+import  Father  from "@/components/test/father.vue"
 let cityMap = ref(new Map());
 const mockData = (): Promise<any[]> => {
   return new Promise((resolve) => {
