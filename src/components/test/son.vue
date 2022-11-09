@@ -53,6 +53,6 @@ defineExpose({
 <script lang="ts">
 export default {
   name: "son",
-  inheritAttrs: false,
+  inheritAttrs: true,
 };
 </script>

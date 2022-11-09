@@ -40,7 +40,7 @@ watch(
 
 const modifyData = async () => {
   id.value = await mockData();
-  sonInstance.value!.getFatherId(id.value);
+  await  sonInstance.value!.getFatherId(id.value);
 };
 onMounted(() => {
   console.log(messageData.value);
