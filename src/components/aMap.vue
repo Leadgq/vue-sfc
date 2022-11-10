@@ -1,12 +1,7 @@
 <template>
   <div class="content">
     <div class="nav">
-      <div
-        v-for="(item, index) in stackItem"
-        :key="index"
-        class="nav-item"
-        @click="backViewType(index)"
-      >
+      <div v-for="(item, index) in stackItem" :key="index" class="nav-item" @click="backViewType(index)">
         <span>{{ item.name }}</span>
         <span class="row"> > </span>
       </div>
