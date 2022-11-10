@@ -16,9 +16,9 @@
 </template>
 
 <script setup lang="ts">
-import {changeMapView, drawCityMakers, drawDistrictMaker, loadMap, removePolyline,} from "@/tools/gaudMap/amap";
-import {loadFile} from "@/tools/lib";
-import {ElMessage} from "element-plus";
+import { changeMapView, drawCityMakers, drawDistrictMaker, loadMap, removePolyline } from "@/tools/gaudMap/amap";
+import { loadFile } from "@/tools/lib";
+import { ElMessage } from "element-plus";
 // 地图类型
 type viewTypes = {
   viewType: string;
@@ -28,7 +28,7 @@ type viewTypes = {
 let currentViewType = reactive<viewTypes>({
   viewType: "province",
   viewCityCode: "210000",
-  name: "辽宁省",
+  name: "辽宁省"
 });
 // 路由视角
 let routerName = $ref("AQYD");
@@ -42,11 +42,7 @@ const toViewType = (viewType?: string, viewCityCode?: string, cityName?: string)
   }
 };
 //公共行为
-const handlerViewType = async (
-  viewType: string,
-  viewCityCode: string,
-  cityName: string
-) => {
+const handlerViewType = async (viewType: string, viewCityCode: string, cityName: string) => {
   currentViewType.viewType = viewType;
   currentViewType.viewCityCode = viewCityCode;
   currentViewType.name = cityName;
@@ -65,28 +61,16 @@ const backViewType = (index: number) => {
 // 加载数据
 const loadData = async () => {
   // 匹配数据
-  const result = (await loadFile(routerName)) as Record<string, {
-      cityList: any[];
-      projectList: any[];
-    }
-  >;
+  const result = (await loadFile(routerName)) as Record<string, { cityList: any[]; projectList: any[] }>;
   const { viewCityCode } = currentViewType;
   let data = result[viewCityCode];
   // 如果匹配到
   if (data) {
     if (currentViewType.viewType === "district") {
       let districtData = handlerDistrictData(data.projectList);
-      drawDistrictMaker(
-        districtData,
-        currentViewType.viewType,
-        currentViewType.viewCityCode
-      );
+      drawDistrictMaker(districtData, currentViewType.viewType, currentViewType.viewCityCode);
     } else {
-      drawCityMakers(
-        data.cityList,
-        currentViewType.viewType,
-        currentViewType.viewCityCode
-      );
+      drawCityMakers(data.cityList, currentViewType.viewType, currentViewType.viewCityCode);
     }
   } else {
     ElMessage.error("当前区域暂无数据");
@@ -94,29 +78,25 @@ const loadData = async () => {
 };
 // 处理区级数据
 const handlerDistrictData = (list: any[]) => {
-  return (list || [])
-    .map((item: any) => {
-      return {
-        ...item,
-        center: [item.longitude, item.latitude],
-        cityName: item?.name,
-        level: "district",
-      };
-    })
-    .filter((item: { longitude: string; latitude: string }) =>
-      filterData(item.longitude, item.latitude)
-    );
+  return (list || []).map((item: any) => {
+    return {
+      ...item,
+      center: [item.longitude, item.latitude],
+      cityName: item?.name,
+      level: "district"
+    };
+  }).filter((item: { longitude: string; latitude: string }) => filterData(item.longitude, item.latitude));
 };
-const filterData = (longitude: string, latitude: string) => {
-  return longitude && latitude && latitude !== "0" && longitude !== "0";
-};
+// 过滤
+const filterData = (longitude: string, latitude: string) => longitude && latitude && latitude !== "0" && longitude !== "0";
+
 onMounted(async () => {
   // 加载地图
   await loadMap({
     contraction: "map",
     viewType: currentViewType.viewType,
     viewCityCode: currentViewType.viewCityCode,
-    toViewType,
+    toViewType
   });
   // 默认放入
   stackItem.push({ ...currentViewType });
