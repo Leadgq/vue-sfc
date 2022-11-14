@@ -60,15 +60,13 @@ const checkMagnification = (size: number) => {
 const recursionCompressH5 = (blobUrl: Blob, quality: number, status: boolean): Promise<string> => {
   let canvas = document.createElement("canvas");
   return new Promise((resolve) => {
-    let blob, img: HTMLImageElement;
+    let blob = URL.createObjectURL(blobUrl), img: HTMLImageElement;
     // 如果不是uni 就正常创建
     if (!status) {
       img = document.createElement("img");
-      blob = URL.createObjectURL(blobUrl);
     } else {
       // uni的情况
       img = new Image();
-      blob = URL.createObjectURL(blobUrl);
     }
     img.src = blob;
     img.onload = () => {
