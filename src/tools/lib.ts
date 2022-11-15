@@ -1,5 +1,5 @@
-import fileSaver from 'file-saver'
-import {Ref} from "vue";
+import fileSaver from "file-saver";
+import { Ref } from "vue";
 // 千分符
 export const toThousands = (num: number | string | Ref<string | number>) => typeof unref(num) === 'string' ? Number(unref(num)).toLocaleString() : unref(num).toLocaleString();
 // 下载文件
@@ -26,6 +26,8 @@ export const isAvailableEmail = (email: string | Ref<string>) => /^[a-zA-Z0-9_-]
 export const isAvailableIdCard = (idCard: string | Ref<string>) => /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(unref(idCard))
 // 是否是一个固定电话
 export const isAvailableLandline = (tel: string | Ref<string>) => /^\d{3,4}-\d{7,8}(-\d{3,4})?$/.test(unref(tel));
+// 是否相同
+export const isIdentical = (x: unknown, y: unknown) => Object.is(x, y);
 // 是否是一个可用的车牌号
 export const isAvailableCarNo = (no: string | Ref<string>) => {
     const cardNo = unref(no);
