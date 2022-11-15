@@ -46,9 +46,9 @@ watch(
 
 // 处理反选
 const handlerTreeInvert = (key: string[] | number[]) => {
-  let nodeAll = flattenArray(treeData.value, true);
+  const nodeAll = flattenArray(treeData.value, true);
   key.forEach(item => {
-    const tree = nodeAll.find(tree => tree.key === item);
+    let tree = nodeAll.find(tree => tree.key === item);
     if (tree) {
       tree.check = true;
       handlerNodeAction(tree);
