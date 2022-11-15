@@ -36,11 +36,13 @@ const InitTreeData = (TreeData: TreeData[], key?: string): TreeData[] => {
 };
 watchEffect(() => treeData.value = InitTreeData(props.data), { flush: "post" });
 
-watchEffect(() => {
-  if (props.defaultKey && isAvailableArray(props.defaultKey)) {
-    handlerTreeInvert(props.defaultKey);
-  }
-}, { flush: "post" });
+watch(
+  () => props.defaultKey,
+  () => {
+    if (props.defaultKey && isAvailableArray(props.defaultKey)) handlerTreeInvert(props.defaultKey);
+  },
+  { flush: "post" }
+);
 
 // 处理反选
 const handlerTreeInvert = (key: string[] | number[]) => {
