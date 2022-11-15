@@ -1,7 +1,7 @@
 <template>
   <div>
     <TreeOption :data="treeData" value="15" class="w-[600px]" />
-    <el-button @click='selectAllCheckTree'>选择树</el-button>
+    <el-button @click="selectAllCheckTree">选择树</el-button>
   </div>
 </template>
 
@@ -9,18 +9,20 @@
 import { TreeData } from "@/types/tree";
 import { useEventBus } from "@vueuse/core";
 import TreeOption from "@/components/treeComponent/treeOption.vue";
-import {findTreeChildrenNode, findTreeParentNode, flattenArray} from "@/tools/tree/treeLib";
-import { isAvailableArray } from "@/tools/lib"
-import { ElMessage } from 'element-plus'
+import { findTreeChildrenNode, findTreeParentNode, flattenArray } from "@/tools/tree/treeLib";
+import { isAvailableArray } from "@/tools/lib";
+import { ElMessage } from "element-plus";
+
 const props = defineProps<{
   data: TreeData[];
+  defaultKey?: string[] | number[]
 }>();
-const bus = useEventBus<TreeData>('changeTree');
+const bus = useEventBus<TreeData>("changeTree");
 const treeData = ref<TreeData[]>([]);
-// 初始化事件中转站、接受子组件的值 
+// 初始化事件中转站、接受子组件的值
 const unsubscribe = bus.on((item) => handlerNodeAction(item));
 // 销毁
-onUnmounted(() => unsubscribe())
+onUnmounted(() => unsubscribe());
 
 // 格式化树
 const InitTreeData = (TreeData: TreeData[], key?: string): TreeData[] => {
@@ -29,10 +31,28 @@ const InitTreeData = (TreeData: TreeData[], key?: string): TreeData[] => {
       ...item,
       parentId: key ? key : undefined,
       children: isAvailableArray(item.children) ? InitTreeData(item.children, item.key) : []
+    };
+  });
+};
+watchEffect(() => treeData.value = InitTreeData(props.data), { flush: "post" });
+
+watchEffect(() => {
+  if (props.defaultKey && isAvailableArray(props.defaultKey)) {
+    handlerTreeInvert(props.defaultKey);
+  }
+}, { flush: "post" });
+
+// 处理反选
+const handlerTreeInvert = (key: string[] | number[]) => {
+  let nodeAll = flattenArray(treeData.value, true);
+  key.forEach(item => {
+    const tree = nodeAll.find(tree => tree.key === item);
+    if (tree) {
+      tree.check = true;
+      handlerNodeAction(tree);
     }
-  })
-}
-watchEffect(() => treeData.value = InitTreeData(props.data), {flush: 'post'})
+  });
+};
 // 节点处理
 const handlerNodeAction = (item: TreeData) => {
   if (!item.children && item.parentId) {
@@ -60,8 +80,8 @@ const handlerAllChildrenNode = (item: TreeData) => {
 // 子节点决定父节点状态
 const handlerParentTreeNodeState = (item: TreeData) => {
   // 寻找当前节点的所有父节点
-  let parentNodes = findTreeParentNode(treeData.value, item.key, true, false)
-  if (isAvailableArray(parentNodes)) parentNodes.forEach(item => handlerCommonAction(item))
+  let parentNodes = findTreeParentNode(treeData.value, item.key, true, false);
+  if (isAvailableArray(parentNodes)) parentNodes.forEach(item => handlerCommonAction(item));
 };
 const handlerCommonAction = (parentNode: TreeData) => {
   // 当前节点的所有子节点
@@ -90,14 +110,14 @@ const selectAllCheckTree = () => {
   const checkedNode = flattenArray(treeData.value, false).filter(item => item.check).map(item => item.key).toString();
 
   ElMessage({
-    type: 'success',
+    type: "success",
     message: `你选择的节点${checkedNode}`
-  })
+  });
 };
 </script>
 
 <script lang="ts">
 export default {
-  name: "treeFather",
+  name: "treeFather"
 };
 </script>
