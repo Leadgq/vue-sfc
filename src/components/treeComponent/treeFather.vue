@@ -57,10 +57,10 @@ const handlerTreeInvert = (key: string[] | number[]) => {
 };
 // 节点处理
 const handlerNodeAction = (item: TreeData) => {
-  if (!item.children && item.parentId) {
+  if (!isAvailableArray(item.children) && item.parentId) {
     // 处理自己的父节点状态
     handlerParentTreeNodeState(item);
-  } else if (item.parentId) {
+  } else if (item.parentId && isAvailableArray(item.children)) {
     // 处理子节点
     handlerAllChildrenNode(item);
     // 处理自己的父节点状态
