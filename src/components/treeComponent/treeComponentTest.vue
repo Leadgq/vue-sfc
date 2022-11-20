@@ -1,7 +1,7 @@
 <template>
   <div>
     <TreeChildren :data="treeDataArray" v-model:testValue="testValue" v-if="flag" />
-    <TreeFatherVue :data="treeDataArray" :default-key="defaultKey" />
+    <TreeFatherVue :data="treeDataArray" :default-key="defaultKey"  :show-check="true"/>
     <div>{{ testValue }}</div>
     <el-button @click="flag = !flag">异步显示</el-button>
     {{ data.x }} --- {{ data.y }}

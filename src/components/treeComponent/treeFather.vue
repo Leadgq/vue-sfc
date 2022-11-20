@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TreeOption :data="treeData" value="15" class="w-[600px]" />
+    <TreeOption :data="treeData" value="15" class="w-[600px]" :show-check="showCheck"/>
     <el-button @click="selectAllCheckTree">选择树</el-button>
   </div>
 </template>
@@ -12,10 +12,12 @@ import TreeOption from "@/components/treeComponent/treeOption.vue";
 import { findTreeChildrenNode, findTreeParentNode, flattenArray } from "@/tools/tree/treeLib";
 import { isAvailableArray } from "@/tools/lib";
 import { ElMessage } from "element-plus";
+import { Ref ,unref } from "vue"
 
 const props = defineProps<{
   data: TreeData[];
-  defaultKey?: string[] | number[]
+  defaultKey?: string[] | number[] | Ref<string[] | number[]>,
+  showCheck?:boolean
 }>();
 const bus = useEventBus<TreeData>("changeTree");
 const treeData = ref<TreeData[]>([]);
@@ -29,6 +31,7 @@ const InitTreeData = (TreeData: TreeData[], key?: string): TreeData[] => {
   return TreeData.map((item) => {
     return {
       ...item,
+      showCheck : props.showCheck ? true: false,
       parentId: key ? key : undefined,
       children: isAvailableArray(item.children) ? InitTreeData(item.children, item.key) : []
     };
@@ -39,7 +42,7 @@ watchEffect(() => treeData.value = InitTreeData(props.data), { flush: "post" });
 watch(
   () => props.defaultKey,
   () => {
-    if (props.defaultKey && isAvailableArray(props.defaultKey)) handlerTreeInvert(props.defaultKey);
+    if (props.defaultKey && isAvailableArray(props.defaultKey)) handlerTreeInvert(unref(props.defaultKey));
   },
   { flush: "post" }
 );
@@ -109,13 +112,24 @@ const handlerCommonAction = (parentNode: TreeData) => {
   }
 };
 const selectAllCheckTree = () => {
-  const checkedNode = flattenArray(treeData.value, false).filter(item => item.check).map(item => item.key).toString();
-
-  ElMessage({
-    type: "success",
-    message: `你选择的节点${checkedNode}`
-  });
+  if (props.showCheck) {
+    returnCheckNode();
+  } else { 
+    ElMessage({
+      type: "error",
+      message: `当前没有节点可选择`
+    });
+  }
 };
+
+const returnCheckNode = () => { 
+  const checkedNode = flattenArray(treeData.value, false).filter(item => item.check).map(item => item.key).toString();
+    ElMessage({
+      type: "success",
+      message: `你选择的节点${checkedNode}`
+    });
+}
+
 </script>
 
 <script lang="ts">

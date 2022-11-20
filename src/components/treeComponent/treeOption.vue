@@ -1,14 +1,19 @@
 <template>
   <div class="bg-white px-3">
     <div v-for="item in props.data" :key="item.key">
-      <el-checkbox
-        v-model="item.check"
-        :indeterminate="item.indeterminate"
-        @change="handlerNodeAction(item)"
-      >
-        {{ item.title }}
-      </el-checkbox>
-      <treeOption  :data="item.children" v-if="item.children"/>
+      <div class="flex items-center">
+        <el-checkbox
+          v-model="item.check"
+          :indeterminate="item.indeterminate"
+          @change="handlerNodeAction(item)"
+          v-if="item.showCheck"
+        >
+        </el-checkbox>
+        <span class="ml-3 text-zinc-600 text-sm" :class="[{ 'mb-2': !item.showCheck }]">
+          {{ item.title }}
+        </span>
+      </div>
+      <treeOption :data="item.children" v-if="item.children" />
     </div>
   </div>
 </template>
