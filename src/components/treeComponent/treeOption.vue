@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white px-3">
-    <div v-for="item in props.data" :key="item.key">
+    <div v-for="item in treeDataArray" :key="item.key">
       <div class="flex items-center">
         <el-checkbox
           v-model="item.check"
@@ -23,7 +23,7 @@ import { TreeData } from "@/types/tree";
 import { useEventBus } from "@vueuse/core";
 const bus = useEventBus<TreeData>("changeTree");
 const props = defineProps<{
-  data: TreeData[];
+  treeDataArray: TreeData[];
 }>();
 const handlerNodeAction = (item: TreeData) => bus.emit(item);
 </script>
