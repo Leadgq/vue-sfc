@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TreeOption :data="treeData" value="15" class="w-[600px]" :show-check="showCheck"/>
+    <TreeOption :treeDataArray="treeData" value="15" class="w-[600px]" :show-check="showCheck"/>
     <el-button @click="selectAllCheckTree">选择树</el-button>
   </div>
 </template>
