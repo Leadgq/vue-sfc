@@ -11,7 +11,7 @@ export const isObject = (obj: Record<string, any> | Ref<Record<string, any>>) =>
 // 是否是一个可用数组
 export const isAvailableArray = (arr: any[] | Ref<any[]>) => isArray(arr) && Array.isArray(unref(arr)) && unref(arr).length > 0;
 // 是否是一个可用对象
-export const isAvailableObject = (obj: Record<string, any> | Ref<Record<string, any>>) => isObject(obj) && Reflect.ownKeys(unref(obj)).length !== 0 && unref(obj).constructor === Object;
+export const isAvailableObject = (obj: Record<string, any> | Ref<Record<string, any>>) => isObject(obj) && Reflect.ownKeys(unref(obj)).length !== 0 ;
 // 对象中所有项是否都有值
 export const isAvailableObjectValue = (obj: Record<string, any> | Ref<Record<string, any>>) => isAvailableObject(obj) && Object.values(unref(obj)).every(item => item && item !== 0);
 // 是否是一个函数
