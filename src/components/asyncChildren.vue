@@ -4,10 +4,16 @@
       <div v-for="(cItem, cIndex) in item" :key="cIndex">{{ cItem?.cityName }}</div>
     </div>
     <Father/>
+    <div>
+      <p>{{data.name}}</p>
+      <p>{{data.age}}</p>
+      <el-button @click="modify">修改</el-button>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
-import  Father  from "@/components/test/father.vue"
+import Father from "@/components/test/father.vue";
+
 let cityMap = ref(new Map());
 const mockData = (): Promise<any[]> => {
   return new Promise((resolve) => {
@@ -59,5 +65,16 @@ const handlerCityData = async () => {
   })
   // cityData.value.filter(item => item[name]).flatMap(item => item[name]);
 };
+// 不能解构如果非要解构可以使用toRefs
+// 或者 { data:{ name,age }  }
+let { data, modify } = reactive({
+  data: {
+    name: "gq",
+    age: 22
+  },
+  modify() {
+    data.name = "lisi";
+  }
+});
 </script>
 <style lang="scss" scoped></style>
