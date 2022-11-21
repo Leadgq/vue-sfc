@@ -1,27 +1,27 @@
 <template>
   <div class="login-container">
     <div class="login-content">
-      <div class="container-left"><img :src="bgImg" alt="" class="login-img"/></div>
+      <div class="container-left"><img :src="bgImg" alt="" class="login-img" /></div>
       <div class="container-right">
         <el-form :model="loginData" label-width="90px" :rules="loginRules" ref="ruleFormRef">
           <el-form-item label="用户名:" prop="name">
-            <el-input v-model.trim="loginData.name"/>
+            <el-input v-model.trim="loginData.name" />
           </el-form-item>
           <el-form-item label="密码:" prop="password">
-            <el-input v-model.trim="loginData.password" type="password"/>
+            <el-input v-model.trim="loginData.password" type="password" />
           </el-form-item>
           <el-form-item label="手机号:" prop="phone">
-            <el-input v-model.trim="loginData.phone" type="text" :maxlength="11"/>
+            <el-input v-model.trim="loginData.phone" type="text" :maxlength="11" />
           </el-form-item>
           <el-form-item label="验证码:" prop="code">
             <div class="code-container">
-              <el-input type="text" v-model="loginData.code" :maxlength="4" @keydown.enter="handlerKeyDown"/>
+              <el-input type="text" v-model="loginData.code" :maxlength="4" @keydown.enter="handlerKeyDown" />
               <span class="code" @click="getCodeImg">{{ codeImg }}</span>
             </div>
           </el-form-item>
           <el-form-item class="login-action">
             <el-button type="primary" @click="loginUser" class="login-btn">登录</el-button>
-            <el-checkbox v-model="checkState" label="记住密码" size="large" class="ml-8"/>
+            <el-checkbox v-model="checkState" label="记住密码" size="large" class="ml-8" />
           </el-form-item>
         </el-form>
       </div>
@@ -56,31 +56,31 @@ const checkCode = (rule: any, codeValue: any, callback: any) => {
   } else {
     callback();
   }
-}
+};
 // 规则
 let loginRules = reactive<FormRules>({
-  name: [{required: true, message: "请输入用户名", trigger: "blur"}],
+  name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
   password: [
-    {required: true, message: "请输入密码", trigger: "blur"},
-    {min: 6, max: 15, message: "密码长度6到15位", trigger: "blur"},
+    { required: true, message: "请输入密码", trigger: "blur" },
+    { min: 6, max: 15, message: "密码长度6到15位", trigger: "blur" }
   ],
   phone: [
-    {required: true, message: "请输入手机号", trigger: "blur"},
-    {validator: checkPhone, trigger: "blur"},
+    { required: true, message: "请输入手机号", trigger: "blur" },
+    { validator: checkPhone, trigger: "blur" }
   ],
   code: [
-    {required: true, message: "请输入验证码", trigger: "blur"},
-    {validator: checkCode, trigger: "submit"},
+    { required: true, message: "请输入验证码", trigger: "blur" },
+    { validator: checkCode, trigger: "submit" }
   ]
 });
 // 记住密码状态
 let checkState = ref(false);
 //验证码字符串
-let codeImg = ref('');
+let codeImg = ref("");
 // 表单实例
 const ruleFormRef = ref<FormInstance>();
 // 登录hook
-const {login, loginData} = useLogin();
+const { login, loginData } = useLogin();
 // 登录逻辑
 const loginUser = () => {
   login(unref(ruleFormRef)!);
@@ -96,17 +96,17 @@ onMounted(() => {
 const handlerImgCode = async () => {
   const data = await getCodeImg();
   codeImg.value = data.result.code;
-}
+};
 // 处理记住密码操作
 const handlerRememberPasswordState = () => {
   checkState.value = userStoreInstance.rememberPasswordState;
   if (checkState.value) {
     // cookie解密
-    const cookiesValues = getCookie(encode(`User${window.location.origin}`), 'login');
+    const cookiesValues = getCookie(encode(`User${window.location.origin}`), "login");
     if (cookiesValues) {
       const formValue = JSON.parse(decode(cookiesValues)) as loginUserType;
-      const {name, password, phone} = formValue;
-      Object.assign(loginData, {name, password, phone});
+      const { name, password, phone } = formValue;
+      Object.assign(loginData, { name, password, phone });
     }
   }
 };
@@ -119,14 +119,12 @@ const modifyState = () => {
   }
 };
 // 处理键盘按下
-const  handlerKeyDown = ()=>{
-  loginUser();
-}
+const handlerKeyDown = () => loginUser();
 </script>
 
 <script lang="ts">
 export default {
-  name: "login",
+  name: "login"
 };
 </script>
 <style lang="scss" scoped>
