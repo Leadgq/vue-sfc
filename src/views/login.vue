@@ -15,7 +15,7 @@
           </el-form-item>
           <el-form-item label="验证码:" prop="code">
             <div class="code-container">
-              <el-input type="text" v-model="loginData.code" :maxlength="4"/>
+              <el-input type="text" v-model="loginData.code" :maxlength="4" @keydown.enter="handlerKeyDown"/>
               <span class="code" @click="getCodeImg">{{ codeImg }}</span>
             </div>
           </el-form-item>
@@ -30,15 +30,15 @@
 </template>
 
 <script lang="ts" setup>
-import {useLogin} from "@/tools/hook/hook";
-import type {FormInstance, FormRules} from "element-plus";
-import {isAvailableObjectValue, isAvailablePhone} from "@/tools/lib";
-import {getCookie, setCookie} from "@/tools/cookie/cookieLib";
+import { useLogin } from "@/tools/hook/hook";
+import type { FormInstance, FormRules } from "element-plus";
+import { isAvailableObjectValue, isAvailablePhone } from "@/tools/lib";
+import { getCookie, setCookie } from "@/tools/cookie/cookieLib";
 import userStore from "@/store/userStore";
-import {decode, encode} from "js-base64";
-import {loginUserType} from "@/types/userStoreType";
-import bgImg from "@/assets/image/login/bg.jpg"
-import {getCodeImg} from "@/api/code";
+import { decode, encode } from "js-base64";
+import { loginUserType } from "@/types/userStoreType";
+import bgImg from "@/assets/image/login/bg.jpg";
+import { getCodeImg } from "@/api/code";
 
 const userStoreInstance = userStore();
 // 检查手机号
@@ -118,6 +118,10 @@ const modifyState = () => {
     setCookie(encode(`User${window.location.origin}`), encode(JSON.stringify(loginData)), 1000);
   }
 };
+// 处理键盘按下
+const  handlerKeyDown = ()=>{
+  loginUser();
+}
 </script>
 
 <script lang="ts">
