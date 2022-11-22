@@ -31,4 +31,9 @@ export const workRoutes = [
         name: 'map',
         component: () => import("@/views/map.vue")
     },
+    {
+        path: '/aMap',
+        name: 'aMap',
+        component:()=> import("@/views/aMap.vue")
+    }
 ] as RouteRecordRaw[]

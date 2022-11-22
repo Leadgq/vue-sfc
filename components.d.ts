@@ -18,6 +18,7 @@ declare module '@vue/runtime-core' {
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElInput: typeof import('element-plus/es')['ElInput']
     Father: typeof import('./src/components/test/father.vue')['default']
+    Map: typeof import('./src/components/map.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SlotTest: typeof import('./src/components/slotTest.vue')['default']
