@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@amap/amap-jsapi-loader": "^1.0.1",
     "@types/file-saver": "^2.0.5",
     "@vueuse/components": "^9.3.0",
     "@vueuse/core": "^9.3.0",
