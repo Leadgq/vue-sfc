@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TreeOption :data="treeData" value="15" class="w-[600px]" :show-check="showCheck"/>
+    <TreeOption :data="treeData"  class="w-[600px]" />
     <el-button @click="selectAllCheckTree">选择树</el-button>
   </div>
 </template>
@@ -12,7 +12,7 @@ import TreeOption from "@/components/treeComponent/treeOption.vue";
 import { findTreeChildrenNode, findTreeParentNode, flattenArray } from "@/tools/tree/treeLib";
 import { isAvailableArray } from "@/tools/lib";
 import { ElMessage } from "element-plus";
-import { Ref ,unref } from "vue"
+import { Ref, unref } from "vue";
 
 const props = defineProps<{
   data: TreeData[];
@@ -31,7 +31,7 @@ const InitTreeData = (TreeData: TreeData[], key?: string): TreeData[] => {
   return TreeData.map((item) => {
     return {
       ...item,
-      showCheck : props.showCheck ? true: false,
+      showCheck : !!props.showCheck,
       parentId: key ? key : undefined,
       children: isAvailableArray(item.children) ? InitTreeData(item.children, item.key) : []
     };
@@ -114,7 +114,7 @@ const handlerCommonAction = (parentNode: TreeData) => {
 const selectAllCheckTree = () => {
   if (props.showCheck) {
     returnCheckNode();
-  } else { 
+  } else {
     ElMessage({
       type: "error",
       message: `当前没有节点可选择`
@@ -122,7 +122,7 @@ const selectAllCheckTree = () => {
   }
 };
 
-const returnCheckNode = () => { 
+const returnCheckNode = () => {
   const checkedNode = flattenArray(treeData.value, false).filter(item => item.check).map(item => item.key).toString();
     ElMessage({
       type: "success",
