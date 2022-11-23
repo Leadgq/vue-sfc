@@ -1,7 +1,7 @@
 // 压平数组
-import {TreeData} from "@/types/tree";
-import {Ref} from "vue";
-import {isAvailableArray} from "@/tools/lib";
+import { TreeData } from "@/types/tree";
+import { Ref } from "vue";
+import { isAvailableArray } from "@/tools/lib";
 
 /**
  *  @description 压平树状数组
@@ -40,7 +40,7 @@ export const findParentNodeKey = (tree: TreeData[] | Ref<TreeData[]>, nodeId: st
  *  @description isProxyState:  父节点是否保持响应式   默认:false   linealNode : 是否只要直系节点
  *  @return TreeData[]
  * */
-export const findTreeParentNode = (tree: TreeData[] | Ref<TreeData[]>, nodeId: string, isProxyState = false, linealNode = false): TreeData[] => getParentObjectByKeys(toFlatArray(tree), nodeId, isProxyState, linealNode);
+export const findTreeParentNode = (tree: TreeData[] | Ref<TreeData[]>, nodeId: string, isProxyState = false, linealNode = false,pass= false): TreeData[] => getParentObjectByKeys(toFlatArray(tree), nodeId, isProxyState, linealNode,pass);
 
 // 获取所有兄弟节点
 export const findAllBrotherNode = (tree: TreeData[] | Ref<TreeData[]>, nodeId: string, isProxyState = false): TreeData[] | [] => {
@@ -82,23 +82,57 @@ const getIds = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: string): string
 
 
 // 返回所有父亲节点对象
-const getParentObjectByKeys = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: string, IsProxyState: boolean, linealNode: boolean): TreeData[] => {
+const getParentObjectByKeys = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: string, IsProxyState: boolean, linealNode: boolean, pass = false): TreeData[] => {
     let parentArray: TreeData[] = [];
     let child = unref(flatArray).find(tree => tree.key === nodeId);
     // 寻找全部父节点，递归
     if (!linealNode) {
         while (child) {
-            parentArray = IsProxyState ? parentArray.concat(child) : parentArray.concat({...child});
-            child = unref(flatArray).find(tree => tree.key === child?.parentId)
+            parentArray = IsProxyState ? parentArray.concat(child) : parentArray.concat({ ...child });
+            child = unref(flatArray).find(tree => tree.key === child?.parentId);
         }
     } else {
         // 寻找直系节点
         if (child) {
             let linealParentNode = unref(flatArray).find((tree) => tree.key === child?.parentId);
             if (linealParentNode) {
-                parentArray = IsProxyState ? parentArray.concat(linealParentNode) : parentArray.concat({...linealParentNode});
+                parentArray = IsProxyState ? parentArray.concat(linealParentNode) : parentArray.concat({ ...linealParentNode });
             }
         }
     }
-    return parentArray.filter(item => item.key !== nodeId);
-}
+    if (pass) {
+        return parentArray;
+    } else {
+        return parentArray.filter(item => item.key !== nodeId);
+    }
+};
+// 返回路径、如果最深的节点相同、那么返回最后一个
+export const findMaxTreeNode = (flatTree: TreeData[]) => {
+    const treeData = toFlatArray(flatTree);
+    const tree = treeData.filter(item => !isAvailableArray(item.children));
+    let parentList: any[] = [];
+    tree.forEach((item) => parentList = [...parentList, findTreeParentNode(flatTree, item.key,false,false,true)]);
+    const parentArray = parentList.sort((a, b) => a.length - b.length).at(-1);
+    if (isAvailableArray(parentArray)) {
+        return arrToTree(parentArray, parentArray.at(-1).key);
+    }
+};
+const arrToTree = (arr: TreeData[], pid: string | number) => {
+    let deep = 0;
+    const data = [];
+    let root = arr.find(item => item.key === pid);
+    data.push(root);
+    while (root) {
+        deep++;
+        let child = arr.find(item => item.parentId === root?.key);
+        if (child) {
+            root.children = [];
+            root.children.push(child);
+        }
+        root = child;
+    }
+    return {
+        data,
+        deep
+    };
+};
