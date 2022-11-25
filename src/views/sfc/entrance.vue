@@ -17,7 +17,7 @@ const handlerPath = async (routeComponentName: string) => {
   // 循环模块
   for (const [key, value] of Object.entries(models)) {
     // 分割模块名称
-    const modelName = key.split("/").at(-1)?.split(".").shift();
+    const modelName = key.split("/").pop()?.split(".").shift();
     if (routeComponentName === modelName) {
       // 执行模块
       return (await value() as any).default;
