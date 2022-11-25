@@ -6,9 +6,8 @@
 <script setup lang="ts">
 const route = useRoute();
 const name = route.query.componentName! as string;
-import { ComponentOptions } from "vue";
 
-let componentName;
+let componentName: any | undefined ;
 const getComponent = async () => {
   return await handlerPath(name);
 };
@@ -21,7 +20,7 @@ const handlerPath = async (routeComponentName: string) => {
     const modelName = key.split("/").at(-1)?.split(".").shift();
     if (routeComponentName === modelName) {
       // 执行模块
-      return (await value() as ComponentOptions).default;
+      return (await value() as any).default;
     }
   }
 };
