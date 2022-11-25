@@ -6,12 +6,14 @@
 <script setup lang="ts">
 const route = useRoute();
 const name = route.query.componentName! as string;
+import { ComponentOptions } from "vue";
+
 let componentName;
 const getComponent = async () => {
   return await handlerPath(name);
 };
 // 处理路径
-const handlerPath = async (routeComponentName: string): Promise<any> => {
+const handlerPath = async (routeComponentName: string) => {
   const models = import.meta.glob("../../components/**/*.vue");
   // 循环模块
   for (const [key, value] of Object.entries(models)) {
@@ -19,7 +21,7 @@ const handlerPath = async (routeComponentName: string): Promise<any> => {
     const modelName = key.split("/").at(-1)?.split(".").shift();
     if (routeComponentName === modelName) {
       // 执行模块
-      return (await value() as any).default;
+      return (await value() as ComponentOptions).default;
     }
   }
 };
