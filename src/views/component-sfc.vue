@@ -18,8 +18,8 @@
   </div>
 </template>
 <script lang="ts" setup>
-const router = useRouter();
 import { sfcConfigList } from "@/config/fsc";
+const router = useRouter();
 
 // 跳入广场
 const jumpToSfc = (componentName: string) => router.push({ path: "/entrance", query: { componentName } });
