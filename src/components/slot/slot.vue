@@ -22,6 +22,6 @@ export default {
 
 <style scoped lang="scss">
 .slot-container {
-  @apply h-full w-full;
+  @apply h-full w-full bg-violet-200;
 }
 </style>

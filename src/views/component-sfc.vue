@@ -3,7 +3,7 @@
     <h1 class="container-header">测试广场</h1>
     <hr />
     <div class="card-container">
-      <el-card v-for="(item,index) in  componentList" :key="index" class="component-card" shadow="hover">
+      <el-card v-for="(item,index) in  sfcConfigList" :key="index" class="component-card" shadow="hover">
         <template #header>
           <div class="card-header" @click="jumpToSfc(item.componentName)">
             <span>{{ item.name }}</span>
@@ -19,23 +19,8 @@
 </template>
 <script lang="ts" setup>
 const router = useRouter();
-const componentList = ref([
-  {
-    name: "地图实验",
-    componentName: "aMap",
-    desc: "使用typeScript重构地图、地图内部存在保存bounds机制、下转视角、回退视角"
-  },
-  {
-    name: "树实验",
-    componentName: "treeComponentTest",
-    desc: "使用typeScript尝试封装自己的树、目前支持正选、反选、是否显示checkBox"
-  },
-  {
-    name: "插槽实验",
-    componentName: "slot",
-    desc: "动态插槽、插槽返回值、具名插槽、匿名插槽"
-  }
-]);
+import { sfcConfigList } from "@/config/fsc";
+
 // 跳入广场
 const jumpToSfc = (componentName: string) => router.push({ path: "/entrance", query: { componentName } });
 </script>
