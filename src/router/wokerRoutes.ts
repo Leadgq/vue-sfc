@@ -1,4 +1,4 @@
-import {RouteRecordRaw} from "vue-router";
+import { RouteRecordRaw } from "vue-router";
 
 export const workRoutes = [
     {
@@ -27,13 +27,13 @@ export const workRoutes = [
         ]
     },
     {
-        path: '/map',
-        name: 'map',
-        component: () => import("@/views/map.vue")
+      path:'/component-sfc',
+      name:'sfc',
+      component: ()=> import("@/views/component-sfc.vue")
     },
     {
-        path: '/aMap',
-        name: 'aMap',
-        component:()=> import("@/views/aMap.vue")
+        path:'/entrance',
+        name:'entrance',
+        component: ()=> import("@/views/sfc/entrance.vue")
     }
 ] as RouteRecordRaw[]

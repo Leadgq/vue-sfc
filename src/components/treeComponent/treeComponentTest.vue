@@ -4,17 +4,14 @@
     <TreeFatherVue :data="treeDataArray" :default-key="defaultKey"  :show-check="true"/>
     <div>{{ testValue }}</div>
     <el-button @click="flag = !flag">异步显示</el-button>
-    {{ data.x }} --- {{ data.y }}
   </div>
 </template>
 
 <script setup lang="ts">
 import { loadFile } from "@/tools/lib";
 import { TreeData } from "@/types/tree";
-import { useSharedMouse } from "@/tools/hook/useMouseHook";
 import TreeFatherVue from "./treeFather.vue";
 
-const data = useSharedMouse();
 let defaultKey = ref<string[]>([]);
 const TreeChildren = defineAsyncComponent({
   loader: () => import("@/components/treeComponent/treeChildren.vue"),

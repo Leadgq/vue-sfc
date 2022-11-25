@@ -7,16 +7,21 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    AMap: typeof import('./src/components/aMap.vue')['default']
+    Amap: typeof import('./src/components/map/aMap.vue')['default']
+    AMap: typeof import('./src/components/map/aMap.vue')['default']
     AsyncChildren: typeof import('./src/components/asyncChildren.vue')['default']
     AsyncChildren2: typeof import('./src/components/asyncChildren2.vue')['default']
+    Date: typeof import('./src/components/date/date.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElCard: typeof import('element-plus/es')['ElCard']
     ElCheckbox: typeof import('element-plus/es')['ElCheckbox']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
     ElDatePicker: typeof import('element-plus/es')['ElDatePicker']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElInput: typeof import('element-plus/es')['ElInput']
+    ElTree: typeof import('element-plus/es')['ElTree']
+    Entrance: typeof import('./src/components/sfc/entrance.vue')['default']
     Father: typeof import('./src/components/test/father.vue')['default']
     Map: typeof import('./src/components/map.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

@@ -1,7 +1,7 @@
 import userStore from "@/store/userStore";
-import {loginUserType} from "@/types/userStoreType";
+import { loginUserType } from "@/types/userStoreType";
 import router from "@/router";
-import {FormInstance} from 'element-plus'
+import { FormInstance } from "element-plus";
 
 export const useLogin = () => {
     const loginData = reactive<loginUserType>({
@@ -22,7 +22,7 @@ export const useLogin = () => {
         // 获取用户权限
         await userStoreInstance.getUserInfoPromise();
         // 路由跳转
-        await router.push({path: '/async/async_children2'})
+        await router.push({path: '/component-sfc'})
     }
     return {
         login,
