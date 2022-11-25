@@ -1,10 +1,10 @@
 <template>
   <div class="test">
     <div class="header">
-      <slot name="header" :headerProps="'头部区域插槽返回'"></slot>
+      <slot name="header" :slot="'头部区域插槽返回'"></slot>
     </div>
     <div class="main">
-      <slot name="main" :headerProps="'中间区域插槽返回'"></slot>
+      <slot name="main" :slot="'中间区域插槽返回'"></slot>
     </div>
   </div>
 </template>

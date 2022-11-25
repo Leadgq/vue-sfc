@@ -30,6 +30,7 @@ declare module '@vue/runtime-core' {
     Slot: typeof import('./src/components/slot/slot.vue')['default']
     SlotTest: typeof import('./src/components/slot/slotTest.vue')['default']
     Son: typeof import('./src/components/test/son.vue')['default']
+    TableSafe: typeof import('./src/components/slot/table-safe.vue')['default']
     TreeChildren: typeof import('./src/components/treeComponent/treeChildren.vue')['default']
     TreeComponentTest: typeof import('./src/components/treeComponent/treeComponentTest.vue')['default']
     TreeFather: typeof import('./src/components/treeComponent/treeFather.vue')['default']
