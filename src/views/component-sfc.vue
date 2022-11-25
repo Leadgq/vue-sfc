@@ -23,12 +23,12 @@ const componentList = ref([
   {
     name: "地图实验",
     componentName: "aMap",
-    desc: "使用typeScript重构地图、已经ok"
+    desc: "使用typeScript重构地图、地图内部存在保存bounds机制、下转视角、回退视角"
   },
   {
     name: "树实验",
     componentName: "treeComponentTest",
-    desc: "使用typeScript尝试封装自己的树、目前支持正选、反选、已经ok"
+    desc: "使用typeScript尝试封装自己的树、目前支持正选、反选、是否显示checkBox"
   },
   {
     name: "插槽实验",

@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="slot-container">
+    <h3 class="font-bold">动态组件</h3>
     <dynamic>
       <template #[distance]="{ headerProps }">我要渲染的地方是{{ distance }} {{ headerProps }}</template>
     </dynamic>
@@ -19,6 +20,8 @@ export default {
 };
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.slot-container {
+  @apply h-full w-full;
+}
 </style>

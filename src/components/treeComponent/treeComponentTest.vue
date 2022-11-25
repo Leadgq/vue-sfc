@@ -1,8 +1,12 @@
 <template>
-  <div>
-    <TreeChildren :data="treeDataArray" v-model:testValue="testValue" v-if="flag" />
-    <TreeFatherVue :data="treeDataArray" :default-key="defaultKey"  :show-check="true"/>
-    <div>{{ testValue }}</div>
+  <div class="h-full  bg-violet-200">
+    <template v-if="flag">
+      <h1>element的树</h1>
+      <TreeChildren :data="treeDataArray" />
+    </template>
+    <hr />
+    <header>自己的树</header>
+    <TreeFatherVue :data="treeDataArray" :default-key="defaultKey" :show-check="true" />
     <el-button @click="flag = !flag">异步显示</el-button>
   </div>
 </template>
@@ -20,7 +24,6 @@ const TreeChildren = defineAsyncComponent({
 });
 let flag = ref(false);
 let treeDataArray = ref<TreeData[]>([]);
-let testValue = ref("父组件的值");
 const load = async () => {
   treeDataArray.value = (await loadFile("treeData")) as TreeData[];
   defaultKey.value = ["1-1"];
