@@ -1,10 +1,6 @@
 <template>
   <div class="async_children">
     <div>
-      <SlotTest ref="asyncComponent">
-        <template #[distance]="{ headerProps }">我要渲染的地方是{{ distance }} {{ headerProps }}</template>
-      </SlotTest>
-      <el-button @click="flag = !flag">按钮</el-button>
       <el-button @click="id++">effect测试</el-button>
       <el-button @click="backView">返回</el-button>
       <div>{{ tip }}</div>
@@ -42,25 +38,11 @@
 </template>
 <script lang="ts" setup>
 import { effectTest } from "@/api/effect";
-import SlotTest from "@/components/slotTest.vue";
 import TreeComponentTest from "@/components/treeComponent/treeComponentTest.vue";
 import { ElMessage } from "element-plus";
 import { isAvailableArray, randomMax } from "@/tools/lib";
-import router from "@/router";
 
-const asyncComponent = ref<InstanceType<typeof SlotTest> | null>(null);
-let flag = ref(true);
-let distance = ref("header");
-
-watch(
-  flag,
-  (newValue) => {
-    distance.value = newValue ? "header" : "main";
-  },
-  {
-    flush: "post"
-  }
-);
+const router = useRouter();
 //watchEffect
 let id = ref(1);
 let tip = ref("");

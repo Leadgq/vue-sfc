@@ -2,7 +2,7 @@
   <div class="component-container">
     <h1 class="container-header">测试广场</h1>
     <hr />
-    <div class="flex card-container">
+    <div class="card-container">
       <el-card v-for="(item,index) in  componentList" :key="index" class="component-card" shadow="hover">
         <template #header>
           <div class="card-header" @click="jumpToSfc(item.componentName)">
@@ -23,20 +23,21 @@ const componentList = ref([
   {
     name: "地图实验",
     componentName: "aMap",
-    desc: "使用typeScript尝试重构地图"
+    desc: "使用typeScript重构地图、已经ok"
   },
   {
     name: "树实验",
     componentName: "treeComponentTest",
-    desc: "使用typeScript尝试封装自己的树、目前支持正选、反选"
+    desc: "使用typeScript尝试封装自己的树、目前支持正选、反选、已经ok"
   },
   {
-    name: "按钮实验",
-    componentName: "treeComponentTest"
+    name: "插槽实验",
+    componentName: "slot",
+    desc: "动态插槽、插槽返回值、具名插槽、匿名插槽"
   }
 ]);
 // 跳入广场
-const jumpToSfc = (componentName: string) => router.push({ path: "/entrance", query: {  componentName } });
+const jumpToSfc = (componentName: string) => router.push({ path: "/entrance", query: { componentName } });
 </script>
 <script lang="ts">
 export default {
@@ -51,14 +52,9 @@ export default {
   }
 
   .card-container {
-    @apply flex-1 overflow-y-auto  p-[10px] mt-3.5;
+    @apply grid grid-cols-5  gap-5 overflow-y-auto  mt-5 px-5;
     .component-card {
-      @apply w-[300px] h-[300px] mr-5;
-
-      &:last-of-type {
-        @apply mr-0;
-      }
-
+      @apply h-[350px] ;
       .card-header {
         @apply flex items-center justify-between  font-bold cursor-pointer;
       }
