@@ -8,9 +8,7 @@ const route = useRoute();
 const name = route.query.componentName! as string;
 
 let componentName: any | undefined ;
-const getComponent = async () => {
-  return await handlerPath(name);
-};
+const getComponent = async () => await handlerPath(name);
 // 处理路径
 const handlerPath = async (routeComponentName: string) => {
   const models = import.meta.glob("../../components/**/*.vue");
