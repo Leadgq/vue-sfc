@@ -13,6 +13,7 @@ declare module '@vue/runtime-core' {
     AsyncChildren2: typeof import('./src/components/asyncChildren2.vue')['default']
     Date: typeof import('./src/components/date/date.vue')['default']
     Dynamic: typeof import('./src/components/slot/dynamic.vue')['default']
+    Editor: typeof import('./src/components/editor/editor.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
     ElCheckbox: typeof import('element-plus/es')['ElCheckbox']

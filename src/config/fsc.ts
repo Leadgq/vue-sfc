@@ -1,7 +1,7 @@
 interface sfc {
   name: string;
   componentName: string;
-  desc: string;
+  desc?: string;
 }
 
 // 试验场配置
@@ -20,5 +20,10 @@ export const sfcConfigList: sfc[] = [
     name: "插槽实验",
     componentName: "slot",
     desc: "动态插槽、插槽返回值、具名插槽、匿名插槽、并实现自己的简单表格、支持所有的插槽选项"
+  },
+  {
+    name: '富文本集成实验',
+    componentName: "editor",
+    desc: "集成富文本、尝试集成王editor富文本的vue3版本"
   }
 ];
