@@ -1,8 +1,13 @@
 <template>
-  <div>时间测试</div>
+  <div>
+    <div class="w-[300px]">
+      <DateComponent />
+    </div>
+  </div>
 </template>
-
-<script>
+<script setup lang="ts">
+import DateComponent from "@/components/date/date-component.vue";</script>
+<script lang="ts">
 export default {
   name: "date"
 };
