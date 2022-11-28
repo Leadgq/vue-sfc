@@ -27,7 +27,6 @@ const {
   bottom: rootBottom,
   update: updateRoot
 } = useElementBounding(root.value);
-console.log(rootTop,rootBottom);
 // 滚动容器
 const scrollContainer = shallowRef<HTMLElement | Window>();
 

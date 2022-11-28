@@ -3,13 +3,6 @@
     <affix-component position="top" :offset="20">
       <el-button >测试按钮</el-button>
     </affix-component>
-    <ul>
-      <li>123</li>
-      <li>123</li>
-      <li>123</li>
-      <li>123</li>
-      <li>123</li>
-    </ul>
   </div>
 </template>
 
