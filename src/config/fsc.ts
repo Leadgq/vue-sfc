@@ -25,10 +25,5 @@ export const sfcConfigList: sfc[] = [
     name: '富文本集成实验',
     componentName: "editor",
     desc: "集成富文本、尝试集成王editor富文本的vue3版本、todo、只是一些配置东西、不能写新特性"
-  },
-  {
-    name:'时间测试',
-    componentName:'date',
-    desc:'时间测试、需要实现简单时间选择、'
   }
 ];
