@@ -15,12 +15,12 @@
     <div class="w-full h-[300px] bg-white">
       <table-safe :columns="columns" :data-source="dataSource" border>
         <template #headerCell="{ columns }">
-          <span v-if="columns.key === 'name'">插槽姓名</span>
+          <span v-if="columns.key === 'name'">🤭</span>
         </template>
         <template #bodyCell="{ column, record }">
           <div v-if="column.key === 'action'">
             <el-button type="primary">编辑</el-button>
-            <el-button type="warning">编辑</el-button>
+            <el-button type="warning">删除</el-button>
           </div>
           <div v-if="column.key === 'age'">
             <span>{{ modifyChange(record) }}</span>
@@ -43,6 +43,7 @@ const columns = [
     dataIndex: "name",
     key: "name",
     title: "姓名",
+    Align: 'left'
   },
   {
     dataIndex: "age",

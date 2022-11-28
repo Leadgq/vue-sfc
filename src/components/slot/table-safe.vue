@@ -9,18 +9,25 @@
             class="table-th"
             :style="{
               width: item.width,
+              textAlign: item.Align || 'center'
             }"
+            :class="{ border :  border }"
           >
             <slot name="headerCell" :columns="item">{{ item.title }}</slot>
           </th>
         </tr>
       </thead>
       <tbody class="table-body">
-        <tr class="tody-tr" v-for="(column,index) in dataSource" :key="column.key">
-          <td v-for="(record,recordIndex) in columns" :key="record.key">
-            <slot v-if="record.key" name="bodyCell" :column="columns[recordIndex]" :record="dataSource[index]">{{ column[record.key] }} </slot>
-          </td>
-        </tr>
+      <tr class="table-body-tr" v-for="(column,index) in dataSource" :key="column.key">
+        <td v-for="(record,recordIndex) in columns"
+            :key="record.key"
+            :style="{textAlign: record.Align || 'center'}"
+            :class="{ border :  border }">
+          <slot v-if="record.key" name="bodyCell" :column="columns[recordIndex]" :record="dataSource[index]">
+            {{ column[record.key] }}
+          </slot>
+        </td>
+      </tr>
       </tbody>
     </table>
   </div>
@@ -29,7 +36,7 @@
 interface columnsTypes {
   dataIndex?: string;
   key: string;
-  Algin?: string;
+  Align?: string;
   width?: string;
   title?: string;
 }
@@ -38,7 +45,6 @@ defineProps<{
   dataSource: any[];
   border?: boolean
 }>();
-
 </script>
 <script lang="ts">
 export default {
@@ -49,8 +55,11 @@ export default {
 <style scoped lang="scss">
 .table-safe {
   @apply w-full h-full p-4 border-[1px] border-gray-50;
+  .border{
+    @apply border-b-[1px] border-r-[1px]  border-l-[1px];
+  }
   .common {
-    @apply border-b-[1px] border-r-[1px]  border-l-[1px] text-sm text-gray-700;
+    @apply  text-sm text-gray-700;
   }
   .table-safe-container {
     @apply w-full h-full;
@@ -66,7 +75,7 @@ export default {
     }
     .table-body {
       @apply w-full  h-full;
-      .tody-tr {
+      .table-body-tr {
         @apply w-full text-center;
         td {
           @extend .common;
