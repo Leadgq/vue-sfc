@@ -7,20 +7,19 @@
             v-for="item in columns"
             :key="item.key"
             class="table-th"
-            :style="{
-              width: item.width
-            }"
-            :class="{ border :  border }"
+            :style="modifyStyle(item)"
+            :class="{ border }"
           >
             <slot name="headerCell" :columns="item">{{ item.title }}</slot>
           </th>
         </tr>
       </thead>
       <tbody class="table-body">
-      <tr class="table-body-tr" v-for="(column,index) in dataSource" :key="column.key">
+      <tr class="table-body-tr" v-for="(column,index) in dataSource" :key="column.key" >
         <td v-for="(record,recordIndex) in columns"
+            :style="modifyStyle(record)"
             :key="record.key"
-            :class="{ border :  border }">
+            :class="{ border  }">
           <slot v-if="record.key" name="bodyCell" :column="columns[recordIndex]" :record="dataSource[index]">
             {{ column[record.key] }}
           </slot>
@@ -34,15 +33,20 @@
 interface columnsTypes {
   dataIndex?: string;
   key: string;
-  Align?: string;
   width?: string;
   title?: string;
 }
-defineProps<{
+interface props {
   columns: columnsTypes[];
   dataSource: any[];
-  border?: boolean
-}>();
+  border?: boolean;
+}
+withDefaults(defineProps<props>(), { border: false });
+const modifyStyle = (item: columnsTypes) => {
+  return {
+    width: item.width,
+  };
+};
 </script>
 <script lang="ts">
 export default {

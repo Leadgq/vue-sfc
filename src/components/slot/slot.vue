@@ -13,7 +13,7 @@
     <!-- 实现简单表格 -->
     <h5>自己的表格</h5>
     <div class="w-full h-[300px] bg-white">
-      <table-safe :columns="columns" :data-source="dataSource" border>
+      <table-safe :columns="columns" :data-source="dataSource">
         <template #headerCell="{ columns }">
           <span v-if="columns.key === 'name'">🤭</span>
         </template>
