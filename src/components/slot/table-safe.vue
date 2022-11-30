@@ -8,8 +8,7 @@
             :key="item.key"
             class="table-th"
             :style="{
-              width: item.width,
-              textAlign: item.Align || 'center'
+              width: item.width
             }"
             :class="{ border :  border }"
           >
@@ -21,7 +20,6 @@
       <tr class="table-body-tr" v-for="(column,index) in dataSource" :key="column.key">
         <td v-for="(record,recordIndex) in columns"
             :key="record.key"
-            :style="{textAlign: record.Align || 'center'}"
             :class="{ border :  border }">
           <slot v-if="record.key" name="bodyCell" :column="columns[recordIndex]" :record="dataSource[index]">
             {{ column[record.key] }}

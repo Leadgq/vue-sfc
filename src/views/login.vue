@@ -114,9 +114,7 @@ const handlerRememberPasswordState = () => {
 const modifyState = () => {
   if (!isAvailableObjectValue(loginData)) return;
   userStoreInstance.modifyRememberPasswordState(checkState.value);
-  if (checkState.value) {
-    setCookie(encode(`User${window.location.origin}`), encode(JSON.stringify(loginData)), 1000);
-  }
+  if (checkState.value)  setCookie(encode(`User${window.location.origin}`), encode(JSON.stringify(loginData)), 1000);
 };
 // 处理键盘按下
 const handlerKeyDown = () => loginUser();
