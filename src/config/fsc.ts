@@ -22,13 +22,18 @@ export const sfcConfigList: sfc[] = [
     desc: "动态插槽、插槽返回值、具名插槽、匿名插槽、并实现自己的简单表格、支持所有的插槽选项、主要练习插槽返回"
   },
   {
-    name: '富文本集成实验',
+    name: "富文本集成实验",
     componentName: "editor",
     desc: "集成富文本、尝试集成王editor富文本的vue3版本、完成、只是一些配置东西、不能写新特性"
   },
   {
-    name:'粘性组件',
-    componentName:'affix',
-    desc:'粘性组件,需要实现所有粘性组件的所有特性'
+    name: "粘性组件",
+    componentName: "affix",
+    desc: "粘性组件,需要实现所有粘性组件的所有特性"
+  },
+  {
+    name: "分页测试",
+    componentName: "table",
+    desc: "主要使用watchEffect对表格进行测试、减少反复调用接口"
   }
 ];
