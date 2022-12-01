@@ -8,7 +8,7 @@
         :mode="mode"
       />
       <EditorComponent
-        style="min-height: 400px; overflow-y: scroll;"
+        style="min-height: 400px; overflow-y: auto;"
         v-model="valueHtml"
         :defaultConfig="editorConfig"
         :mode="mode"
