@@ -6,10 +6,11 @@ export const loadModule = async () => {
   const module = import.meta.glob("@/components/**/desc.ts");
   for (const [_, value] of Object.entries(module)) {
     const result = await value() as Record<string, any>;
+    // 如果是已经加载过的模块排除
+    if (sfcConfigList.find(item => item.id === result?.default.id)) break;
     sfcConfigList.push(result?.default);
-    if (sfcConfigList.length > 0) {
-      sfcConfigList.sort((a, b) => a.id - b.id);
-    }
+    // 排序
+    sfcConfigList.sort((a, b) => a.id - b.id);
   }
   return sfcConfigList;
 };
