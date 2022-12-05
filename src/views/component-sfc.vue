@@ -6,12 +6,12 @@
       <el-card v-for="(item,index) in  sfcConfigList" :key="index" class="component-card" shadow="hover">
         <template #header>
           <div class="card-header">
-            <span>{{ item.name }}--{{item.componentName}}</span>
+            <span>{{ item.name }}--{{ item.componentName }}</span>
             <el-button type="primary" @click="jumpToSfc(item.componentName)">前往</el-button>
           </div>
         </template>
         <div class="card-footer">
-          <div class="card-desc">{{ item.desc }}</div>
+          <div class="card-desc" v-html="item.desc"></div>
         </div>
       </el-card>
     </div>
