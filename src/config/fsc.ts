@@ -3,13 +3,13 @@ import { sfc } from "@/types/sfc";
 const sfcConfigList: sfc[] = [];
 
 export const loadModule = async () => {
-  const module = import.meta.glob("@/components/**/*.ts");
-  for (const [key, value] of Object.entries(module)) {
+  const module = import.meta.glob("@/components/**/desc.ts");
+  for (const [_, value] of Object.entries(module)) {
     const result = await value() as Record<string, any>;
     sfcConfigList.push(result?.default);
     if (sfcConfigList.length > 0) {
       sfcConfigList.sort((a, b) => a.id - b.id);
     }
   }
-  return sfcConfigList
+  return sfcConfigList;
 };

@@ -23,9 +23,7 @@ import { loadModule } from "@/config/fsc";
 
 let sfcConfigList = ref<sfc[]>([]);
 const router = useRouter();
-onMounted(async () => {
-  sfcConfigList.value = await loadModule();
-});
+onMounted(async () => sfcConfigList.value = await loadModule());
 // 跳入广场
 const jumpToSfc = (componentName: string) => router.push({ path: "/entrance", query: { componentName } });
 </script>
