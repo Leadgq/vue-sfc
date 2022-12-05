@@ -7,10 +7,14 @@
   </div>
 </template>
 <script setup lang="ts">
-const props = defineProps<{
-  book: string,
+type propsType = {
+  book: string
   bookModifiers: { capitalize?: boolean }
-}>();
+  imageStyle?: "round" | "square"
+}
+const props = withDefaults(defineProps<propsType>(), {
+  imageStyle: "round"
+});
 const emit = defineEmits(["update:book"]);
 
 const modifyBookName = (event: { target: { value: string; }; }) => {

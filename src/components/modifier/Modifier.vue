@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full bg-violet-200">
-    <modifier-component v-model:book.capitalize="bookTitle" class="w-[300px]" />
+    <modifier-component v-model:book.capitalize="bookTitle" class="w-[300px]"  />
     <div>父组件中书籍名称为{{ bookTitle }}</div>
   </div>
 </template>
