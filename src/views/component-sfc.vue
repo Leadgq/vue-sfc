@@ -5,9 +5,9 @@
     <div class="card-container">
       <el-card v-for="(item,index) in  sfcConfigList" :key="index" class="component-card" shadow="hover">
         <template #header>
-          <div class="card-header" @click="jumpToSfc(item.componentName)">
+          <div class="card-header">
             <span>{{ item.name }}--{{item.componentName}}</span>
-            <el-button type="primary">前往</el-button>
+            <el-button type="primary" @click="jumpToSfc(item.componentName)">前往</el-button>
           </div>
         </template>
         <div class="card-footer">
@@ -44,7 +44,7 @@ export default {
     .component-card {
       @apply h-[350px] ;
       .card-header {
-        @apply flex items-center justify-between  font-bold cursor-pointer;
+        @apply flex items-center justify-between  font-bold ;
       }
 
       .card-footer {
