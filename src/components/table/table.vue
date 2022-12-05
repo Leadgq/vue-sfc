@@ -48,12 +48,8 @@ let pagination = reactive({
   showQuickJumper: true,
   position: ["bottomLeft"],
   showTotal: (total: number) => `总条数:${total}条`,
-  change: (page: Record<string, any>) => {
-    pagination.current = page.current;
-  },
-  onShowSizeChange: (_: number, pageSize: number) => {
-    pagination.pageSize = pageSize;
-  }
+  change: (page: Record<string, any>) => pagination.current = page.current,
+  onShowSizeChange: (_: number, pageSize: number) => pagination.pageSize = pageSize
 });
 onMounted(() => {
   setTableData();
