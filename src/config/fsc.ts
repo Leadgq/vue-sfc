@@ -35,5 +35,10 @@ export const sfcConfigList: sfc[] = [
     name: "分页测试",
     componentName: "table",
     desc: "主要使用watchEffect对表格进行测试、减少反复调用接口"
+  },
+  {
+    name: "自动更新",
+    componentName: "Modifier",
+    desc: "测试组件的v-model:value、自动更新外界的值"
   }
 ];
