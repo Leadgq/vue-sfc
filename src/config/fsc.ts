@@ -39,6 +39,6 @@ export const sfcConfigList: sfc[] = [
   {
     name: "自动更新",
     componentName: "Modifier",
-    desc: "测试组件的v-model:value、自动更新外界的值"
+    desc: "测试组件的v-model:value、自动更新外界的值、修饰符(这类似于.trim .lazy)"
   }
 ];
