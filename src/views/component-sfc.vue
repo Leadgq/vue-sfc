@@ -34,15 +34,15 @@ export default {
 </script>
 <style lang="scss" scoped>
 .component-container {
-  @apply w-full h-full flex flex-col bg-violet-200;
+  @apply w-full h-full flex flex-col bg-violet-200 overflow-y-auto;
   .container-header {
     @apply w-full  text-center font-bold py-3;
   }
 
   .card-container {
-    @apply grid grid-cols-5  gap-5 overflow-y-auto  mt-5 px-5;
+    @apply md:grid md:grid-cols-5  md:gap-5 md:overflow-y-auto  mt-5 px-5 sm:flex flex-col;
     .component-card {
-      @apply h-[350px] ;
+      @apply sm:mb-5 md:h-[350px]  md:mb-0 lg:mb-0;
       .card-header {
         @apply flex items-center justify-between  font-bold ;
       }
