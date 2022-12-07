@@ -7,15 +7,11 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    AButton: typeof import('ant-design-vue/es')['Button']
     Affix: typeof import('./src/components/Affix/affix.vue')['default']
     AffixComponent: typeof import('./src/components/Affix/affix-component.vue')['default']
     AMap: typeof import('./src/components/map/aMap.vue')['default']
-    ASelect: typeof import('ant-design-vue/es')['Select']
-    ASelectOption: typeof import('ant-design-vue/es')['SelectOption']
     AsyncChildren: typeof import('./src/components/asyncChildren.vue')['default']
     AsyncChildren2: typeof import('./src/components/asyncChildren2.vue')['default']
-    ATable: typeof import('ant-design-vue/es')['Table']
     Dynamic: typeof import('./src/components/slot/dynamic.vue')['default']
     Editor: typeof import('./src/components/editor/editor.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -25,7 +21,6 @@ declare module '@vue/runtime-core' {
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElInput: typeof import('element-plus/es')['ElInput']
-    ElTree: typeof import('element-plus/es')['ElTree']
     Father: typeof import('./src/components/test/father.vue')['default']
     Modifier: typeof import('./src/components/modifier/Modifier.vue')['default']
     ModifierComponent: typeof import('./src/components/modifier/ModifierComponent.vue')['default']
@@ -41,5 +36,6 @@ declare module '@vue/runtime-core' {
     TreeComponentTest: typeof import('./src/components/treeComponent/treeComponentTest.vue')['default']
     TreeFather: typeof import('./src/components/treeComponent/treeFather.vue')['default']
     TreeOption: typeof import('./src/components/treeComponent/treeOption.vue')['default']
+    WatchOption: typeof import('./src/components/watch/watch-option.vue')['default']
   }
 }
