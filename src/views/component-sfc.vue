@@ -19,13 +19,26 @@
 </template>
 <script lang="ts" setup>
 import { sfc } from "@/types/sfc";
-import { loadModule } from "@/config/fsc";
 
 let sfcConfigList = ref<sfc[]>([]);
 const router = useRouter();
-onMounted(async () => sfcConfigList.value = await loadModule());
+onMounted(async () => await loadModule());
 // 跳入广场
 const jumpToSfc = (componentName: string) => router.push({ path: "/entrance", query: { componentName } });
+
+const loadModule = async () => {
+  const module = import.meta.glob("@/components/**/desc.ts");
+  for (const [_, value] of Object.entries(module)) {
+    const result = await value() as Record<string, any>;
+    // 如果是已经加载过的模块排除
+    if (sfcConfigList.value.find(item => item.id === result?.default.id)) break;
+    sfcConfigList.value.push(result?.default);
+    // 排序
+    sfcConfigList.value.sort((a, b) => a.id - b.id);
+  }
+  return sfcConfigList;
+};
+
 </script>
 <script lang="ts">
 export default {
