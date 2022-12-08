@@ -36,7 +36,6 @@ const loadModule = async () => {
     // 排序
     sfcConfigList.value.sort((a, b) => a.id - b.id);
   }
-  return sfcConfigList;
 };
 
 </script>
