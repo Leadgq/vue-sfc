@@ -30,14 +30,18 @@ const loadModule = async () => {
   const module = import.meta.glob("@/components/**/desc.ts");
   for (const [_, value] of Object.entries(module)) {
     const result = await value() as Record<string, any>;
+    // 模块
+    let module = result.default as sfc;
+    // 当前加载的必须含有
+    if (!excludeIncompleteData(module)) continue;
     // 如果是已经加载过的模块排除
-    if (sfcConfigList.value.find(item => item.id === result?.default.id)) break;
-    sfcConfigList.value.push(result?.default);
+    if (sfcConfigList.value.find(item => item.id === module.id)) continue;
+    sfcConfigList.value.push(module);
     // 排序
     sfcConfigList.value.sort((a, b) => a.id - b.id);
   }
 };
-
+const excludeIncompleteData = (module: sfc) => Object.hasOwn(module, "id") && Object.hasOwn(module, "componentName");
 </script>
 <script lang="ts">
 export default {
