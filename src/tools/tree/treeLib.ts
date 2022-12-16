@@ -119,9 +119,9 @@ export const findMaxTreeNode = (flatTree: TreeData[]) => {
 };
 const arrToTree = (arr: TreeData[], pid: string | number) => {
     let deep = 0;
-    const data = [];
+    const data: TreeData[] = [];
     let root = arr.find(item => item.key === pid);
-    data.push(root);
+    if (root) data.push(root);
     while (root) {
         deep++;
         let child = arr.find(item => item.parentId === root?.key);
