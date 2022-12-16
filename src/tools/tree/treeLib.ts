@@ -97,9 +97,7 @@ const getParentObjectByKeys = (flatArray: TreeData[] | Ref<TreeData[]>, nodeId: 
         // 寻找直系节点
         if (child) {
             let linealParentNode = unref(flatArray).find((tree) => tree.key === child?.parentId);
-            if (linealParentNode) {
-                parentArray = IsProxyState ? parentArray.concat(linealParentNode) : parentArray.concat({ ...linealParentNode });
-            }
+            if (linealParentNode)  parentArray = IsProxyState ? parentArray.concat(linealParentNode) : parentArray.concat({ ...linealParentNode });
         }
     }
     if (pass) {
