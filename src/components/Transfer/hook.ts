@@ -23,8 +23,8 @@ export const useTransfer = () => {
 
   // 公共处理向左、向右
   const handlerCommonAction = (direction: string, containerDirectionLeft: Ref<transferProps[]>, containerDirectionRight: Ref<transferProps[]>, Indeterminate: Ref<boolean>, check: Ref<boolean>): number[] => {
-    // 所有选中、并且当前可用
-    const emitList = containerDirectionLeft.value.filter(item => !item.disabled && item.check);
+    // 所有选中
+    const emitList = containerDirectionLeft.value.filter(item =>  item.check);
     // 做数据
     let list = emitList.map((item) => {
       return { ...item, check: false };
