@@ -7,7 +7,7 @@
       </div>
       <div class="transfer-bottom bg-white">
         <div v-if="filterable" class="mt-3 mb-2">
-          <el-input placeholder="请输入搜索内容" v-model="leftSearch" clearable @input="searchResult"/>
+          <el-input :placeholder="placeholder" v-model="leftSearch" clearable @input="searchResult"/>
         </div>
         <template v-if="leftList && leftList.length > 0">
           <div v-for="transfer in leftList" :key="transfer.key">
@@ -30,7 +30,7 @@
       </div>
       <div class="transfer-bottom bg-white">
         <div v-if="filterable" class="mt-3 mb-2">
-          <el-input placeholder="请输入搜索内容" v-model="rightSearch" clearable/>
+          <el-input :placeholder="placeholder" v-model="rightSearch" clearable/>
         </div>
         <template v-if="rightList && rightList.length > 0">
           <div v-for="transfer in rightList" :key="transfer.key">
@@ -51,7 +51,7 @@ import { useTransfer } from "./hook";
 // 导出hooks
 const { handlerTransferInterlock, calculateCount, handlerCommonAction, handlerTransfer } = useTransfer();
 
-const props = defineProps<{ data: transferProps[], value: number[] ,filterable?:boolean}>();
+const props = defineProps<{ data: transferProps[], value: number[] ,filterable?:boolean ,  filterPlaceholder? :string }>();
 const emit = defineEmits(["update:value"]);
 // 左面列表
 let leftList = ref<transferProps[]>([]);
@@ -74,8 +74,9 @@ let  copyLeftList = ref<transferProps[]>([]);
 let  copyRightList = ref<transferProps[]>([]);
 // 需要发出的数据
 let  aleadyEmitArray =  ref<transferProps[]>([])
-
 let  emitArray = ref<number[]>([]);
+
+let placeholder = computed(()=>  props.filterPlaceholder ? props.filterPlaceholder : '请输入搜索内容')
 // 格式化数据
 watchEffect(() => {
   leftList.value = props.data.map((item, index) => {
