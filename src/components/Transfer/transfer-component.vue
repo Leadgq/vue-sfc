@@ -105,7 +105,7 @@ const modifyList = (dir: string) => {
 // 左全选
 const isLeftAvailableAllCheck = computed(() => !isAvailableArray(leftList) || leftList.value.filter(item => !item.disabled).length === 0);
 // 右全选
-const isRightAvailableAllCheck = computed(() => !isAvailableArray(rightList) || rightList.value.length === 0);
+const isRightAvailableAllCheck = computed(() => !isAvailableArray(rightList) ||  rightList.value.filter(item => !item.disabled).length === 0);
 // 可向右
 const isRightAvailable = computed(() => isAvailableArray(leftList) && leftList.value.filter(item => !item.disabled).every(item => !item.check));
 // 可向左
