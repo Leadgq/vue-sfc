@@ -42,6 +42,8 @@
 import { transferProps } from "@/types/transferTypes";
 import { isAvailableArray } from "@/tools/lib";
 import { useTransfer } from "./hook";
+// 导出hooks
+const { handlerTransferInterlock, calculateCount, handlerCommonAction, handlerTransfer } = useTransfer();
 
 const props = defineProps<{ data: transferProps[], value: number[] }>();
 const emit = defineEmits(["update:value"]);
@@ -82,8 +84,6 @@ const stop = watchEffect(() => {
   }
 }, { flush: "post" });
 
-// 导出hooks
-const { handlerTransferInterlock, calculateCount, handlerCommonAction, handlerTransfer } = useTransfer();
 // 联动
 const modifyList = (dir: string) => {
   dir === "left" ? handlerTransferInterlock(leftList, leftIndeterminate, leftCheck) : handlerTransferInterlock(rightList, rightIndeterminate, rightCheck);
