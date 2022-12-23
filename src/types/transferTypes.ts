@@ -3,4 +3,5 @@ export type transferProps = {
   disabled: boolean
   key: number
   check?: boolean
+  direction? : number
 }

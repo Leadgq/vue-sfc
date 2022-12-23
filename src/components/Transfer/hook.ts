@@ -22,12 +22,20 @@ export const useTransfer = () => {
   };
 
   // 公共处理向左、向右
-  const handlerCommonAction = (containerDirectionLeft: Ref<transferProps[]>, containerDirectionRight: Ref<transferProps[]>, Indeterminate: Ref<boolean>, check: Ref<boolean>):transferProps[] => {
-    const  emitList =  containerDirectionLeft.value.filter(item => !item.disabled && item.check);
+  const handlerCommonAction = (direction: string, containerDirectionLeft: Ref<transferProps[]>, containerDirectionRight: Ref<transferProps[]>, Indeterminate: Ref<boolean>, check: Ref<boolean>): transferProps[] => {
+    const emitList = containerDirectionLeft.value.filter(item => !item.disabled && item.check);
     let list = emitList.map((item) => {
       return { ...item, check: false };
     });
-    containerDirectionRight.value.push(...list);
+    // 如果是左面回退之前的状态
+    if (direction === "left") {
+      list.forEach((item) => {
+        containerDirectionRight.value.splice(item.direction!, 0, item);
+      });
+    } else {
+      containerDirectionRight.value.push(...list);
+    }
+    // 保留为选中
     containerDirectionLeft.value = containerDirectionLeft.value.filter(item => !item.check);
     resetState(Indeterminate, check);
     return emitList;

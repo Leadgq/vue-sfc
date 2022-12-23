@@ -59,10 +59,11 @@ let rightCheck = ref(false);
 let rightIndeterminate = ref(false);
 // 格式化数据
 watchEffect(() => {
-  leftList.value = props.data.map((item) => {
+  leftList.value = props.data.map((item,index) => {
     return {
       ...item,
-      check: false
+      check: false,
+     direction :index
     };
   });
 }, { flush: "post" });
@@ -88,9 +89,9 @@ const rightCount = computed(() => calculateCount(rightList));
 const toActionCommon = (direction: string) => {
   let  emitArray;
   if (direction === "right" ){
-    emitArray = handlerCommonAction(leftList, rightList, leftIndeterminate, leftCheck)
+    emitArray = handlerCommonAction(direction,leftList, rightList, leftIndeterminate, leftCheck)
   }else {
-    emitArray = handlerCommonAction(rightList, leftList, rightIndeterminate, rightCheck);
+    emitArray = handlerCommonAction(direction,rightList, leftList, rightIndeterminate, rightCheck);
   }
   emit("update:value",emitArray);
 };
