@@ -7,7 +7,7 @@
       </div>
       <div class="transfer-bottom bg-white">
         <div v-if="filterable" class="mt-3 mb-2">
-          <el-input :placeholder="placeholder" v-model="leftSearch" clearable @input="searchResult"/>
+          <el-input :placeholder="placeholder" v-model="leftSearch" clearable />
         </div>
         <template v-if="leftList && leftList.length > 0">
           <div v-for="transfer in leftList" :key="transfer.key">
@@ -165,7 +165,7 @@ export default {
     @extend .common;
     @apply flex flex-col;
     .transfer-top {
-      @apply h-[40px] flex px-3 flex  items-center  justify-between bg-[#f3f5f8];
+      @apply h-[40px] flex px-3   items-center  justify-between bg-[#f3f5f8];
       span {
         @apply text-[12px]  text-[#999] ;
       }
