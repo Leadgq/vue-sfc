@@ -24,7 +24,7 @@ watch(() => value.value, (newValue) => {
 });
 watch(() => transferValue.value, (newValue) => {
   console.log(newValue);
-});
+}, { deep: true });
 const mockTransferPropsData = (): Promise<transferProps[]> => {
   return new Promise((resolve) => {
     resolve(

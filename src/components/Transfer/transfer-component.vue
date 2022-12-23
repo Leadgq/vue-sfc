@@ -69,11 +69,13 @@ let rightIndeterminate = ref(false);
 let  leftSearch =  ref('');
 // 搜索右面
 let  rightSearch = ref('');
-// todo
+
 let  copyLeftList = ref<transferProps[]>([]);
 let  copyRightList = ref<transferProps[]>([]);
 // 需要发出的数据
 let  aleadyEmitArray =  ref<transferProps[]>([])
+
+let  emitArray = ref<number[]>([]);
 // 格式化数据
 watchEffect(() => {
   leftList.value = props.data.map((item, index) => {
@@ -91,8 +93,8 @@ const stop = watchEffect(() => {
       const item = leftList.value.find(item => item.key === key);
       if (item) item.check = true;
     });
-    // 回显的effect只触发一次
     stop();
+    // 回显的effect只触发一次
     toActionCommon("right");
   }
 }, { flush: "post" });
@@ -114,14 +116,30 @@ const leftCount = computed(() => calculateCount(leftList));
 const rightCount = computed(() => calculateCount(rightList));
 // 方向处理
 const toActionCommon = (direction: string) => {
-  let  emitArray ;
+  let needPush: number[] = [], needRemove: number[] = [];
   if (direction === "right") {
-    emitArray = handlerCommonAction(direction, leftList, rightList, leftIndeterminate, leftCheck);
+    needPush = handlerCommonAction(direction, leftList, rightList, leftIndeterminate, leftCheck);
   } else {
-    emitArray = handlerCommonAction(direction, rightList, leftList, rightIndeterminate, rightCheck);
+    needRemove = handlerCommonAction(direction, rightList, leftList, rightIndeterminate, rightCheck);
   }
-  emit("update:value", emitArray);
+  handlerEmit(direction, needPush, needRemove);
 };
+
+const  handlerEmit = (direction:string,needPush:number[],needRemove:number[])=>{
+  if (direction === "right") {
+    emitArray.value.push(...needPush);
+    emit("update:value",emitArray.value);
+  }
+  if (direction === "left") {
+    needRemove.forEach((key: number) => {
+      const index = emitArray.value.findIndex((currentKey) => currentKey === key);
+      if (index !== -1) {
+        emitArray.value.splice(index, 1);
+      }
+    });
+    emit("update:value",emitArray.value);
+  }
+}
 // 穿梭点击
 const transferSelect = (dir: string, _: transferProps) => {
   dir === "left" ? handlerTransfer(leftList, leftIndeterminate, leftCheck) : handlerTransfer(rightList, rightIndeterminate, rightCheck);
