@@ -92,7 +92,6 @@ const toActionCommon = (direction: string) => {
   }else {
     emitArray = handlerCommonAction(rightList, leftList, rightIndeterminate, rightCheck);
   }
-  console.log(emitArray);
   emit("update:value",emitArray);
 };
 // 穿梭点击

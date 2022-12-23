@@ -23,13 +23,14 @@ export const useTransfer = () => {
 
   // 公共处理向左、向右
   const handlerCommonAction = (containerDirectionLeft: Ref<transferProps[]>, containerDirectionRight: Ref<transferProps[]>, Indeterminate: Ref<boolean>, check: Ref<boolean>):transferProps[] => {
-    let list = containerDirectionLeft.value.filter(item => !item.disabled && item.check).map((item) => {
+    const  emitList =  containerDirectionLeft.value.filter(item => !item.disabled && item.check);
+    let list = emitList.map((item) => {
       return { ...item, check: false };
     });
     containerDirectionRight.value.push(...list);
     containerDirectionLeft.value = containerDirectionLeft.value.filter(item => !item.check);
     resetState(Indeterminate, check);
-    return list;
+    return emitList;
   };
 
   // 重置
