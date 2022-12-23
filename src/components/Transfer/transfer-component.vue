@@ -21,7 +21,7 @@
     </div>
     <div class="transfer-btn">
       <el-button type="primary" :disabled="!isLeftAvailable" @click="toActionCommon('left')">向左</el-button>
-      <el-button type="primary" class="ml-2" :disabled="isRightAvailable" @click="toActionCommon('right')">向右</el-button>
+      <el-button type="primary" class="ml-2" :disabled="!isRightAvailable" @click="toActionCommon('right')">向右</el-button>
     </div>
     <div class="transfer-left" key="right">
       <div class="transfer-top">
@@ -107,7 +107,7 @@ const isLeftAvailableAllCheck = computed(() => !isAvailableArray(leftList) || le
 // 右全选
 const isRightAvailableAllCheck = computed(() => !isAvailableArray(rightList) ||  rightList.value.filter(item => !item.disabled).length === 0);
 // 可向右
-const isRightAvailable = computed(() => isAvailableArray(leftList) && leftList.value.filter(item => !item.disabled).every(item => !item.check));
+const isRightAvailable = computed(() => isAvailableArray(leftList) && leftList.value.some((item)=> item.check));
 // 可向左
 const isLeftAvailable = computed(() => isAvailableArray(rightList) && rightList.value.some(item => item.check));
 // 左面个数
