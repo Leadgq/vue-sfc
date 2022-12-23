@@ -12,8 +12,8 @@ import TransferComponent from "@/components/Transfer/transfer-component.vue";
 import { transferProps } from "@/types/transferTypes";
 
 let data = ref<transferProps[]>([]);
-let value = ref([]);
-let  transferValue = ref<number[]>([]);
+let value = ref([1,3]);
+let  transferValue = ref<number[]>([1,3]);
 onMounted(async () => {
   data.value = await mockTransferPropsData();
 });

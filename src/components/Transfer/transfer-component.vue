@@ -2,7 +2,7 @@
   <div class="w-full h-full transfer-container-content">
     <div class="transfer-left" key="left">
       <div class="transfer-top">
-        <el-checkbox v-model="leftCheck" label="列表1" size="large" @change="modifyList('left')" :indeterminate="leftIndeterminate" :disabled="isLeftAvailableAllCheck"/>
+        <el-checkbox v-model="leftCheck" label="列表1" size="large" @change="modifyList('left')" :indeterminate="leftIndeterminate" :disabled="isLeftAvailableAllCheck" />
         <span>{{ leftCount }}</span>
       </div>
       <div class="transfer-bottom bg-white">
@@ -43,7 +43,7 @@ import { transferProps } from "@/types/transferTypes";
 import { isAvailableArray } from "@/tools/lib";
 import { useTransfer } from "./hook";
 
-const props = defineProps<{ data: transferProps[] , value:number[] }>();
+const props = defineProps<{ data: transferProps[], value: number[] }>();
 const emit = defineEmits(["update:value"]);
 // 左面列表
 let leftList = ref<transferProps[]>([]);
@@ -59,14 +59,29 @@ let rightCheck = ref(false);
 let rightIndeterminate = ref(false);
 // 格式化数据
 watchEffect(() => {
-  leftList.value = props.data.map((item,index) => {
+  leftList.value = props.data.map((item, index) => {
     return {
       ...item,
       check: false,
-     direction :index
+      direction: index
     };
   });
 }, { flush: "post" });
+// 处理回显
+const stop = watchEffect(() => {
+  if (isAvailableArray(props.value) && isAvailableArray(leftList.value)) {
+    props.value.forEach((key) => {
+      const item = leftList.value.find(item => item.key === key);
+      if (item) {
+        item.check = true;
+      }
+    });
+    toActionCommon("right");
+    // 回显的effect只触发一次
+    stop();
+  }
+}, { flush: "post" });
+
 // 导出hooks
 const { handlerTransferInterlock, calculateCount, handlerCommonAction, handlerTransfer } = useTransfer();
 // 联动
@@ -74,9 +89,9 @@ const modifyList = (dir: string) => {
   dir === "left" ? handlerTransferInterlock(leftList, leftIndeterminate, leftCheck) : handlerTransferInterlock(rightList, rightIndeterminate, rightCheck);
 };
 // 左全选
-const  isLeftAvailableAllCheck = computed(()=> !isAvailableArray(leftList) || leftList.value.filter(item=> !item.disabled).length === 0 );
+const isLeftAvailableAllCheck = computed(() => !isAvailableArray(leftList) || leftList.value.filter(item => !item.disabled).length === 0);
 // 右全选
-const  isRightAvailableAllCheck = computed(()=> !isAvailableArray(rightList) || rightList.value.length === 0 );
+const isRightAvailableAllCheck = computed(() => !isAvailableArray(rightList) || rightList.value.length === 0);
 // 可向右
 const isRightAvailable = computed(() => isAvailableArray(leftList) && leftList.value.filter(item => !item.disabled).every(item => !item.check));
 // 可向左
@@ -87,13 +102,13 @@ const leftCount = computed(() => calculateCount(leftList));
 const rightCount = computed(() => calculateCount(rightList));
 // 方向处理
 const toActionCommon = (direction: string) => {
-  let  emitArray;
-  if (direction === "right" ){
-    emitArray = handlerCommonAction(direction,leftList, rightList, leftIndeterminate, leftCheck)
-  }else {
-    emitArray = handlerCommonAction(direction,rightList, leftList, rightIndeterminate, rightCheck);
+  let emitArray;
+  if (direction === "right") {
+    emitArray = handlerCommonAction(direction, leftList, rightList, leftIndeterminate, leftCheck);
+  } else {
+    emitArray = handlerCommonAction(direction, rightList, leftList, rightIndeterminate, rightCheck);
   }
-  emit("update:value",emitArray);
+  emit("update:value", emitArray);
 };
 // 穿梭点击
 const transferSelect = (dir: string) => {
@@ -125,8 +140,8 @@ export default {
 
     .transfer-bottom {
       @apply px-3 flex-1;
-      &:deep(.el-checkbox.el-checkbox--large){
-        @apply  h-[32px];
+      &:deep(.el-checkbox.el-checkbox--large) {
+        @apply h-[32px];
       }
     }
   }

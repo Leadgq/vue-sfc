@@ -22,23 +22,25 @@ export const useTransfer = () => {
   };
 
   // 公共处理向左、向右
-  const handlerCommonAction = (direction: string, containerDirectionLeft: Ref<transferProps[]>, containerDirectionRight: Ref<transferProps[]>, Indeterminate: Ref<boolean>, check: Ref<boolean>): transferProps[] => {
+  const handlerCommonAction = (direction: string, containerDirectionLeft: Ref<transferProps[]>, containerDirectionRight: Ref<transferProps[]>, Indeterminate: Ref<boolean>, check: Ref<boolean>): number[] => {
+    // 所有选中、并且当前可用
     const emitList = containerDirectionLeft.value.filter(item => !item.disabled && item.check);
+    // 做数据
     let list = emitList.map((item) => {
       return { ...item, check: false };
     });
     // 如果是左面回退之前的状态
     if (direction === "left") {
-      list.forEach((item) => {
-        containerDirectionRight.value.splice(item.direction!, 0, item);
-      });
+      // 插到原来的位置
+      list.forEach((item) => containerDirectionRight.value.splice(item.direction!, 0, item));
     } else {
+      // 右面直接放
       containerDirectionRight.value.push(...list);
     }
-    // 保留为选中
+    // 保留没有选中
     containerDirectionLeft.value = containerDirectionLeft.value.filter(item => !item.check);
     resetState(Indeterminate, check);
-    return emitList;
+    return emitList.map(item => item.key);
   };
 
   // 重置
