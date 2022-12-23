@@ -52,7 +52,9 @@ import { useTransfer } from "./hook";
 const { handlerTransferInterlock, calculateCount, handlerCommonAction, handlerTransfer } = useTransfer();
 
 const props = defineProps<{ data: transferProps[], value: number[] ,filterable?:boolean ,  filterPlaceholder? :string }>();
-const emit = defineEmits(["update:value"]);
+const emit = defineEmits<{
+  (e: "update:value", arr: number[]): void;
+}>();
 // 左面列表
 let leftList = ref<transferProps[]>([]);
 // 左面是否被选
