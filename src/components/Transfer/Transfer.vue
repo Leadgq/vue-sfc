@@ -14,7 +14,7 @@ import { transferProps } from "@/types/transferTypes";
 
 let data = ref<transferProps[]>([]);
 let value = ref([1, 3]);
-let transferValue = ref<number[]>([1, 3]);
+let transferValue = ref<number[]>([]);
 onMounted(async () => {
   data.value = await mockTransferPropsData();
 });

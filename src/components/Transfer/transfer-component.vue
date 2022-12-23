@@ -6,9 +6,12 @@
         <span>{{ leftCount }}</span>
       </div>
       <div class="transfer-bottom bg-white">
+        <div v-if="filterable" class="mt-3 mb-2">
+          <el-input placeholder="请输入搜索内容" v-model="leftSearch" clearable @input="searchResult"/>
+        </div>
         <template v-if="leftList && leftList.length > 0">
-          <div v-for="(transfer) in leftList" :key="transfer.key">
-            <el-checkbox :label="transfer.label" size="large" :disabled="transfer.disabled" v-model="transfer.check" @change="transferSelect('left')" />
+          <div v-for="transfer in leftList" :key="transfer.key">
+            <el-checkbox :label="transfer.label" size="large" :disabled="transfer.disabled" v-model="transfer.check" @change="transferSelect('left',transfer)" />
           </div>
         </template>
         <template v-else>
@@ -26,9 +29,12 @@
         <span>{{ rightCount }}</span>
       </div>
       <div class="transfer-bottom bg-white">
+        <div v-if="filterable" class="mt-3 mb-2">
+          <el-input placeholder="请输入搜索内容" v-model="rightSearch" clearable/>
+        </div>
         <template v-if="rightList && rightList.length > 0">
-          <div v-for="(transfer) in rightList" :key="transfer.key">
-            <el-checkbox :label="transfer.label" size="large" :disabled="transfer.disabled" v-model="transfer.check" @change="transferSelect('right')" />
+          <div v-for="transfer in rightList" :key="transfer.key">
+            <el-checkbox :label="transfer.label" size="large" :disabled="transfer.disabled" v-model="transfer.check" @change="transferSelect('right',transfer)" />
           </div>
         </template>
         <template v-else>
@@ -45,7 +51,7 @@ import { useTransfer } from "./hook";
 // 导出hooks
 const { handlerTransferInterlock, calculateCount, handlerCommonAction, handlerTransfer } = useTransfer();
 
-const props = defineProps<{ data: transferProps[], value: number[] }>();
+const props = defineProps<{ data: transferProps[], value: number[] ,filterable?:boolean}>();
 const emit = defineEmits(["update:value"]);
 // 左面列表
 let leftList = ref<transferProps[]>([]);
@@ -59,6 +65,15 @@ let rightList = ref<transferProps[]>([]);
 let rightCheck = ref(false);
 // 右半选
 let rightIndeterminate = ref(false);
+// 搜索左面
+let  leftSearch =  ref('');
+// 搜索右面
+let  rightSearch = ref('');
+// todo
+let  copyLeftList = ref<transferProps[]>([]);
+let  copyRightList = ref<transferProps[]>([]);
+// 需要发出的数据
+let  aleadyEmitArray =  ref<transferProps[]>([])
 // 格式化数据
 watchEffect(() => {
   leftList.value = props.data.map((item, index) => {
@@ -74,16 +89,13 @@ const stop = watchEffect(() => {
   if (isAvailableArray(props.value) && isAvailableArray(leftList.value)) {
     props.value.forEach((key) => {
       const item = leftList.value.find(item => item.key === key);
-      if (item) {
-        item.check = true;
-      }
+      if (item) item.check = true;
     });
-    toActionCommon("right");
     // 回显的effect只触发一次
     stop();
+    toActionCommon("right");
   }
 }, { flush: "post" });
-
 // 联动
 const modifyList = (dir: string) => {
   dir === "left" ? handlerTransferInterlock(leftList, leftIndeterminate, leftCheck) : handlerTransferInterlock(rightList, rightIndeterminate, rightCheck);
@@ -102,7 +114,7 @@ const leftCount = computed(() => calculateCount(leftList));
 const rightCount = computed(() => calculateCount(rightList));
 // 方向处理
 const toActionCommon = (direction: string) => {
-  let emitArray;
+  let  emitArray ;
   if (direction === "right") {
     emitArray = handlerCommonAction(direction, leftList, rightList, leftIndeterminate, leftCheck);
   } else {
@@ -111,7 +123,7 @@ const toActionCommon = (direction: string) => {
   emit("update:value", emitArray);
 };
 // 穿梭点击
-const transferSelect = (dir: string) => {
+const transferSelect = (dir: string, _: transferProps) => {
   dir === "left" ? handlerTransfer(leftList, leftIndeterminate, leftCheck) : handlerTransfer(rightList, rightIndeterminate, rightCheck);
 };
 </script>
