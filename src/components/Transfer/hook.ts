@@ -29,14 +29,8 @@ export const useTransfer = () => {
     let list = emitList.map((item) => {
       return { ...item, check: false };
     });
-    // 如果是左面回退之前的状态
-    if (direction === "left") {
-      // 插到原来的位置
-      list.forEach((item) => containerDirectionRight.value.splice(item.direction!, 0, item));
-    } else {
-      // 右面直接放
-      containerDirectionRight.value.push(...list);
-    }
+    // 无论左右、都需要保持原来的位置
+    list.forEach((item) => containerDirectionRight.value.splice(item.direction!, 0, item));
     // 保留没有选中
     containerDirectionLeft.value = containerDirectionLeft.value.filter(item => !item.check);
     resetState(Indeterminate, check);
