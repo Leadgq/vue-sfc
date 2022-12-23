@@ -1,7 +1,8 @@
 <template>
   <div class="transfer-container">
     <div class="w-[562px] h-[300px]">
-      <TransferComponent :data="data"  v-model:value="transferValue" />
+      <!--   自己的穿梭框   -->
+      <TransferComponent :data="data" v-model:value="transferValue" />
     </div>
     <el-transfer v-model="value" :data="data" />
   </div>
@@ -12,18 +13,18 @@ import TransferComponent from "@/components/Transfer/transfer-component.vue";
 import { transferProps } from "@/types/transferTypes";
 
 let data = ref<transferProps[]>([]);
-let value = ref([1,3]);
-let  transferValue = ref<number[]>([1,3]);
+let value = ref([1, 3]);
+let transferValue = ref<number[]>([1, 3]);
 onMounted(async () => {
   data.value = await mockTransferPropsData();
 });
 
-watch(()=>value.value,(newValue)=>{
+watch(() => value.value, (newValue) => {
   console.log(newValue);
-})
-watch(()=>transferValue.value,(newValue)=>{
+});
+watch(() => transferValue.value, (newValue) => {
   console.log(newValue);
-})
+});
 const mockTransferPropsData = (): Promise<transferProps[]> => {
   return new Promise((resolve) => {
     resolve(
