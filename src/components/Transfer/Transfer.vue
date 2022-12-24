@@ -2,9 +2,9 @@
   <div class="transfer-container">
     <div class="w-[562px] h-[300px]">
       <!--   自己的穿梭框   -->
-      <TransferComponent :data="data" v-model:value="transferValue" />
+      <TransferComponent :data="data" v-model:value="transferValue"  filterable/>
     </div>
-    <el-transfer v-model="value" :data="data" />
+    <el-transfer v-model="value" :data="data" filterable/>
   </div>
 </template>
 
@@ -13,8 +13,8 @@ import TransferComponent from "@/components/Transfer/transfer-component.vue";
 import { transferProps } from "@/types/transferTypes";
 
 let data = ref<transferProps[]>([]);
-let value = ref([1, 2]);
-let transferValue = ref<number[]>([1,2]);
+let value = ref([]);
+let transferValue = ref<number[]>([]);
 onMounted(async () => {
   data.value = await mockTransferPropsData();
 });

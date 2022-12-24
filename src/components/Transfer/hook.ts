@@ -22,7 +22,7 @@ export const useTransfer = () => {
   };
 
   // 公共处理向左、向右
-  const handlerCommonAction = (direction: string, containerDirectionLeft: Ref<transferProps[]>, containerDirectionRight: Ref<transferProps[]>, Indeterminate: Ref<boolean>, check: Ref<boolean>): number[] => {
+  const handlerCommonAction = (direction: string, containerDirectionLeft: Ref<transferProps[]>, containerDirectionRight: Ref<transferProps[]>, Indeterminate: Ref<boolean>, check: Ref<boolean>) => {
     // 所有选中
     const emitList = containerDirectionLeft.value.filter(item =>  item.check);
     // 做数据
@@ -34,15 +34,35 @@ export const useTransfer = () => {
     // 保留没有选中
     containerDirectionLeft.value = containerDirectionLeft.value.filter(item => !item.check);
     resetState(Indeterminate, check);
-    return emitList.map(item => item.key);
+    return {
+      sourceKey: emitList.map(item => item.key),
+      source: list
+    }
   };
+  // 删除已经移动的值===> copy数组
+  const handlerCopyList = (direction: string, copyList: Ref<transferProps[]>, keys: number[]) => { 
+    keys.forEach((key) => {
+      const index = copyList.value.findIndex((item) => item.key === key);
+      if (index !== -1) copyList.value.splice(index, 1);
+    })
+  }
 
+  // 处理搜索
+  const handlerTransferFilter = (source: Ref<transferProps[]>, copyTarget: Ref<transferProps[]>, search:Ref<string> , Indeterminate:Ref<boolean>,check:Ref<boolean>) => { 
+    if (!search.value) {
+      source.value = copyTarget.value
+    } else { 
+      source.value = copyTarget.value.filter((item) => item.label.includes(search.value));
+    }
+    handlerTransfer(source, Indeterminate, check);
+  }
   // 重置
   const resetState = (indeterminateValue: Ref<boolean>, checkStateValue: Ref<boolean>) => {
     indeterminateValue.value = false;
     checkStateValue.value = false;
   };
 
+  // 联动
   const handlerTransfer = (list: Ref<transferProps[]>, Indeterminate: Ref<boolean>, check: Ref<boolean>) => {
     if (!isAvailableArray(list)) return;
     // 有一个被选择
@@ -66,6 +86,8 @@ export const useTransfer = () => {
     handlerTransferInterlock,
     calculateCount,
     handlerCommonAction,
-    handlerTransfer
+    handlerTransfer,
+    handlerCopyList,
+    handlerTransferFilter
   };
 };

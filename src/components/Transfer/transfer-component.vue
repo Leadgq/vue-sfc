@@ -7,7 +7,7 @@
       </div>
       <div class="transfer-bottom bg-white">
         <div v-if="filterable" class="mt-3 mb-2">
-          <el-input :placeholder="placeholder" v-model="leftSearch" clearable />
+          <el-input :placeholder="placeholder" v-model="leftSearch" clearable @input="searchKeyWorld('left')" />
         </div>
         <template v-if="leftList && leftList.length > 0">
           <div v-for="transfer in leftList" :key="transfer.key">
@@ -30,7 +30,7 @@
       </div>
       <div class="transfer-bottom bg-white">
         <div v-if="filterable" class="mt-3 mb-2">
-          <el-input :placeholder="placeholder" v-model="rightSearch" clearable/>
+          <el-input :placeholder="placeholder" v-model="rightSearch" clearable @input="searchKeyWorld('right')"/>
         </div>
         <template v-if="rightList && rightList.length > 0">
           <div v-for="transfer in rightList" :key="transfer.key">
@@ -48,8 +48,9 @@
 import { transferProps } from "@/types/transferTypes";
 import { isAvailableArray } from "@/tools/lib";
 import { useTransfer } from "./hook";
+import { Ref } from "vue";
 // 导出hooks
-const { handlerTransferInterlock, calculateCount, handlerCommonAction, handlerTransfer } = useTransfer();
+const { handlerTransferInterlock, calculateCount, handlerCommonAction, handlerTransfer,handlerCopyList,handlerTransferFilter } = useTransfer();
 
 const props = defineProps<{ data: transferProps[], value: number[] ,filterable?:boolean ,  filterPlaceholder? :string }>();
 const emit = defineEmits<{
@@ -68,30 +69,43 @@ let rightCheck = ref(false);
 // 右半选
 let rightIndeterminate = ref(false);
 // 搜索左面
-let  leftSearch =  ref('');
+let leftSearch = ref('');
 // 搜索右面
-let  rightSearch = ref('');
-
-let  copyLeftList = ref<transferProps[]>([]);
-let  copyRightList = ref<transferProps[]>([]);
-// 需要发出的数据
-let  aleadyEmitArray =  ref<transferProps[]>([])
-let  emitArray = ref<number[]>([]);
+let rightSearch = ref('');
+// 左面copy
+let copyLeftList = ref<transferProps[]>([]);
+let copyRightList = ref<transferProps[]>([]);
+let emitArray = ref<number[]>([]);
+let isClock = ref(false);
 
 let placeholder = computed(()=>  props.filterPlaceholder ? props.filterPlaceholder : '请输入搜索内容')
 // 格式化数据
-watchEffect(() => {
-  leftList.value = props.data.map((item, index) => {
+const stopInit = watchEffect(() => {
+  if (isAvailableArray(leftList)) {
+    stopInit();
+  } else { 
+    leftList.value  = props.data.map((item, index) => {
     return {
       ...item,
       check: false,
       direction: index
     };
-  });
+    }); 
+  }
 }, { flush: "post" });
+// copy左面数组
+const stopCopy = watchEffect(() => { 
+  if (isAvailableArray(copyLeftList)) { 
+    stopCopy();
+  } else {
+    copyLeftList.value = leftList.value; 
+  }
+}, { flush:'post'})
 // 处理回显
 const stop = watchEffect(() => {
+  if (isClock.value) return;
   if (isAvailableArray(props.value) && isAvailableArray(leftList.value)) {
+    console.log(222);
     props.value.forEach((key) => {
       const item = leftList.value.find(item => item.key === key);
       if (item) item.check = true;
@@ -105,6 +119,13 @@ const stop = watchEffect(() => {
 const modifyList = (dir: string) => {
   dir === "left" ? handlerTransferInterlock(leftList, leftIndeterminate, leftCheck) : handlerTransferInterlock(rightList, rightIndeterminate, rightCheck);
 };
+const searchKeyWorld = (direction: string) => {
+  if (direction === 'left') {
+    handlerTransferFilter(leftList , copyLeftList, leftSearch,leftIndeterminate,leftCheck);
+  } else { 
+    handlerTransferFilter(rightList, copyRightList,rightSearch,rightIndeterminate,rightCheck);
+  }
+}
 // 左全选
 const isLeftAvailableAllCheck = computed(() => !isAvailableArray(leftList) || leftList.value.filter(item => !item.disabled).length === 0);
 // 右全选
@@ -121,13 +142,27 @@ const rightCount = computed(() => calculateCount(rightList));
 const toActionCommon = (direction: string) => {
   let needPush: number[] = [], needRemove: number[] = [];
   if (direction === "right") {
-    needPush = handlerCommonAction(direction, leftList, rightList, leftIndeterminate, leftCheck);
+    const { source, sourceKey } = handlerCommonAction(direction, leftList, rightList, leftIndeterminate, leftCheck);
+    needPush = sourceKey;
+    // 处理copy数组
+    if (props.filterable) { 
+      // 右面数组copy开始
+      copyRightListAction(source);
+      // 不论想左还是向右、都要移除copy数组中的值、否则当搜索框为空的时候、状态将会回退
+      handlerCopyList(direction, copyLeftList, needPush); 
+    }
   } else {
-    needRemove = handlerCommonAction(direction, rightList, leftList, rightIndeterminate, rightCheck);
+    const { sourceKey ,source }   = handlerCommonAction(direction, rightList, leftList, rightIndeterminate, rightCheck);
+    needRemove = sourceKey;
+    if(props.filterable){
+      handlerCopyList(direction, copyRightList, needRemove);
+      // 由于右面是往里面放的、所以不需要恢复状态
+      recoveryState(source);
+    }
   }
   handlerEmit(direction, needPush, needRemove);
 };
-
+// 返回将要活动的值
 const  handlerEmit = (direction:string,needPush:number[],needRemove:number[])=>{
   if (direction === "right") {
     emitArray.value.push(...needPush);
@@ -142,6 +177,15 @@ const  handlerEmit = (direction:string,needPush:number[],needRemove:number[])=>{
     });
     emit("update:value",emitArray.value);
   }
+}
+const recoveryState = (source:transferProps[]) => { 
+  source.forEach((item) => copyLeftList.value.splice(item.direction!, 0, item));
+}
+// 右面拷贝
+const copyRightListAction = (source: transferProps[]) => {
+  //🔒住回显，第二次props中将会有值
+  isClock.value = true;
+  copyRightList.value.push(...source);
 }
 // 穿梭点击
 const transferSelect = (dir: string, _: transferProps) => {
