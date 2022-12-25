@@ -3,6 +3,8 @@ import { isAvailableArray } from "@/tools/lib";
 import { Ref } from "vue";
 
 export const useTransfer = () => {
+  // 锁住搜索的effect
+  let initClock = ref(false);
   // 处理联动
   const handlerTransferInterlock = (list: Ref<transferProps[]>, Indeterminate: Ref<boolean>, check: Ref<boolean>) => {
     if (!isAvailableArray(list)) return;
@@ -52,6 +54,7 @@ export const useTransfer = () => {
     if (!search.value) {
       source.value = copyTarget.value
     } else { 
+      initClock.value = true;
       source.value = copyTarget.value.filter((item) => item.label.includes(search.value));
     }
     handlerTransfer(source, Indeterminate, check);
@@ -88,6 +91,7 @@ export const useTransfer = () => {
     handlerCommonAction,
     handlerTransfer,
     handlerCopyList,
+    initClock,
     handlerTransferFilter
   };
 };

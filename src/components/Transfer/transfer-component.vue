@@ -2,7 +2,7 @@
   <div class="w-full h-full transfer-container-content">
     <div class="transfer-left" key="left">
       <div class="transfer-top">
-        <el-checkbox v-model="leftCheck" label="列表1" size="large" @change="modifyList('left')" :indeterminate="leftIndeterminate" :disabled="isLeftAvailableAllCheck" />
+        <el-checkbox v-model="leftCheck" :label="leftListText" size="large" @change="modifyList('left')" :indeterminate="leftIndeterminate" :disabled="isLeftAvailableAllCheck" />
         <span>{{ leftCount }}</span>
       </div>
       <div class="transfer-bottom bg-white">
@@ -20,12 +20,12 @@
       </div>
     </div>
     <div class="transfer-btn">
-      <el-button type="primary" :disabled="!isLeftAvailable" @click="toActionCommon('left')">向左</el-button>
-      <el-button type="primary" class="ml-2" :disabled="!isRightAvailable" @click="toActionCommon('right')">向右</el-button>
+      <el-button type="primary" :disabled="!isLeftAvailable" @click="toActionCommon('left')">{{ btnLeftText }}</el-button>
+      <el-button type="primary" class="ml-2" :disabled="!isRightAvailable" @click="toActionCommon('right')">{{ btnRightText }}</el-button>
     </div>
     <div class="transfer-left" key="right">
       <div class="transfer-top">
-        <el-checkbox v-model="rightCheck" label="列表2" size="large" :indeterminate="rightIndeterminate" @change="modifyList('right')" :disabled="isRightAvailableAllCheck" />
+        <el-checkbox v-model="rightCheck" :label="rightListText" size="large" :indeterminate="rightIndeterminate" @change="modifyList('right')" :disabled="isRightAvailableAllCheck" />
         <span>{{ rightCount }}</span>
       </div>
       <div class="transfer-bottom bg-white">
@@ -50,9 +50,24 @@ import { isAvailableArray } from "@/tools/lib";
 import { useTransfer } from "./hook";
 import { Ref } from "vue";
 // 导出hooks
-const { handlerTransferInterlock, calculateCount, handlerCommonAction, handlerTransfer,handlerCopyList,handlerTransferFilter } = useTransfer();
+const {
+  handlerTransferInterlock,
+  calculateCount,
+  handlerCommonAction,
+  handlerTransfer,
+  handlerCopyList,
+  initClock,
+  handlerTransferFilter
+} = useTransfer();
 
-const props = defineProps<{ data: transferProps[], value: number[] ,filterable?:boolean ,  filterPlaceholder? :string }>();
+const props = defineProps<{
+  data: transferProps[],
+  value: number[],
+  filterable?: boolean,
+  filterPlaceholder?: string
+  buttonTexts?: string[]	
+  titles?: string[]
+}>();
 const emit = defineEmits<{
   (e: "update:value", arr: number[]): void;
 }>();
@@ -76,14 +91,22 @@ let rightSearch = ref('');
 let copyLeftList = ref<transferProps[]>([]);
 let copyRightList = ref<transferProps[]>([]);
 let emitArray = ref<number[]>([]);
+// 锁住回显
 let isClock = ref(false);
+// 文案
+let btnLeftText = ref('←');
+let btnRightText = ref('→');
+let leftListText = ref('列表1');
+let rightListText = ref('列表2');
 
-let placeholder = computed(()=>  props.filterPlaceholder ? props.filterPlaceholder : '请输入搜索内容')
+let placeholder = computed(()=> props.filterPlaceholder ? props.filterPlaceholder : '请输入搜索内容' )
 // 格式化数据
 const stopInit = watchEffect(() => {
   if (isAvailableArray(leftList)) {
     stopInit();
   } else { 
+    // 因为搜索操作会影响effect、所以加🔐
+    if (initClock.value) return;
     leftList.value  = props.data.map((item, index) => {
     return {
       ...item,
@@ -114,6 +137,24 @@ const stop = watchEffect(() => {
     toActionCommon("right");
   }
 }, { flush: "post" });
+ // 按钮文案
+const  stopBtnInit = watchEffect(() => { 
+  if (props.buttonTexts && isAvailableArray(props.buttonTexts)) { 
+    const [leftText ,rightText] = props.buttonTexts;
+    if (leftText)  btnLeftText.value = leftText;
+    if (rightText) btnRightText.value = rightText;
+    stopBtnInit();
+  }
+}, { flush: 'post' })
+// 列表文案
+const stopTitle = watchEffect(() => {
+  if (props.titles && isAvailableArray(props.titles)) { 
+    const [leftTitleText, rightTitleText] = props.titles;
+    if (leftTitleText)  leftListText.value = leftTitleText;
+    if (rightTitleText) rightListText.value = rightTitleText;
+    stopTitle();
+  }
+}, { flush: 'post' })
 // 联动
 const modifyList = (dir: string) => {
   dir === "left" ? handlerTransferInterlock(leftList, leftIndeterminate, leftCheck) : handlerTransferInterlock(rightList, rightIndeterminate, rightCheck);

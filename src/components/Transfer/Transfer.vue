@@ -2,7 +2,7 @@
   <div class="transfer-container">
     <div class="w-[562px] h-[300px]">
       <!--   自己的穿梭框   -->
-      <TransferComponent :data="data" v-model:value="transferValue"  filterable/>
+      <TransferComponent :data="data" v-model:value="transferValue"  filterable  :button-texts="btnText" :titles="titles"/>
     </div>
     <el-transfer v-model="value" :data="data" filterable/>
   </div>
@@ -15,6 +15,9 @@ import { transferProps } from "@/types/transferTypes";
 let data = ref<transferProps[]>([]);
 let value = ref([]);
 let transferValue = ref<number[]>([]);
+// 自定义按钮
+const btnText = ['左','右']
+const titles = ['list1','list2'];
 onMounted(async () => {
   data.value = await mockTransferPropsData();
 });
