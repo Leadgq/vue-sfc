@@ -105,7 +105,6 @@ const stopCopy = watchEffect(() => {
 const stop = watchEffect(() => {
   if (isClock.value) return;
   if (isAvailableArray(props.value) && isAvailableArray(leftList.value)) {
-    console.log(222);
     props.value.forEach((key) => {
       const item = leftList.value.find(item => item.key === key);
       if (item) item.check = true;
