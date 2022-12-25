@@ -2,16 +2,18 @@
   <div class="w-full h-full transfer-container-content">
     <div class="transfer-left" key="left">
       <div class="transfer-top">
-        <el-checkbox v-model="leftCheck" :label="leftListText" size="large" @change="modifyList('left')" :indeterminate="leftIndeterminate" :disabled="isLeftAvailableAllCheck" />
+        <el-checkbox v-model="leftCheck" :label="leftListText" size="large" @change="modifyList('left')"
+                     :indeterminate="leftIndeterminate" :disabled="isLeftAvailableAllCheck"/>
         <span>{{ leftCount }}</span>
       </div>
       <div class="transfer-bottom bg-white">
         <div v-if="filterable" class="mt-3 mb-2">
-          <el-input :placeholder="placeholder" v-model="leftSearch" clearable @input="searchKeyWorld('left')" />
+          <el-input :placeholder="placeholder" v-model="leftSearch" clearable @input="searchKeyWorld('left')"/>
         </div>
         <template v-if="leftList && leftList.length > 0">
           <div v-for="transfer in leftList" :key="transfer.key">
-            <el-checkbox :label="transfer.label" size="large" :disabled="transfer.disabled" v-model="transfer.check" @change="transferSelect('left',transfer)" />
+            <el-checkbox :label="transfer.label" size="large" :disabled="transfer.disabled" v-model="transfer.check"
+                         @change="transferSelect('left',transfer)"/>
           </div>
         </template>
         <template v-else>
@@ -20,12 +22,18 @@
       </div>
     </div>
     <div class="transfer-btn">
-      <el-button type="primary" :disabled="!isLeftAvailable" @click="toActionCommon('left')">{{ btnLeftText }}</el-button>
-      <el-button type="primary" class="ml-2" :disabled="!isRightAvailable" @click="toActionCommon('right')">{{ btnRightText }}</el-button>
+      <el-button type="primary" :disabled="!isLeftAvailable" @click="toActionCommon('left')">{{
+          btnLeftText
+        }}
+      </el-button>
+      <el-button type="primary" class="ml-2" :disabled="!isRightAvailable" @click="toActionCommon('right')">
+        {{ btnRightText }}
+      </el-button>
     </div>
     <div class="transfer-left" key="right">
       <div class="transfer-top">
-        <el-checkbox v-model="rightCheck" :label="rightListText" size="large" :indeterminate="rightIndeterminate" @change="modifyList('right')" :disabled="isRightAvailableAllCheck" />
+        <el-checkbox v-model="rightCheck" :label="rightListText" size="large" :indeterminate="rightIndeterminate"
+                     @change="modifyList('right')" :disabled="isRightAvailableAllCheck"/>
         <span>{{ rightCount }}</span>
       </div>
       <div class="transfer-bottom bg-white">
@@ -34,7 +42,8 @@
         </div>
         <template v-if="rightList && rightList.length > 0">
           <div v-for="transfer in rightList" :key="transfer.key">
-            <el-checkbox :label="transfer.label" size="large" :disabled="transfer.disabled" v-model="transfer.check" @change="transferSelect('right',transfer)" />
+            <el-checkbox :label="transfer.label" size="large" :disabled="transfer.disabled" v-model="transfer.check"
+                         @change="transferSelect('right',transfer)"/>
           </div>
         </template>
         <template v-else>
@@ -45,10 +54,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import { transferProps } from "@/types/transferTypes";
-import { isAvailableArray } from "@/tools/lib";
-import { useTransfer } from "./hook";
-import { Ref } from "vue";
+import {transferProps} from "@/types/transferTypes";
+import {isAvailableArray} from "@/tools/lib";
+import {useTransfer} from "./hook";
 // 导出hooks
 const {
   handlerTransferInterlock,
@@ -65,7 +73,7 @@ const props = defineProps<{
   value: number[],
   filterable?: boolean,
   filterPlaceholder?: string
-  buttonTexts?: string[]	
+  buttonTexts?: string[]
   titles?: string[]
 }>();
 const emit = defineEmits<{
@@ -99,31 +107,31 @@ let btnRightText = ref('→');
 let leftListText = ref('列表1');
 let rightListText = ref('列表2');
 
-let placeholder = computed(()=> props.filterPlaceholder ? props.filterPlaceholder : '请输入搜索内容' )
+let placeholder = computed(() => props.filterPlaceholder ? props.filterPlaceholder : '请输入搜索内容')
 // 格式化数据
 const stopInit = watchEffect(() => {
   if (isAvailableArray(leftList)) {
     stopInit();
-  } else { 
+  } else {
     // 因为搜索操作会影响effect、所以加🔐
     if (initClock.value) return;
-    leftList.value  = props.data.map((item, index) => {
-    return {
-      ...item,
-      check: false,
-      direction: index
-    };
-    }); 
+    leftList.value = props.data.map((item, index) => {
+      return {
+        ...item,
+        check: false,
+        direction: index
+      };
+    });
   }
-}, { flush: "post" });
+}, {flush: "post"});
 // copy左面数组
-const stopCopy = watchEffect(() => { 
-  if (isAvailableArray(copyLeftList)) { 
+const stopCopy = watchEffect(() => {
+  if (isAvailableArray(copyLeftList)) {
     stopCopy();
   } else {
-    copyLeftList.value = leftList.value; 
+    copyLeftList.value = leftList.value;
   }
-}, { flush:'post'})
+}, {flush: 'post'})
 // 处理回显
 const stop = watchEffect(() => {
   if (isClock.value) return;
@@ -136,42 +144,42 @@ const stop = watchEffect(() => {
     // 回显的effect只触发一次
     toActionCommon("right");
   }
-}, { flush: "post" });
- // 按钮文案
-const  stopBtnInit = watchEffect(() => { 
-  if (props.buttonTexts && isAvailableArray(props.buttonTexts)) { 
-    const [leftText ,rightText] = props.buttonTexts;
-    if (leftText)  btnLeftText.value = leftText;
+}, {flush: "post"});
+// 按钮文案
+const stopBtnInit = watchEffect(() => {
+  if (props.buttonTexts && isAvailableArray(props.buttonTexts)) {
+    const [leftText, rightText] = props.buttonTexts;
+    if (leftText) btnLeftText.value = leftText;
     if (rightText) btnRightText.value = rightText;
     stopBtnInit();
   }
-}, { flush: 'post' })
+}, {flush: 'post'})
 // 列表文案
 const stopTitle = watchEffect(() => {
-  if (props.titles && isAvailableArray(props.titles)) { 
+  if (props.titles && isAvailableArray(props.titles)) {
     const [leftTitleText, rightTitleText] = props.titles;
-    if (leftTitleText)  leftListText.value = leftTitleText;
+    if (leftTitleText) leftListText.value = leftTitleText;
     if (rightTitleText) rightListText.value = rightTitleText;
     stopTitle();
   }
-}, { flush: 'post' })
+}, {flush: 'post'})
 // 联动
 const modifyList = (dir: string) => {
   dir === "left" ? handlerTransferInterlock(leftList, leftIndeterminate, leftCheck) : handlerTransferInterlock(rightList, rightIndeterminate, rightCheck);
 };
 const searchKeyWorld = (direction: string) => {
   if (direction === 'left') {
-    handlerTransferFilter(leftList , copyLeftList, leftSearch,leftIndeterminate,leftCheck);
-  } else { 
-    handlerTransferFilter(rightList, copyRightList,rightSearch,rightIndeterminate,rightCheck);
+    handlerTransferFilter(leftList, copyLeftList, leftSearch, leftIndeterminate, leftCheck);
+  } else {
+    handlerTransferFilter(rightList, copyRightList, rightSearch, rightIndeterminate, rightCheck);
   }
 }
 // 左全选
 const isLeftAvailableAllCheck = computed(() => !isAvailableArray(leftList) || leftList.value.filter(item => !item.disabled).length === 0);
 // 右全选
-const isRightAvailableAllCheck = computed(() => !isAvailableArray(rightList) ||  rightList.value.filter(item => !item.disabled).length === 0);
+const isRightAvailableAllCheck = computed(() => !isAvailableArray(rightList) || rightList.value.filter(item => !item.disabled).length === 0);
 // 可向右
-const isRightAvailable = computed(() => isAvailableArray(leftList) && leftList.value.some((item)=> item.check));
+const isRightAvailable = computed(() => isAvailableArray(leftList) && leftList.value.some((item) => item.check));
 // 可向左
 const isLeftAvailable = computed(() => isAvailableArray(rightList) && rightList.value.some(item => item.check));
 // 左面个数
@@ -182,19 +190,19 @@ const rightCount = computed(() => calculateCount(rightList));
 const toActionCommon = (direction: string) => {
   let needPush: number[] = [], needRemove: number[] = [];
   if (direction === "right") {
-    const { source, sourceKey } = handlerCommonAction(direction, leftList, rightList, leftIndeterminate, leftCheck);
+    const {source, sourceKey} = handlerCommonAction(direction, leftList, rightList, leftIndeterminate, leftCheck);
     needPush = sourceKey;
     // 处理copy数组
-    if (props.filterable) { 
+    if (props.filterable) {
       // 右面数组copy开始
       copyRightListAction(source);
       // 不论想左还是向右、都要移除copy数组中的值、否则当搜索框为空的时候、状态将会回退
-      handlerCopyList(direction, copyLeftList, needPush); 
+      handlerCopyList(direction, copyLeftList, needPush);
     }
   } else {
-    const { sourceKey ,source }   = handlerCommonAction(direction, rightList, leftList, rightIndeterminate, rightCheck);
+    const {sourceKey, source} = handlerCommonAction(direction, rightList, leftList, rightIndeterminate, rightCheck);
     needRemove = sourceKey;
-    if(props.filterable){
+    if (props.filterable) {
       handlerCopyList(direction, copyRightList, needRemove);
       // 由于右面是往里面放的、所以不需要恢复状态
       recoveryState(source);
@@ -203,10 +211,10 @@ const toActionCommon = (direction: string) => {
   handlerEmit(direction, needPush, needRemove);
 };
 // 返回将要活动的值
-const  handlerEmit = (direction:string,needPush:number[],needRemove:number[])=>{
+const handlerEmit = (direction: string, needPush: number[], needRemove: number[]) => {
   if (direction === "right") {
     emitArray.value.push(...needPush);
-    emit("update:value",emitArray.value);
+    emit("update:value", emitArray.value);
   }
   if (direction === "left") {
     needRemove.forEach((key: number) => {
@@ -215,10 +223,10 @@ const  handlerEmit = (direction:string,needPush:number[],needRemove:number[])=>{
         emitArray.value.splice(index, 1);
       }
     });
-    emit("update:value",emitArray.value);
+    emit("update:value", emitArray.value);
   }
 }
-const recoveryState = (source:transferProps[]) => { 
+const recoveryState = (source: transferProps[]) => {
   source.forEach((item) => copyLeftList.value.splice(item.direction!, 0, item));
 }
 // 右面拷贝
