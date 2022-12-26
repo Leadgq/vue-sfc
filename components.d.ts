@@ -23,6 +23,8 @@ declare module '@vue/runtime-core' {
     ElInput: typeof import('element-plus/es')['ElInput']
     ElTransfer: typeof import('element-plus/es')['ElTransfer']
     Father: typeof import('./src/components/test/father.vue')['default']
+    InfiniteScroll: typeof import('./src/components/infiniteScroll/infiniteScroll.vue')['default']
+    InfiniteScrollComponent: typeof import('./src/components/infiniteScroll/infinite-scroll-component.vue')['default']
     Modifier: typeof import('./src/components/modifier/Modifier.vue')['default']
     ModifierComponent: typeof import('./src/components/modifier/ModifierComponent.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
@@ -40,5 +42,8 @@ declare module '@vue/runtime-core' {
     TreeFather: typeof import('./src/components/treeComponent/treeFather.vue')['default']
     TreeOption: typeof import('./src/components/treeComponent/treeOption.vue')['default']
     WatchOption: typeof import('./src/components/watch/watch-option.vue')['default']
+  }
+  export interface ComponentCustomProperties {
+    vInfiniteScroll: typeof import('element-plus/es')['ElInfiniteScroll']
   }
 }
