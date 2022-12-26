@@ -247,7 +247,6 @@ const copyRightListAction = (source: transferProps[]) => {
 // 穿梭点击
 const transferSelect = (dir: string, _: transferProps) => {
   dir === "left" ? handlerTransfer(leftList, leftIndeterminate, leftCheck) : handlerTransfer(rightList, rightIndeterminate, rightCheck);
-  console.log(_)
 };
 // 清空搜索
 const clearQuery = (direction: direction) => {
