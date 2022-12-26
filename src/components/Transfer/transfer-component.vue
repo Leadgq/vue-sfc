@@ -235,9 +235,8 @@ const handlerEmit = (direction: string, needPush: number[], needRemove: number[]
     emit("update:value", emitArray.value);
   }
 }
-const recoveryState = (source: transferProps[]) => {
-  source.forEach((item) => copyLeftList.value.splice(item.direction!, 0, item));
-}
+// 左面拷贝数组回滚
+const recoveryState = (source: transferProps[]) =>  source.forEach((item) => copyLeftList.value.splice(item.direction!, 0, item));
 // 右面拷贝
 const copyRightListAction = (source: transferProps[]) => {
   //🔒住回显，第二次props中将会有值
