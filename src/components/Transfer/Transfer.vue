@@ -2,22 +2,39 @@
   <div class="transfer-container">
     <div class="w-[562px] h-[300px]">
       <!--   自己的穿梭框   -->
-      <TransferComponent :data="data" v-model:value="transferValue"  filterable  :button-texts="btnText" :titles="titles"/>
+      <TransferComponent :data="data" v-model:value="transferValue" filterable :button-texts="btnText" :titles="titles"
+                         ref="transferInstance">
+      </TransferComponent>
     </div>
-    <el-transfer v-model="value" :data="data" filterable/>
+    <el-transfer v-model="value" :data="data" filterable @left-check-change="leftCheck">
+
+      <template #right-footer>
+        <el-button @click="clear">清空</el-button>
+      </template>
+    </el-transfer>
+
   </div>
 </template>
 
 <script setup lang="ts">
 import TransferComponent from "@/components/Transfer/transfer-component.vue";
-import { transferProps } from "@/types/transferTypes";
+import {transferProps} from "@/types/transferTypes";
 
 let data = ref<transferProps[]>([]);
 let value = ref([]);
 let transferValue = ref<number[]>([]);
 // 自定义按钮
-const btnText = ['左','右']
-const titles = ['list1','list2'];
+const btnText = ['左', '右']
+const titles = ['list1', 'list2'];
+const transferInstance = ref<InstanceType<typeof TransferComponent> | null>(null)
+
+
+const clear = () => {
+  transferInstance.value.clearQuery('left');
+}
+const leftCheck = (key: number[], keys: number[]) => {
+  console.log(key, keys)
+}
 onMounted(async () => {
   data.value = await mockTransferPropsData();
 });
@@ -27,27 +44,27 @@ watch(() => value.value, (newValue) => {
 });
 watch(() => transferValue.value, (newValue) => {
   console.log(newValue);
-}, { deep: true });
+}, {deep: true});
 const mockTransferPropsData = (): Promise<transferProps[]> => {
   return new Promise((resolve) => {
     resolve(
-      [
-        {
-          key: 1,
-          disabled: false,
-          label: "大连"
-        },
-        {
-          key: 2,
-          disabled: true,
-          label: "沈阳"
-        },
-        {
-          key: 3,
-          disabled: false,
-          label: "吉林"
-        }
-      ]
+        [
+          {
+            key: 1,
+            disabled: false,
+            label: "大连"
+          },
+          {
+            key: 2,
+            disabled: true,
+            label: "沈阳"
+          },
+          {
+            key: 3,
+            disabled: false,
+            label: "吉林"
+          }
+        ]
     );
   });
 };

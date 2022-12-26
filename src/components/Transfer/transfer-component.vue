@@ -11,20 +11,21 @@
           <el-input :placeholder="placeholder" v-model="leftSearch" clearable @input="searchKeyWorld('left')"/>
         </div>
         <template v-if="leftList && leftList.length > 0">
-          <div v-for="transfer in leftList" :key="transfer.key">
-            <el-checkbox :label="transfer.label" size="large" :disabled="transfer.disabled" v-model="transfer.check"
-                         @change="transferSelect('left',transfer)"/>
+          <div class="overflow-auto flex-1">
+            <div v-for="transfer in leftList" :key="transfer.key">
+              <el-checkbox :label="transfer.label" size="large" :disabled="transfer.disabled" v-model="transfer.check"
+                           @change="transferSelect('left',transfer)"/>
+            </div>
           </div>
         </template>
         <template v-else>
-          <div class="text-sm text-[#999] text-center mt-3">无数据</div>
+          <div class="text-sm text-[#999] text-center mt-3 flex-1">无数据</div>
         </template>
       </div>
     </div>
     <div class="transfer-btn">
-      <el-button type="primary" :disabled="!isLeftAvailable" @click="toActionCommon('left')">{{
-          btnLeftText
-        }}
+      <el-button type="primary" :disabled="!isLeftAvailable" @click="toActionCommon('left')">
+        {{ btnLeftText }}
       </el-button>
       <el-button type="primary" class="ml-2" :disabled="!isRightAvailable" @click="toActionCommon('right')">
         {{ btnRightText }}
@@ -41,13 +42,15 @@
           <el-input :placeholder="placeholder" v-model="rightSearch" clearable @input="searchKeyWorld('right')"/>
         </div>
         <template v-if="rightList && rightList.length > 0">
-          <div v-for="transfer in rightList" :key="transfer.key">
-            <el-checkbox :label="transfer.label" size="large" :disabled="transfer.disabled" v-model="transfer.check"
-                         @change="transferSelect('right',transfer)"/>
+          <div class="flex-1 overflow-y-auto">
+            <div v-for="transfer in rightList" :key="transfer.key">
+              <el-checkbox :label="transfer.label" size="large" :disabled="transfer.disabled" v-model="transfer.check"
+                           @change="transferSelect('right',transfer)"/>
+            </div>
           </div>
         </template>
         <template v-else>
-          <div class="text-sm text-[#999] text-center mt-3">无数据</div>
+          <div class="text-sm text-[#999] text-center mt-3 flex-1">无数据</div>
         </template>
       </div>
     </div>
@@ -57,6 +60,12 @@
 import {transferProps} from "@/types/transferTypes";
 import {isAvailableArray} from "@/tools/lib";
 import {useTransfer} from "./hook";
+
+enum direction {
+  left = 'left',
+  right = 'right'
+}
+
 // 导出hooks
 const {
   handlerTransferInterlock,
@@ -238,13 +247,24 @@ const copyRightListAction = (source: transferProps[]) => {
 // 穿梭点击
 const transferSelect = (dir: string, _: transferProps) => {
   dir === "left" ? handlerTransfer(leftList, leftIndeterminate, leftCheck) : handlerTransfer(rightList, rightIndeterminate, rightCheck);
+  console.log(_)
 };
+// 清空搜索
+const clearQuery = (direction: direction) => {
+  if (!props.filterable) return;
+  if (direction === 'left') {
+    leftSearch.value = '';
+    searchKeyWorld(direction);
+  } else if (direction === 'right') {
+    rightSearch.value = ''
+    searchKeyWorld(direction);
+  }
+}
+defineExpose({
+  clearQuery
+})
 </script>
-<script lang="ts">
-export default {
-  name: "transfer-component"
-};
-</script>
+
 
 <style scoped lang="scss">
 .transfer-container-content {
@@ -264,7 +284,7 @@ export default {
     }
 
     .transfer-bottom {
-      @apply px-3 flex-1;
+      @apply px-3 flex-1 flex flex-col;
       &:deep(.el-checkbox.el-checkbox--large) {
         @apply h-[32px];
       }
