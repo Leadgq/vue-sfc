@@ -24,7 +24,6 @@ declare module '@vue/runtime-core' {
     ElTransfer: typeof import('element-plus/es')['ElTransfer']
     Father: typeof import('./src/components/test/father.vue')['default']
     InfiniteScroll: typeof import('./src/components/infiniteScroll/infiniteScroll.vue')['default']
-    InfiniteScrollComponent: typeof import('./src/components/infiniteScroll/infinite-scroll-component.vue')['default']
     Modifier: typeof import('./src/components/modifier/Modifier.vue')['default']
     ModifierComponent: typeof import('./src/components/modifier/ModifierComponent.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
