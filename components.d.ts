@@ -42,7 +42,4 @@ declare module '@vue/runtime-core' {
     TreeOption: typeof import('./src/components/treeComponent/treeOption.vue')['default']
     WatchOption: typeof import('./src/components/watch/watch-option.vue')['default']
   }
-  export interface ComponentCustomProperties {
-    vInfiniteScroll: typeof import('element-plus/es')['ElInfiniteScroll']
-  }
 }

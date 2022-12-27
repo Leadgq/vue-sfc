@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full h-full transfer-container-content">
-    <div class="transfer-left" key="left">
+  <div class="w-full h-full transfer-container-content" ref="transferContainer">
+    <div class="transfer-left" key="left" ref="transferLeft">
       <div class="transfer-top">
         <el-checkbox v-model="leftCheck" :label="leftListText" size="large" @change="modifyList('left')"
                      :indeterminate="leftIndeterminate" :disabled="isLeftAvailableAllCheck"/>
@@ -13,8 +13,10 @@
         <template v-if="leftList && leftList.length > 0">
           <div class="overflow-auto flex-1">
             <div v-for="transfer in leftList" :key="transfer.key">
-              <el-checkbox :label="transfer.label" size="large" :disabled="transfer.disabled" v-model="transfer.check"
-                           @change="transferSelect('left',transfer)"/>
+              <div :draggable="draggable" @dragstart="dragTransfer(transfer)" @dragend="dragTransferEnd($event)">
+                <el-checkbox :label="transfer.label" size="large" :disabled="transfer.disabled" v-model="transfer.check"
+                             @change="transferSelect('left',transfer)"/>
+              </div>
             </div>
           </div>
         </template>
@@ -23,7 +25,7 @@
         </template>
       </div>
     </div>
-    <div class="transfer-btn">
+    <div class="transfer-btn" ref="transferBtn">
       <el-button type="primary" :disabled="!isLeftAvailable" @click="toActionCommon('left')">
         {{ btnLeftText }}
       </el-button>
@@ -31,7 +33,7 @@
         {{ btnRightText }}
       </el-button>
     </div>
-    <div class="transfer-left" key="right">
+    <div class="transfer-left" key="right" ref="transferRight">
       <div class="transfer-top">
         <el-checkbox v-model="rightCheck" :label="rightListText" size="large" :indeterminate="rightIndeterminate"
                      @change="modifyList('right')" :disabled="isRightAvailableAllCheck"/>
@@ -44,8 +46,10 @@
         <template v-if="rightList && rightList.length > 0">
           <div class="flex-1 overflow-y-auto">
             <div v-for="transfer in rightList" :key="transfer.key">
-              <el-checkbox :label="transfer.label" size="large" :disabled="transfer.disabled" v-model="transfer.check"
-                           @change="transferSelect('right',transfer)"/>
+              <div :draggable="draggable" @dragstart="dragTransfer(transfer)" @dragend="dragTransferRightEnd($event)">
+                <el-checkbox :label="transfer.label" size="large" :disabled="transfer.disabled" v-model="transfer.check"
+                             @change="transferSelect('right',transfer)"/>
+              </div>
             </div>
           </div>
         </template>
@@ -59,7 +63,7 @@
 <script setup lang="ts">
 import {transferProps} from "@/types/transferTypes";
 import {isAvailableArray} from "@/tools/lib";
-import {useTransfer} from "./hook";
+import {useDrag, useTransfer} from "./hook";
 
 enum direction {
   left = 'left',
@@ -74,17 +78,31 @@ const {
   handlerTransfer,
   handlerCopyList,
   initClock,
-  handlerTransferFilter
+  handlerTransferFilter,
 } = useTransfer();
 
-const props = defineProps<{
+const {
+  onActiveTransfer,
+  transferRight,
+  transferLeft,
+  maxRightRange,
+  minRightRange,
+  maxLeftRange,
+  minLeftRange
+} = useDrag()
+
+type propsType = {
   data: transferProps[],
   value: number[],
   filterable?: boolean,
   filterPlaceholder?: string
   buttonTexts?: string[]
-  titles?: string[]
-}>();
+  titles?: string[],
+  draggable?: boolean
+}
+
+const props = withDefaults(defineProps<propsType>(), {draggable: false});
+
 const emit = defineEmits<{
   (e: "update:value", arr: number[]): void;
 }>();
@@ -163,6 +181,22 @@ const stopBtnInit = watchEffect(() => {
     stopBtnInit();
   }
 }, {flush: 'post'})
+// 拖拽相关
+const dragTransfer = (transfer: transferProps) => onActiveTransfer.value = transfer;
+// 向右拽
+const dragTransferEnd = (event: DragEvent) => {
+  if (event.x <= maxRightRange.value && event.x >= minRightRange.value) dragTransferAction('right');
+}
+// 向左拽
+const dragTransferRightEnd = (event: DragEvent) => {
+  if (event.x <= maxLeftRange.value && event.x >= minLeftRange.value) dragTransferAction('left');
+}
+const dragTransferAction = (direction: string) => {
+  if (onActiveTransfer.value?.disabled) return;
+  onActiveTransfer.value!.check = true;
+  toActionCommon(direction);
+  onActiveTransfer.value = undefined;
+}
 // 列表文案
 const stopTitle = watchEffect(() => {
   if (props.titles && isAvailableArray(props.titles)) {
@@ -236,7 +270,7 @@ const handlerEmit = (direction: string, needPush: number[], needRemove: number[]
   }
 }
 // 左面拷贝数组回滚
-const recoveryState = (source: transferProps[]) =>  source.forEach((item) => copyLeftList.value.splice(item.direction!, 0, item));
+const recoveryState = (source: transferProps[]) => source.forEach((item) => copyLeftList.value.splice(item.direction!, 0, item));
 // 右面拷贝
 const copyRightListAction = (source: transferProps[]) => {
   //🔒住回显，第二次props中将会有值

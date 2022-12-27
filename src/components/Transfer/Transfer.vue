@@ -2,7 +2,7 @@
   <div class="transfer-container">
     <div class="w-[562px] h-[300px]">
       <!--   自己的穿梭框   -->
-      <TransferComponent :data="data" v-model:value="transferValue" filterable :button-texts="btnText" :titles="titles"
+      <TransferComponent :data="data" v-model:value="transferValue" filterable  :titles="titles"
                          ref="transferInstance">
       </TransferComponent>
     </div>
