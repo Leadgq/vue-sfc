@@ -73,7 +73,6 @@ enum direction {
 // 导出hooks
 const {
   handlerTransferInterlock,
-  calculateCount,
   handlerCommonAction,
   handlerTransfer,
   handlerCopyList,
