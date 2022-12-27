@@ -138,6 +138,7 @@ export const useDrag = () => {
 }
 
 export const useVariable = () => {
+    const {calculateCount} = useTransfer()
     // 左面列表
     let leftList = ref<transferProps[]>([]);
     // 左面是否被选
@@ -173,6 +174,10 @@ export const useVariable = () => {
     const isRightAvailable = computed(() => isAvailableArray(leftList) && leftList.value.some((item) => item.check));
     // 可向左
     const isLeftAvailable = computed(() => isAvailableArray(rightList) && rightList.value.some(item => item.check));
+    // 左面个数
+    const leftCount = computed(() => calculateCount(leftList));
+    // 右面个数
+    const rightCount = computed(() => calculateCount(rightList));
     return {
         leftList,
         leftCheck,
@@ -193,6 +198,8 @@ export const useVariable = () => {
         isLeftAvailableAllCheck,
         isRightAvailableAllCheck,
         isRightAvailable,
-        isLeftAvailable
+        isLeftAvailable,
+        leftCount,
+        rightCount
     }
 }

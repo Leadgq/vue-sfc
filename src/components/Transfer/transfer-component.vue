@@ -111,7 +111,9 @@ const {
   isLeftAvailableAllCheck,
   isRightAvailableAllCheck,
   isRightAvailable,
-  isLeftAvailable
+  isLeftAvailable,
+  leftCount,
+  rightCount
 } = useVariable();
 
 type propsType = {
@@ -213,10 +215,6 @@ const searchKeyWorld = (direction: string) => {
     handlerTransferFilter(rightList, copyRightList, rightSearch, rightIndeterminate, rightCheck);
   }
 }
-// 左面个数
-const leftCount = computed(() => calculateCount(leftList));
-// 右面个数
-const rightCount = computed(() => calculateCount(rightList));
 // 方向处理
 const toActionCommon = (direction: string) => {
   let needPush: number[] = [], needRemove: number[] = [];
