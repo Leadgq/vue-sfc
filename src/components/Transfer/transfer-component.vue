@@ -63,7 +63,7 @@
 <script setup lang="ts">
 import {transferProps} from "@/types/transferTypes";
 import {isAvailableArray} from "@/tools/lib";
-import {useDrag, useTransfer} from "./hook";
+import {useDrag, useTransfer, useVariable} from "./hook";
 
 enum direction {
   left = 'left',
@@ -91,6 +91,29 @@ const {
   minLeftRange
 } = useDrag()
 
+const {
+  leftList,
+  leftCheck,
+  leftIndeterminate,
+  rightList,
+  rightCheck,
+  rightIndeterminate,
+  leftSearch,
+  rightSearch,
+  copyLeftList,
+  copyRightList,
+  emitArray,
+  isClock,
+  btnLeftText,
+  btnRightText,
+  leftListText,
+  rightListText,
+  isLeftAvailableAllCheck,
+  isRightAvailableAllCheck,
+  isRightAvailable,
+  isLeftAvailable
+} = useVariable();
+
 type propsType = {
   data: transferProps[],
   value: number[],
@@ -106,33 +129,6 @@ const props = withDefaults(defineProps<propsType>(), {draggable: false});
 const emit = defineEmits<{
   (e: "update:value", arr: number[]): void;
 }>();
-// 左面列表
-let leftList = ref<transferProps[]>([]);
-// 左面是否被选
-let leftCheck = ref(false);
-// 左面半选
-let leftIndeterminate = ref(false);
-// 右面列表
-let rightList = ref<transferProps[]>([]);
-// 右面
-let rightCheck = ref(false);
-// 右半选
-let rightIndeterminate = ref(false);
-// 搜索左面
-let leftSearch = ref('');
-// 搜索右面
-let rightSearch = ref('');
-// 左面copy
-let copyLeftList = ref<transferProps[]>([]);
-let copyRightList = ref<transferProps[]>([]);
-let emitArray = ref<number[]>([]);
-// 锁住回显
-let isClock = ref(false);
-// 文案
-let btnLeftText = ref('←');
-let btnRightText = ref('→');
-let leftListText = ref('列表1');
-let rightListText = ref('列表2');
 
 let placeholder = computed(() => props.filterPlaceholder ? props.filterPlaceholder : '请输入搜索内容')
 // 格式化数据
@@ -181,6 +177,15 @@ const stopBtnInit = watchEffect(() => {
     stopBtnInit();
   }
 }, {flush: 'post'})
+// 列表文案
+const stopTitle = watchEffect(() => {
+  if (props.titles && isAvailableArray(props.titles)) {
+    const [leftTitleText, rightTitleText] = props.titles;
+    if (leftTitleText) leftListText.value = leftTitleText;
+    if (rightTitleText) rightListText.value = rightTitleText;
+    stopTitle();
+  }
+}, {flush: 'post'})
 // 拖拽相关
 const dragTransfer = (transfer: transferProps) => onActiveTransfer.value = transfer;
 // 向右拽
@@ -197,15 +202,6 @@ const dragTransferAction = (direction: string) => {
   toActionCommon(direction);
   onActiveTransfer.value = undefined;
 }
-// 列表文案
-const stopTitle = watchEffect(() => {
-  if (props.titles && isAvailableArray(props.titles)) {
-    const [leftTitleText, rightTitleText] = props.titles;
-    if (leftTitleText) leftListText.value = leftTitleText;
-    if (rightTitleText) rightListText.value = rightTitleText;
-    stopTitle();
-  }
-}, {flush: 'post'})
 // 联动
 const modifyList = (dir: string) => {
   dir === "left" ? handlerTransferInterlock(leftList, leftIndeterminate, leftCheck) : handlerTransferInterlock(rightList, rightIndeterminate, rightCheck);
@@ -217,14 +213,6 @@ const searchKeyWorld = (direction: string) => {
     handlerTransferFilter(rightList, copyRightList, rightSearch, rightIndeterminate, rightCheck);
   }
 }
-// 左全选
-const isLeftAvailableAllCheck = computed(() => !isAvailableArray(leftList) || leftList.value.filter(item => !item.disabled).length === 0);
-// 右全选
-const isRightAvailableAllCheck = computed(() => !isAvailableArray(rightList) || rightList.value.filter(item => !item.disabled).length === 0);
-// 可向右
-const isRightAvailable = computed(() => isAvailableArray(leftList) && leftList.value.some((item) => item.check));
-// 可向左
-const isLeftAvailable = computed(() => isAvailableArray(rightList) && rightList.value.some(item => item.check));
 // 左面个数
 const leftCount = computed(() => calculateCount(leftList));
 // 右面个数
