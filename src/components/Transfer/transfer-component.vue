@@ -161,13 +161,14 @@ const stopLeftCheckDefault = watchEffect(() => {
     stopLeftCheckDefault();
   }
 }, {flush: 'post'})
-watchEffect(() => {
+ const stopRightCheckDefault =  watchEffect(() => {
   if (props.rightDefaultCheck && isAvailableArray(rightList)) {
     props.rightDefaultCheck.forEach((item) => {
       let result = rightList.value.find((source) => source.key === item);
       if (result) result.check = true;
     })
     handlerTransfer(rightList, rightIndeterminate, rightCheck);
+    stopRightCheckDefault()
   }
 }, {flush: 'post'})
 // copy左面数组
