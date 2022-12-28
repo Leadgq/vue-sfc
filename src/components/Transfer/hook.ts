@@ -63,7 +63,10 @@ export const useTransfer = () => {
         check: Ref<boolean>) => {
 
         if (!search.value) {
-            source.value = copyTarget.value
+            copyTarget.value.forEach((item) => {
+                let result = source.value.find((source) => source.key === item.key);
+                if (!result) source.value.splice(item.direction!, 0, item)
+            })
         } else {
             initClock.value = true;
             source.value = copyTarget.value.filter((item) => item.label.includes(search.value));
