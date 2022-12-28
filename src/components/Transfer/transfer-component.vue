@@ -112,7 +112,7 @@ const {
   isRightAvailable,
   isLeftAvailable,
   leftCount,
-  rightCount
+  rightCount,
 } = useVariable();
 
 type propsType = {
@@ -123,6 +123,8 @@ type propsType = {
   buttonTexts?: string[]
   titles?: string[],
   draggable?: boolean
+  leftDefaultCheck?: number[],
+  rightDefaultCheck?: number[]
 }
 
 const props = withDefaults(defineProps<propsType>(), {draggable: false});
@@ -148,6 +150,26 @@ const stopInit = watchEffect(() => {
     });
   }
 }, {flush: "post"});
+// 左面默认选中
+const stopLeftCheckDefault = watchEffect(() => {
+  if (props.leftDefaultCheck && isAvailableArray(leftList)) {
+    props.leftDefaultCheck.forEach((item) => {
+      let result = leftList.value.find((source) => source.key === item);
+      if (result) result.check = true;
+    })
+    handlerTransfer(leftList, leftIndeterminate, leftCheck);
+    stopLeftCheckDefault();
+  }
+}, {flush: 'post'})
+watchEffect(() => {
+  if (props.rightDefaultCheck && isAvailableArray(rightList)) {
+    props.rightDefaultCheck.forEach((item) => {
+      let result = rightList.value.find((source) => source.key === item);
+      if (result) result.check = true;
+    })
+    handlerTransfer(rightList, rightIndeterminate, rightCheck);
+  }
+}, {flush: 'post'})
 // copy左面数组
 const stopCopy = watchEffect(() => {
   if (isAvailableArray(copyLeftList)) {

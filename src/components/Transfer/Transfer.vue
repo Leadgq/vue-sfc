@@ -3,7 +3,7 @@
     <div class="w-[562px] h-[300px]">
       <!--   自己的穿梭框   -->
       <TransferComponent :data="data" v-model:value="transferValue" filterable :titles="titles"
-                         ref="transferInstance">
+                         ref="transferInstance" :left-default-check="[1,3]" :right-default-check="[3]">
       </TransferComponent>
     </div>
     <el-transfer v-model="value" :data="data" filterable @left-check-change="leftCheck">
