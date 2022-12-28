@@ -75,7 +75,7 @@ const {
   handlerTransferInterlock,
   handlerCommonAction,
   handlerTransfer,
-  handlerCopyList,
+  removeCopyListValue,
   initClock,
   handlerTransferFilter,
 } = useTransfer();
@@ -225,13 +225,13 @@ const toActionCommon = (direction: string) => {
       // 右面数组copy开始
       copyRightListAction(source);
       // 不论想左还是向右、都要移除copy数组中的值、否则当搜索框为空的时候、状态将会回退
-      handlerCopyList(direction, copyLeftList, needPush);
+      removeCopyListValue(direction, copyLeftList, needPush);
     }
   } else {
     const {sourceKey, source} = handlerCommonAction(direction, rightList, leftList, rightIndeterminate, rightCheck);
     needRemove = sourceKey;
     if (props.filterable) {
-      handlerCopyList(direction, copyRightList, needRemove);
+      removeCopyListValue(direction, copyRightList, needRemove);
       // 由于右面是往里面放的、所以不需要恢复状态
       recoveryState(source);
     }

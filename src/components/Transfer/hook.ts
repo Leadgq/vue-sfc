@@ -47,7 +47,7 @@ export const useTransfer = () => {
         }
     };
     // 删除已经移动的值===> copy数组
-    const handlerCopyList = (direction: string, copyList: Ref<transferProps[]>, keys: number[]) => {
+    const removeCopyListValue = (direction: string, copyList: Ref<transferProps[]>, keys: number[]) => {
         keys.forEach((key) => {
             const index = copyList.value.findIndex((item) => item.key === key);
             if (index !== -1) copyList.value.splice(index, 1);
@@ -119,7 +119,7 @@ export const useTransfer = () => {
         calculateCount,
         handlerCommonAction,
         handlerTransfer,
-        handlerCopyList,
+        removeCopyListValue,
         initClock,
         handlerTransferFilter
     };
