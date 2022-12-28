@@ -64,8 +64,23 @@ export const useTransfer = () => {
 
         if (!search.value) {
             copyTarget.value.forEach((item) => {
-                let result = source.value.find((source) => source.key === item.key);
-                if (!result) source.value.splice(item.direction!, 0, item)
+                let index = source.value.findIndex((source) => source.key === item.key);
+                // 正常替换
+                if (index === -1) {
+                    source.value.splice(item.direction!, 0, item)
+                } else {
+                    // 如果原数组种存在、先移除
+                    source.value.splice(index, 1);
+                    // 位置
+                    const direction = item.direction;
+                    // 头部
+                    if (direction === 0) {
+                        source.value.unshift(item)
+                    } else {
+                        // 替换
+                        source.value.splice(item.direction!, 0, item)
+                    }
+                }
             })
         } else {
             initClock.value = true;

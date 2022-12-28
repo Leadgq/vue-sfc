@@ -2,7 +2,7 @@
   <div class="transfer-container">
     <div class="w-[562px] h-[300px]">
       <!--   自己的穿梭框   -->
-      <TransferComponent :data="data" v-model:value="transferValue" filterable  :titles="titles"
+      <TransferComponent :data="data" v-model:value="transferValue" filterable :titles="titles"
                          ref="transferInstance">
       </TransferComponent>
     </div>
@@ -33,7 +33,7 @@ const clear = () => {
   transferInstance.value.clearQuery('left');
 }
 const leftCheck = (key: number[], keys: number[]) => {
-  console.log(key, keys)
+  // console.log(key, keys)
 }
 onMounted(async () => {
   data.value = await mockTransferPropsData();
@@ -42,8 +42,8 @@ onMounted(async () => {
 watch(() => value.value, (newValue) => {
   console.log(newValue);
 });
-watch(() => transferValue.value, (newValue) => {
-  console.log(newValue);
+watch(() => transferValue.value, (_) => {
+  // console.log(newValue);
 }, {deep: true});
 const mockTransferPropsData = (): Promise<transferProps[]> => {
   return new Promise((resolve) => {
@@ -65,9 +65,14 @@ const mockTransferPropsData = (): Promise<transferProps[]> => {
             label: "吉林"
           },
           {
-            key:4,
-            disabled:false,
-            label:'大悲想'
+            key: 5,
+            disabled: false,
+            label: "吉南区"
+          },
+          {
+            key: 4,
+            disabled: false,
+            label: '大理'
           }
         ]
     );
