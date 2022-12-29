@@ -3,10 +3,10 @@
     <div class="w-[562px] h-[300px]">
       <!--   自己的穿梭框   -->
       <TransferComponent :data="data" v-model:value="transferValue" filterable :titles="titles"
-                         ref="transferInstance" :left-default-check="[1,3]" :right-default-check="[3]">
+                         ref="transferInstance" :left-default-check="[1,3]" :right-default-check="[3]" @leftChangeCheck="check" @rightChangeCheck="check">
       </TransferComponent>
     </div>
-    <el-transfer v-model="value" :data="data" filterable @left-check-change="leftCheck">
+    <el-transfer v-model="value" :data="data" filterable @left-check-change="leftCheck" :left-default-checked="[1,3]">
 
       <template #right-footer>
         <el-button @click="clear">清空</el-button>
@@ -33,7 +33,11 @@ const clear = () => {
   transferInstance.value.clearQuery('left');
 }
 const leftCheck = (key: number[], keys: number[]) => {
-  // console.log(key, keys)
+  console.log(key, keys)
+}
+
+const  check = (key:number[])=>{
+  console.log(key)
 }
 onMounted(async () => {
   data.value = await mockTransferPropsData();

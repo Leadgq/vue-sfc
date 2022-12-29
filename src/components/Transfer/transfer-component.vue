@@ -64,6 +64,7 @@
 import {transferProps} from "@/types/transferTypes";
 import {isAvailableArray} from "@/tools/lib";
 import {useDrag, useTransfer, useVariable} from "./hook";
+import {Ref} from "vue";
 
 enum direction {
   left = 'left',
@@ -131,6 +132,8 @@ const props = withDefaults(defineProps<propsType>(), {draggable: false});
 
 const emit = defineEmits<{
   (e: "update:value", arr: number[]): void;
+  (e: "leftChangeCheck", data: number[]): void;
+  (e: "rightChangeCheck", data: number[]): void;
 }>();
 
 let placeholder = computed(() => props.filterPlaceholder ? props.filterPlaceholder : '请输入搜索内容')
@@ -155,7 +158,7 @@ const stopLeftCheckDefault = watchEffect(() => {
   if (props.leftDefaultCheck && isAvailableArray(leftList)) {
     props.leftDefaultCheck.forEach((item) => {
       let result = leftList.value.find((source) => source.key === item);
-      if (result) result.check = true;
+      if (result && !result.disabled) result.check = true;
     })
     handlerTransfer(leftList, leftIndeterminate, leftCheck);
     stopLeftCheckDefault();
@@ -165,7 +168,7 @@ const stopLeftCheckDefault = watchEffect(() => {
   if (props.rightDefaultCheck && isAvailableArray(rightList)) {
     props.rightDefaultCheck.forEach((item) => {
       let result = rightList.value.find((source) => source.key === item);
-      if (result) result.check = true;
+      if (result && !result.disabled) result.check = true;
     })
     handlerTransfer(rightList, rightIndeterminate, rightCheck);
     stopRightCheckDefault()
@@ -285,8 +288,17 @@ const copyRightListAction = (source: transferProps[]) => {
   isClock.value = true;
   copyRightList.value.push(...source);
 }
+const handlerLeftCheckEmit = (list: Ref<transferProps[]>, dir: string) => {
+  const emitList = list.value.filter(item => item.check).map(item => item.key);
+  if (dir === 'left') {
+    emit('leftChangeCheck', emitList);
+  } else {
+    emit('rightChangeCheck', emitList);
+  }
+}
 // 穿梭点击
 const transferSelect = (dir: string, _: transferProps) => {
+  dir === 'left' ? handlerLeftCheckEmit(leftList,dir) : handlerLeftCheckEmit(rightList,dir);
   dir === "left" ? handlerTransfer(leftList, leftIndeterminate, leftCheck) : handlerTransfer(rightList, rightIndeterminate, rightCheck);
 };
 // 清空搜索
