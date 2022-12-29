@@ -80,7 +80,10 @@ const handlerAllChildrenNode = (item: TreeData) => {
   // 当前节点下所有子节点
   const children = findTreeChildrenNode(treeData.value, item.key, true);
   // 修改子节点的状态，父节点为true 所有为true,反之亦然
-  children.forEach(tree => tree.check = item.check);
+  children.forEach(tree => {
+    tree.indeterminate = false;
+    tree.check = item.check
+  });
 };
 // 子节点决定父节点状态
 const handlerParentTreeNodeState = (item: TreeData) => {
