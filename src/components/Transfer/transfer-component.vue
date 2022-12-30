@@ -66,11 +66,6 @@ import {isAvailableArray} from "@/tools/lib";
 import {useDrag, useTransfer, useVariable} from "./hook";
 import {Ref} from "vue";
 
-enum direction {
-  left = 'left',
-  right = 'right'
-}
-
 // 导出hooks
 const {
   handlerTransferInterlock,
@@ -302,7 +297,7 @@ const transferSelect = (dir: string, _: transferProps) => {
   dir === "left" ? handlerTransfer(leftList, leftIndeterminate, leftCheck) : handlerTransfer(rightList, rightIndeterminate, rightCheck);
 };
 // 清空搜索
-const clearQuery = (direction: direction) => {
+const clearQuery = (direction: string) => {
   if (!props.filterable) return;
   if (direction === 'left') {
     leftSearch.value = '';

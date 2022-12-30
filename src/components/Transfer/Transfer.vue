@@ -22,7 +22,7 @@ import {transferProps} from "@/types/transferTypes";
 
 let data = ref<transferProps[]>([]);
 let value = ref([]);
-let transferValue = ref<number[]>([]);
+let transferValue = ref<number[]>([1,3]);
 // 自定义按钮
 const btnText = ['左', '右']
 const titles = ['list1', 'list2'];
@@ -30,7 +30,7 @@ const transferInstance = ref<InstanceType<typeof TransferComponent> | null>(null
 
 
 const clear = () => {
-  transferInstance.value.clearQuery('left');
+  transferInstance.value!.clearQuery('left');
 }
 const leftCheck = (key: number[], keys: number[]) => {
   console.log(key, keys)
@@ -47,7 +47,7 @@ watch(() => value.value, (newValue) => {
   console.log(newValue);
 });
 watch(() => transferValue.value, (_) => {
-  // console.log(newValue);
+  console.log(_);
 }, {deep: true});
 const mockTransferPropsData = (): Promise<transferProps[]> => {
   return new Promise((resolve) => {
