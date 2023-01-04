@@ -19,7 +19,7 @@ export const isFunction = (fn: Function) => typeof fn === 'function';
 // 是否是一个Promise
 export const isPromiseFunction = (fn: Promise<Function>) => isObject(fn) && isFunction(fn.then) && isFunction(fn.catch);
 // 是否是一个可用的手机号
-export const isAvailablePhone = (phone: string | Ref<string>) => /^1[3,4,5,6,7,8,9][0-9]{9}$/.test(unref(phone))
+export const isAvailablePhone = (phone: string | Ref<string>) => /^1[3-9]\d{9}$/.test(unref(phone))
 // 是否是一个可用的邮箱
 export const isAvailableEmail = (email: string | Ref<string>) => /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(unref(email))
 // 是否是一个可用的身份证号码
