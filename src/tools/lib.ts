@@ -1,5 +1,5 @@
 import fileSaver from "file-saver";
-import { Ref } from "vue";
+import {Ref} from "vue";
 // 千分符
 export const toThousands = (num: number | string | Ref<string | number>) => typeof unref(num) === 'string' ? Number(unref(num)).toLocaleString() : unref(num).toLocaleString();
 // 下载文件
@@ -11,7 +11,7 @@ export const isObject = (obj: Record<string, any> | Ref<Record<string, any>>) =>
 // 是否是一个可用数组
 export const isAvailableArray = (arr: any[] | Ref<any[]>) => isArray(arr) && Array.isArray(unref(arr)) && unref(arr).length > 0;
 // 是否是一个可用对象
-export const isAvailableObject = (obj: Record<string, any> | Ref<Record<string, any>>) => isObject(obj) && Reflect.ownKeys(unref(obj)).length !== 0 ;
+export const isAvailableObject = (obj: Record<string, any> | Ref<Record<string, any>>) => isObject(obj) && Reflect.ownKeys(unref(obj)).length !== 0;
 // 对象中所有项是否都有值
 export const isAvailableObjectValue = (obj: Record<string, any> | Ref<Record<string, any>>) => isAvailableObject(obj) && Object.values(unref(obj)).every(item => item && item !== 0);
 // 是否是一个函数
@@ -50,7 +50,8 @@ export const randomIncludeMax = (min: number, max: number) => Math.floor(Math.ra
 // 手机号中间四位变成*
 export const telFormat = (tel: string | number | Ref<string | number>) => {
     let telPhone = String(unref(tel));
-    return telPhone.substring(0, 3) + "****" + telPhone.substring(7);
+    let reg = /(?<=\d{4})(.+)(?=\d{3})/gi;
+    return telPhone.replace(reg,()=> "*".repeat(4));
 };
 // 处理大文件
 export const handlerMoreData = async () => {
@@ -88,6 +89,7 @@ const initWebWorker = (): Promise<Worker> => {
 interface job {
     id?: number
 }
+
 // 二分
 const findInsertionIndex = (id: number, queue: job[]) => {
     let start = 0
