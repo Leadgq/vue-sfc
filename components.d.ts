@@ -21,7 +21,6 @@ declare module '@vue/runtime-core' {
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElInput: typeof import('element-plus/es')['ElInput']
-    ElTransfer: typeof import('element-plus/es')['ElTransfer']
     Father: typeof import('./src/components/test/father.vue')['default']
     InfiniteScroll: typeof import('./src/components/infiniteScroll/infiniteScroll.vue')['default']
     Modifier: typeof import('./src/components/modifier/Modifier.vue')['default']

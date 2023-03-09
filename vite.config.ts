@@ -27,7 +27,8 @@ export default defineConfig(({command, mode}) => {
                 imports: ['vue', 'vue-router', '@vueuse/core', {
                     '@vueuse/math': ['useSum']
                 }],
-                dts: "src/auto-import.d.ts"
+                dts: "src/auto-import.d.ts",
+                dirs:['./src/tools']
             }),
             Components({
                 dirs: ['src/components'],
