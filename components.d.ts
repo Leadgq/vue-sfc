@@ -25,6 +25,8 @@ declare module '@vue/runtime-core' {
     InfiniteScroll: typeof import('./src/components/infiniteScroll/infiniteScroll.vue')['default']
     Modifier: typeof import('./src/components/modifier/Modifier.vue')['default']
     ModifierComponent: typeof import('./src/components/modifier/ModifierComponent.vue')['default']
+    MyInput: typeof import('./src/components/packaging/my-input.vue')['default']
+    PackagingEle: typeof import('./src/components/packaging/packaging-ele.vue')['default']
     RefComponent: typeof import('./src/components/refAndReactive/ref-component.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

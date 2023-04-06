@@ -7,7 +7,7 @@
 const route = useRoute();
 const name = route.query.componentName! as string;
 
-let componentName: any | undefined ;
+let componentName: any | undefined;
 const getComponent = async () => await handlerPath(name);
 // 处理路径
 const handlerPath = async (routeComponentName: string) => {
@@ -32,6 +32,4 @@ export default {
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
