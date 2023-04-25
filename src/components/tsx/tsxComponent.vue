@@ -1,10 +1,10 @@
 <template>
     <div class="w-full h-full">
-        <TsxComponent>
-            <template #header>我是头部</template>
-            <template #footer>
-                <div>hi</div>
+        <TsxComponent :width="'300px'" :height="'200px'" :title="'测试'" :show-icon="true">
+            <template #center>
+                <div v-for="item in 15" :key="item">{{item}}</div>
             </template>
+            <template #footer>底部</template>
         </TsxComponent>
     </div>
 </template>

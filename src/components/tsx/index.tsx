@@ -4,40 +4,44 @@ export default defineComponent({
             type: String,
             required: false
         },
-        showLabel: {
+        width: {
+            type: String,
+            required: true,
+        },
+        height: {
+            type: String,
+            required: true,
+        },
+        showIcon: {
             type: Boolean,
             required: false,
         }
     },
     name: "tsx-component",
     setup(props, {emit, slots}) {
-        const renderLabel = () => {
-            return (
-                props.showLabel && <span>123466</span>
-            )
-        }
-        const renderHeader = () => {
-            const header = slots.header && slots.header()
-            return (
-                <div>
-                    {header}
-                </div>
-            )
-        }
         const renderFooter = () => {
             const footer = slots.footer && slots.footer()
+            return <div>{footer}</div>
+        }
+        const renderHeader = () => {
             return (
-                <div>
-                    {footer}
+                <div class="flex justify-between items-center">
+                    <div>{props.title}</div>
+                    {props.showIcon && <div>icon</div>}
                 </div>
             )
         }
+        const renderCenter = () => {
+            const center = slots.center && slots.center()
+            return <div class="flex-1  overflow-auto">{center}</div>
+        }
         return () => {
-            return <div>
-                <span>{props.title}</span>
-                {renderLabel()}
-                {renderHeader()}
-                {renderFooter()}
+            return <div style={`width:${props.width};height:${props.height}`}>
+                <div class='w-full h-full flex flex-col'>
+                    {renderHeader()}
+                    {renderCenter()}
+                    {renderFooter()}
+                </div>
             </div>;
         };
     },
