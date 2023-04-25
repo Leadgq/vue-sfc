@@ -1,6 +1,11 @@
 <template>
     <div class="w-full h-full">
-        <TsxComponent :title="'你'" />
+        <TsxComponent>
+            <template #header>我是头部</template>
+            <template #footer>
+                <div>hi</div>
+            </template>
+        </TsxComponent>
     </div>
 </template>
 
