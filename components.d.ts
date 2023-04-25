@@ -42,6 +42,7 @@ declare module '@vue/runtime-core' {
     TreeComponentTest: typeof import('./src/components/treeComponent/treeComponentTest.vue')['default']
     TreeFather: typeof import('./src/components/treeComponent/treeFather.vue')['default']
     TreeOption: typeof import('./src/components/treeComponent/treeOption.vue')['default']
+    TsxComponent: typeof import('./src/components/tsx/tsxComponent.vue')['default']
     WatchOption: typeof import('./src/components/watch/watch-option.vue')['default']
   }
 }

@@ -4,6 +4,7 @@ import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { AntDesignVueResolver, ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import { viteMockServe } from "vite-plugin-mock";
+import vueJsx from "@vitejs/plugin-vue-jsx";
 import path from "path";
 
 export default defineConfig(({command, mode}) => {
@@ -13,6 +14,7 @@ export default defineConfig(({command, mode}) => {
             vue({
                 reactivityTransform: true
             }),
+            vueJsx(),
             // 生成开启mock，可通过prodEnabled控制
             viteMockServe({
                 mockPath: './src/mock',
