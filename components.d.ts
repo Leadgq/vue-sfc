@@ -23,6 +23,7 @@ declare module '@vue/runtime-core' {
     ElInput: typeof import('element-plus/es')['ElInput']
     Father: typeof import('./src/components/test/father.vue')['default']
     InfiniteScroll: typeof import('./src/components/infiniteScroll/infiniteScroll.vue')['default']
+    Lazy: typeof import('./src/components/lazy/lazy.vue')['default']
     Modifier: typeof import('./src/components/modifier/Modifier.vue')['default']
     ModifierComponent: typeof import('./src/components/modifier/ModifierComponent.vue')['default']
     MyInput: typeof import('./src/components/packaging/my-input.vue')['default']
