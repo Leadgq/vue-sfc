@@ -5,7 +5,13 @@
 </template>
 
 <script setup lang="ts">
-let imageList = ref<any[]>([]);
-const globImage = import.meta.glob("../../assets/image/girls/*.jpeg", { eager: true });
-imageList.value = Object.values(globImage).map((item: any) => item.default);
+type imageDefault = {
+  default: string;
+};
+let imageList = ref<string[]>([]);
+const globImage: Record<
+  string,
+  imageDefault
+> = import.meta.glob("../../assets/image/girls/*.jpeg", { eager: true });
+imageList.value = Object.values(globImage).map((item) => item.default);
 </script>
