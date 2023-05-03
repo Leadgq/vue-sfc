@@ -6,5 +6,4 @@ declare module '*.vue' {
   export default component
 }
 
-
 declare const  AMap: any;

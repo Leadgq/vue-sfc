@@ -24,6 +24,7 @@ declare module '@vue/runtime-core' {
     Father: typeof import('./src/components/test/father.vue')['default']
     InfiniteScroll: typeof import('./src/components/infiniteScroll/infiniteScroll.vue')['default']
     Lazy: typeof import('./src/components/lazy/lazy.vue')['default']
+    Loading: typeof import('./src/components/loading/loading.vue')['default']
     Modifier: typeof import('./src/components/modifier/Modifier.vue')['default']
     ModifierComponent: typeof import('./src/components/modifier/ModifierComponent.vue')['default']
     MyInput: typeof import('./src/components/packaging/my-input.vue')['default']
