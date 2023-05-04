@@ -12,6 +12,7 @@ declare module '@vue/runtime-core' {
     AMap: typeof import('./src/components/map/aMap.vue')['default']
     AsyncChildren: typeof import('./src/components/asyncChildren.vue')['default']
     AsyncChildren2: typeof import('./src/components/asyncChildren2.vue')['default']
+    Container: typeof import('./src/components/watermark/container.vue')['default']
     Dynamic: typeof import('./src/components/slot/dynamic.vue')['default']
     Editor: typeof import('./src/components/editor/editor.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -46,5 +47,6 @@ declare module '@vue/runtime-core' {
     TreeOption: typeof import('./src/components/treeComponent/treeOption.vue')['default']
     TsxComponent: typeof import('./src/components/tsx/tsxComponent.vue')['default']
     WatchOption: typeof import('./src/components/watch/watch-option.vue')['default']
+    Watermark: typeof import('./src/components/watermark/watermark.vue')['default']
   }
 }
