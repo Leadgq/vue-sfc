@@ -31,6 +31,8 @@ declare module '@vue/runtime-core' {
     MyInput: typeof import('./src/components/packaging/my-input.vue')['default']
     PackagingEle: typeof import('./src/components/packaging/packaging-ele.vue')['default']
     RefComponent: typeof import('./src/components/refAndReactive/ref-component.vue')['default']
+    Responsive: typeof import('./src/components/responsive/responsive.vue')['default']
+    ResponsiveOption: typeof import('./src/components/responsive/responsive-option.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Slot: typeof import('./src/components/slot/slot.vue')['default']
