@@ -4,10 +4,15 @@
     {{ doubleCount }}
     <el-button @click="flag++">修改</el-button>
     testData: {{ testData }} flag: {{ flag }}
+    <span>
+      倒计时： {{ countDownValue }}
+      <el-button @click="start">开始</el-button>
+    </span>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useCountDown } from "@/tools/hook/hook";
 let flag = ref(1);
 const props = defineProps<{
   count: number;
@@ -44,4 +49,6 @@ watchEffect(async () => {
   const data = await mockData();
   console.log(data, result);
 });
+
+const { countDownValue, start } = useCountDown(3, 1, false);
 </script>
