@@ -2,10 +2,13 @@
   <div>
     {{ count }}
     {{ doubleCount }}
+    <el-button @click="flag++">修改</el-button>
+    testData: {{ testData }} flag: {{ flag }}
   </div>
 </template>
 
 <script setup lang="ts">
+let flag = ref(1);
 const props = defineProps<{
   count: number;
 }>();
@@ -22,4 +25,23 @@ const useEffect = (props: any) => {
   });
 };
 useEffect(props);
+// 它收集所有的东西作为依赖，
+// 如果说mockData代码在前面，在收集依赖的时候发现
+// 它里面并没有响应式数据，那么就算下面在有响应式数据也不会重新执行
+// 也就说、执行promise前面必须存在响应式数据，否则不会重新执行
+const mockData = () => {
+  return new Promise((resolve) => {
+    resolve([1, 2, 3]);
+  });
+};
+const normalFn = () => {
+  return 123;
+};
+let testData = ref(2);
+watchEffect(async () => {
+  const result = normalFn();
+  testData.value = flag.value * 2;
+  const data = await mockData();
+  console.log(data, result);
+});
 </script>
