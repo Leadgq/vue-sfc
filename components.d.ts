@@ -49,5 +49,6 @@ declare module '@vue/runtime-core' {
     TreeOption: typeof import('./src/components/treeComponent/treeOption.vue')['default']
     TsxComponent: typeof import('./src/components/tsx/tsxComponent.vue')['default']
     WatchOption: typeof import('./src/components/watch/watch-option.vue')['default']
+    WebApiComponent: typeof import('./src/components/webAPI/WebApiComponent.vue')['default']
   }
 }

@@ -6,7 +6,7 @@
       <el-card v-for="(item,index) in  sfcConfigList" :key="index" class="component-card" shadow="hover">
         <template #header>
           <div class="card-header">
-            <span>{{ item.name }}--{{ item.componentName }}</span>
+            <span>{{ item.name }}--{{ item.componentName }}--{{item.id}}</span>
             <el-button type="primary" @click="jumpToSfc(item.componentName)">前往</el-button>
           </div>
         </template>
@@ -22,11 +22,10 @@ import { sfc } from "@/types/sfc";
 
 let sfcConfigList = ref<sfc[]>([]);
 const router = useRouter();
-onMounted(async () => await loadModule());
 // 跳入广场
 const jumpToSfc = (componentName: string) => router.push({ path: "/entrance", query: { componentName } });
 // 加载模块
-const loadModule = async () => {
+const loadModule =  () => {
   const module = import.meta.glob("@/components/**/desc.ts", { eager: true, import: 'default' });
   const moduleValue = Object.values(module) as sfc[];
   if (!isArray(moduleValue)) return;
@@ -34,6 +33,7 @@ const loadModule = async () => {
   // 排序
   sfcConfigList.value.sort((a, b) => a.id - b.id);
 };
+watchEffect( () =>  loadModule(),{flush:'post'});
 </script>
 <script lang="ts">
 export default {
