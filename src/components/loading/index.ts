@@ -8,6 +8,7 @@ export default {
     app.config.globalProperties.$loadings = {
       show: vNode.component?.exposed?.show,
       hidden: vNode.component?.exposed?.hidden,
+      showOrHidden: vNode.component?.exposed?.showOrHidden,
     };
   },
 };
