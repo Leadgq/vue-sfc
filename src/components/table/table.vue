@@ -107,21 +107,29 @@ const getTableDta = () => {
   console.log(url);
 };
 
-let selectedRowKeyList = ref<Array<number | string>>([]);
-const rowSelection = ref({
-  // 回显用
+const rowSelection = reactive({
   selectedRowKeys: [] as (string | number)[],
   onChange: (selectedRowKey: (string | number)[]) => {
-    // 这个用于给后台发送、选择了那个
-    selectedRowKeyList.value = [...selectedRowKey, ...selectedRowKeyList.value];
-    const setRowKeys = new Set(selectedRowKeyList.value);
-    selectedRowKeyList.value = [...setRowKeys];
+    if(selectedRowKey.length === 0){
+     rowSelection.selectedRowKeys = [];
+    }
+    rowSelection.selectedRowKeys = [...selectedRowKey, ...rowSelection.selectedRowKeys];
+    const setRowKeys = new Set(rowSelection.selectedRowKeys);
+     rowSelection.selectedRowKeys = [...setRowKeys];
   },
+  onSelect:(record:useType, selected:boolean)=>{
+    // 取消
+    if(!selected){
+      const { id } = record;
+       const index = rowSelection.selectedRowKeys.findIndex(item => item ===id);
+       rowSelection.selectedRowKeys.splice(index,1)
+    }
+  }
 });
 
 onMounted(() => {
   setTimeout(() => {
-    rowSelection.value.selectedRowKeys.push(1);
+    rowSelection.selectedRowKeys.push(1);
   }, 2000);
 });
 </script>
