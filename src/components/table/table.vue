@@ -1,8 +1,13 @@
 <template>
   <div class="table-container flex flex-col">
-    <div class="search-tool flex ">
-      <a-select v-model:value="noticeState" style="width:120px">
-        <a-select-option v-for="(item,index) in companyList" :key="index" :value="item.value">{{ item.label }}</a-select-option>
+    <div class="search-tool flex">
+      <a-select v-model:value="noticeState" style="width: 120px">
+        <a-select-option
+          v-for="(item, index) in companyList"
+          :key="index"
+          :value="item.value"
+          >{{ item.label }}</a-select-option
+        >
       </a-select>
     </div>
     <div class="flex-1">
@@ -12,7 +17,8 @@
         :pagination="pagination"
         @change="pagination.change"
         @onShowSizeChange="pagination.onShowSizeChange"
-        row-key="id"
+        :row-selection="rowSelection"
+        :rowKey="'id'"
         :scroll="{ y: 500 }"
       >
       </a-table>
@@ -21,23 +27,31 @@
 </template>
 
 <script setup lang="ts">
-const dataSource = [];
+interface useType {
+  id: number;
+  name: string;
+  key: number;
+  age: string;
+  address: string;
+}
+
+const dataSource = ref<Array<useType>>([]);
 const columns = [
   {
     title: "姓名",
     dataIndex: "name",
-    key: "name"
+    key: "name",
   },
   {
     title: "年龄",
     dataIndex: "age",
-    key: "age"
+    key: "age",
   },
   {
     title: "住址",
     dataIndex: "address",
-    key: "address"
-  }
+    key: "address",
+  },
 ];
 let pagination = reactive({
   current: 1,
@@ -48,20 +62,20 @@ let pagination = reactive({
   showQuickJumper: true,
   position: ["bottomLeft"],
   showTotal: (total: number) => `总条数:${total}条`,
-  change: (page: Record<string, any>) => pagination.current = page.current,
-  onShowSizeChange: (_: number, pageSize: number) => pagination.pageSize = pageSize
+  change: (page: Record<string, any>) => (pagination.current = page.current),
+  onShowSizeChange: (_: number, pageSize: number) => (pagination.pageSize = pageSize),
 });
 onMounted(() => {
   setTableData();
 });
 const setTableData = () => {
   for (let i = 0; i < 100; i++) {
-    dataSource.push({
+    dataSource.value.push({
       id: i,
       name: `第${i}个李四`,
       key: i,
       age: i + "岁",
-      address: "大连"
+      address: "大连",
     });
   }
   pagination.total = 50;
@@ -73,12 +87,12 @@ const companyList = computed(() => {
   return [
     {
       label: "停用",
-      value: "0"
+      value: "0",
     },
     {
       label: "启用",
-      value: "1"
-    }
+      value: "1",
+    },
   ];
 });
 // 公告状态
@@ -93,10 +107,27 @@ const getTableDta = () => {
   console.log(url);
 };
 
+let selectedRowKeyList = ref<Array<number | string>>([]);
+const rowSelection = ref({
+  // 回显用
+  selectedRowKeys: [] as (string | number)[],
+  onChange: (selectedRowKey: (string | number)[]) => {
+    // 这个用于给后台发送、选择了那个
+    selectedRowKeyList.value = [...selectedRowKey, ...selectedRowKeyList.value];
+    const setRowKeys = new Set(selectedRowKeyList.value);
+    selectedRowKeyList.value = [...setRowKeys];
+  },
+});
+
+onMounted(() => {
+  setTimeout(() => {
+    rowSelection.value.selectedRowKeys.push(1);
+  }, 2000);
+});
 </script>
 <script lang="ts">
 export default {
-  name: "table"
+  name: "table",
 };
 </script>
 
